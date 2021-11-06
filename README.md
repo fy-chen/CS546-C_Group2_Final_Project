@@ -1,2 +1,8 @@
 # CS546-C_Group2_Final_Project
-# Hey Im Sam
+
+Group Members:
+
+Feiyu Chen
+Chenfeng Duan
+Samarth Kapuria
+Utsav Italiya 
