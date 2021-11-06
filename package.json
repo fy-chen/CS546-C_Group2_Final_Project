@@ -1,0 +1,28 @@
+{
+  "name": "bug-tracker",
+  "version": "1.0.0",
+  "description": "A software to keep track of bugs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fy-chen/CS546-C_Group2_Final_Project.git"
+  },
+  "keywords": [
+    "bug",
+    "track",
+    "ticket"
+  ],
+  "author": "CS546 Section C Group 2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fy-chen/CS546-C_Group2_Final_Project/issues"
+  },
+  "homepage": "https://github.com/fy-chen/CS546-C_Group2_Final_Project#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^4.1.4"
+  }
+}
