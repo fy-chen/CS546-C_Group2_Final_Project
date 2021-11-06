@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 const mongoConfig = {
     serverUrl: 'mongodb://localhost:27017/',
-    database: ''
+    database: 'CS546_Final_Project'
   };
 
 let _connection = undefined;
