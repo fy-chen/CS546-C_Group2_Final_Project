@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/',async(req,res) =>{
-    res.render('pages/homepage');
+    res.render('pages/projectPage');
 });
+
 
 module.exports = router;
