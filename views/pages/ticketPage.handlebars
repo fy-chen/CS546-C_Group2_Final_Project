@@ -1,1 +1,45 @@
-<p>ticket page</p>
+<article class="new-post">
+  <h1>Create a New Ticket</h1>
+  <form action="/posts" method="POST" class="new-post-form">
+    <label>
+      Ticket Title
+      <input type="text" name="title" value="{{post.title}}" class="full-width-input"/>
+    </label>
+    <label>
+      Description
+      <input type="text" name="description" value="{{post.descriptioin}}" class="full-width-input"/>
+    </label>
+
+    <label>
+      Priority
+    </label>
+    <select class="full-width-input" name="priority">
+        <option style="display:none"></option>
+        <option value=1>1 (less important)</option>
+        <option value=2>2 (medium important)</option>
+        <option value=3>3 (most important)</option>
+    </select>
+
+<label>Bug Type
+<input list="browsers" class="full-width-input" name="errorType" /></label>
+<datalist id="browsers">
+        <option style="display:none"></option>
+        <option value="Functional errors">Functional errors</option>
+        <option value='Performance defects'>Performance defects</option>
+        <option value='Usability defects'>Usability defects</option>
+        <option value='Compatibility defects'>Compatibility defects</option>
+        <option value='Security defects'>Security defects</option>
+        <option value='Syntax errors'>Syntax errors</option>
+        <option value='Logic errors'>Logic errors</option>
+        <option value='Unit-level bugs'>Unit-level bugs</option>
+        <option value='System-level integration bugs'>System-level integration bugs</option>
+        <option value='Code Duplication'>Code Duplication</option>
+        <option value='Data Type Mismatch'>Data Type Mismatch</option>
+</datalist>
+
+
+
+    <button type="submit">Create</button>
+    <button type="reset">Clear</button>
+  </form>
+</article>

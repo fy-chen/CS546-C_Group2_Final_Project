@@ -36,3 +36,14 @@ body {
 	.sidenav {padding-top: 15px;}
 	.sidenav a {font-size: 18px;}
   }
+
+.new-post-form {
+	max-width: 300px;
+}
+
+.new-post-form .full-width-input {
+	display: block;
+	min-height: 3em;
+	margin: 10px 0;
+	width: 100%;
+}
