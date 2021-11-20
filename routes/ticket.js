@@ -11,7 +11,7 @@ router.get('/',async(req,res) =>{
 router.get('/:id', async(req, res) => {
 
     try{
-        const ticket = ticketsData.get(req.params.id);
+        const ticket = await ticketsData.get(req.params.id);
         res.render('pages/ticketPage', {ticket});
     }catch(e) {
         res.status(500).json({ error: e });
@@ -21,8 +21,8 @@ router.get('/:id', async(req, res) => {
 router.get('/user/:id', async(req, res) => {
 
     try{
-        const createdTickets = ticketsData.getTicketsByUser(req.params.id, 'creator');
-        const assignedTickets = ticketsData.getTicketsByUser(req.params.id, 'assigned');
+        const createdTickets = await ticketsData.getTicketsByUser(req.params.id, 'creator');
+        const assignedTickets = await ticketsData.getTicketsByUser(req.params.id, 'assigned');
         res.render('pages/ticketPage', {createdTickets: createdTickets, assignedTickets: assignedTickets});
     }catch(e) {
         res.status(500).json({ error: e });
@@ -41,7 +41,7 @@ router.post('/search', async(req, res) => {
     }
 
     try{
-        const ticketlist = ticketsData.searchTicketsByTitle(req.body.phrase);
+        const ticketlist = await ticketsData.searchTicketsByTitle(req.body.phrase);
         if(ticketlist.length === 0){
             res.render('pages/ticketPage', {notFound: true});
         }else{
@@ -69,38 +69,38 @@ router.post('/create', async(req, res) => {
     let errors = {};
 
     try{
-        ticketsData.isAppropriateString(title, 'title');
+        ticketsData.isAppropriateString(ticketData.title, 'title');
     }catch(e) {
         errors.title_error = e;
     }
 
     try{
-        ticketsData.isAppropriateString(description, 'description');
+        ticketsData.isAppropriateString(ticketData.description, 'description');
     }catch(e) {
         errors.description_error = e;
     }
 
     try{
-        ticketsData.isAppropriateString(creator, 'creator');
+        ticketsData.isAppropriateString(ticketData.creator, 'creator');
     }catch(e) {
         errors.creator_error = e;
     }
         
     try{
-        ticketsData.isAppropriateString(project, 'project');
+        ticketsData.isAppropriateString(ticketData.project, 'project');
     }catch(e) {
         errors.project_error = e;
     }
         
     try{
-        ticketsData.isAppropriateString(errorType, 'errorType');
+        ticketsData.isAppropriateString(ticketData.errorType, 'errorType');
     }catch(e) {
         errors.errorType_error = e;
     }
 
     try{
-        if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
-        else if(Number(priority) !== 1 || Number(priority) !== 2 || Number(priority) !== 3) throw 'Provided priority not valid';
+        if(isNaN(Number(ticketData.priority))) throw 'Provided priority should not be NaN';
+        else if(Number(ticketData.priority) !== 1 || Number(ticketData.priority) !== 2 || Number(ticketData.priority) !== 3) throw 'Provided priority not valid';
     }catch(e) {
         errors.priority_error = e;
     }
@@ -140,11 +140,90 @@ router.delete('/:id', async (req, res) => {
 router.get('/edit/:id', async(req, res) => {
 
     try {
-        const ticket = ticketsData.get(id);
+        const ticket = await ticketsData.get(req.params.id);
         res.render('/pages/ticketPage', {ticket:ticket});
     }catch(e) {
         res.status(500).json({ error: e });
     }
+});
+
+router.patch('/edit/:id', async(req, res) => {
+
+    const modifiedData = req.body;
+
+    let errors = {}
+
+    try {
+        const ticket = ticketsData.get(req.params.id);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+
+    try{
+        ticketsData.isAppropriateString(modifiedData.title, 'title');
+    }catch(e) {
+        errors.title_error = e;
+    }
+
+    try{
+        ticketsData.isAppropriateString(modifiedData.description, 'description');
+    }catch(e) {
+        errors.description_error = e;
+    }
+
+    try{
+        ticketsData.isAppropriateString(modifiedData.creator, 'creator');
+    }catch(e) {
+        errors.creator_error = e;
+    }
+        
+    try{
+        ticketsData.isAppropriateString(modifiedData.project, 'project');
+    }catch(e) {
+        errors.project_error = e;
+    }
+        
+    try{
+        ticketsData.isAppropriateString(modifiedData.errorType, 'errorType');
+    }catch(e) {
+        errors.errorType_error = e;
+    }
+
+    try{
+        if(isNaN(Number(modifiedData.priority))) throw 'Provided priority should not be NaN';
+        else if(Number(modifiedData.priority) !== 1 || Number(modifiedData.priority) !== 2 || Number(modifiedData.priority) !== 3) throw 'Provided priority not valid';
+    }catch(e) {
+        errors.priority_error = e;
+    }
+        
+    //should check if creator exist
+    //should check if project exist
+        
+    try{
+        await projectsData.get(project);
+    }catch(e) {
+        errors.project_not_exist = e;
+    }
+
+    try{
+        ticketsData.isAppropriateString(modifiedData.status, 'status');
+        if(modifiedData.status !== 'open' || modifiedData.status !== 'closed' || modifiedData.status !== 'ready_to_close') throw 'Provided status not valid';
+    }catch(e) {
+        errors.status_error = e;
+    }
+
+    if(Object.keys(errors).length !== 0){
+        res.render('pages/ticketPage', {ticketData: modifiedData, error: true, errors: errors});
+        return;
+    }
+
+    try{
+        const ticket = await ticketsData.update(req.params.id, modifiedData.title, modifiedData.description, modifiedData.creator, modifiedData.project, modifiedData.errorType, modifiedData.status, modifiedData.priority);
+        res.render('pages/ticketPage', {ticket: ticket});
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+    
 });
 
 
