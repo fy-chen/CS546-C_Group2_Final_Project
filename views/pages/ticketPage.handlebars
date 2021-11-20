@@ -37,6 +37,15 @@
         <option value='Data Type Mismatch'>Data Type Mismatch</option>
 </datalist>
 
+<label for="poster">
+  Project
+</label>
+<select class="full-width-input" name="project">
+  <option value=""></option>
+  {{#each projects}}
+    <option value="{{_id}}">{{projectName}}</option>
+  {{/each}}
+</select>
 
 
     <button type="submit">Create</button>
