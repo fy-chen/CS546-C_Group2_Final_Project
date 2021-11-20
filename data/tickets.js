@@ -224,6 +224,97 @@ async function updateStatus(id, status) {
 
 }
 
+async function getTicketsByUser(userId) {
+
+    let parsedId = toObjectId(userId, 'userId');
+
+    TicketsCollection = await tickets();
+  
+    let ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
+  
+    for(let x of ticketlist){
+      x._id = x._id.toString();
+    }
+  
+    return ticketlist;
+}
+
+async function getTicketsByProject(projectId) {
+    
+    let parsedId = toObjectId(projectId, 'projectId');
+
+    TicketsCollection = await tickets();
+  
+    let ticketlist = await TicketsCollection.find({project: parsedId}).toArray();
+  
+    for(let x of ticketlist){
+      x._id = x._id.toString();
+    }
+  
+    return ticketlist;
+}
+
+async function searchTicketsByTitle(phrase) {
+
+    isAppropriateString(phrase, 'title phrase');
+
+    TicketsCollection = await tickets();
+  
+    let ticketlist = await TicketsCollection.find({ $text: { $search: phrase, $caseSensitive: false }}).toArray();
+  
+    for(let x of ticketlist){
+      x._id = x._id.toString();
+    }
+  
+    return ticketlist;
+    
+}
+
+async function SortByPriority() {
+    
+    TicketsCollection = await tickets();
+  
+    let ticketlist = await TicketsCollection.find({}).sort({priority: 1}).toArray();
+  
+    for(let x of ticketlist){
+      x._id = x._id.toString();
+    }
+  
+    return ticketlist;
+}
+
+async function getTicketsByStatus(status) {
+
+    isValidStatus(status);
+
+    TicketsCollection = await tickets();
+  
+    let ticketlist = await TicketsCollection.find({status: status}).toArray();
+  
+    for(let x of ticketlist){
+      x._id = x._id.toString();
+    }
+  
+    return ticketlist;
+}
+
+async function getTicketsByPriority(priority) {
+    
+    if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
+    else if(Number(priority) !== 1 || Number(priority) !== 2 || Number(priority) !== 3) throw 'Provided priority not valid';
+
+    TicketsCollection = await tickets();
+  
+    let ticketlist = await TicketsCollection.find({priority: priority}).toArray();
+  
+    for(let x of ticketlist){
+      x._id = x._id.toString();
+    }
+  
+    return ticketlist;
+
+}
+
 module.exports = {
     areAppropriateParameters,
     create,
@@ -232,5 +323,11 @@ module.exports = {
     update,
     addAssignedUser,
     remove,
-    updateStatus
+    updateStatus,
+    getTicketsByUser,
+    getTicketsByPriority,
+    getTicketsByProject,
+    getTicketsByStatus,
+    SortByPriority,
+    searchTicketsByTitle    
 }
