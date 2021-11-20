@@ -17,7 +17,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router,get('/user/:id', async(req, res) => {
+router.get('/user/:id', async(req, res) => {
 
     try{
         const createdTickets = ticketsData.getTicketsByUser(req.params.id, 'creator');
