@@ -153,12 +153,6 @@ router.patch('/edit/:id', async(req, res) => {
 
     let errors = {}
 
-    try {
-        const ticket = ticketsData.get(req.params.id);
-    }catch(e) {
-        res.status(500).json({ error: e });
-    }
-
     try{
         ticketsData.isAppropriateString(modifiedData.title, 'title');
     }catch(e) {
@@ -216,6 +210,61 @@ router.patch('/edit/:id', async(req, res) => {
         res.render('pages/ticketPage', {ticketData: modifiedData, error: true, errors: errors});
         return;
     }
+
+    let history = {Property: 'Update', Value: ''};
+    let history_value = '';
+
+    try {
+        const ticket = ticketsData.get(req.params.id);
+
+        if(ticket.title !== modifiedData.title){
+            let modify_content = `title: ${modifiedData.title} \n`
+            history_value.concat(modify_content);
+        }
+
+        if(ticket.description !== modifiedData.description){
+            let modify_content = `description: ${modifiedData.description} \n`
+            history_value.concat(modify_content);
+        }
+
+        if(ticket.creator !== modifiedData.creator){
+            let modify_content = `creator: ${modifiedData.creator} \n`
+            history_value.concat(modify_content);
+        }
+
+        if(ticket.project !== modifiedData.project){
+            let modify_content = `project: ${modifiedData.project} \n`
+            history_value.concat(modify_content);
+        }
+
+        if(ticket.errorType !== modifiedData.errorType){
+            let modify_content = `errorType: ${modifiedData.errorType} \n`
+            history_value.concat(modify_content);
+        }
+
+        if(ticket.priority !== modifiedData.priority){
+            let modify_content = `priority: ${modifiedData.priority} \n`
+            history_value.concat(modify_content);
+        }
+
+        if(ticket.status !== modifiedData.status){
+            let modify_content = `status: ${modifiedData.status} \n`
+            history_value.concat(modify_content);
+        }
+
+        history.Value = history_value;
+
+        if(history.Value.trim().length === 0){
+            res.render('/pages/ticketPage', {noChanges: true});
+            return;
+        }
+
+        await ticketsData.addHistory(req.params.id, history); 
+
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+
 
     try{
         const ticket = await ticketsData.update(req.params.id, modifiedData.title, modifiedData.description, modifiedData.creator, modifiedData.project, modifiedData.errorType, modifiedData.status, modifiedData.priority);

@@ -362,7 +362,13 @@ async function getTicketsByPriority(priority) {
 
 async function addHistory(id, history) {
 
-    isAppropriateString(history, 'modify history');
+    if(Object.prototype.toString.call(history) !== '[object Object]'){
+        throw 'provided history is not a object';
+    }
+
+    if(!history.Property || !history.Value){
+        throw 'provided history lack of necessary keys';
+    }
 
     let parsedId = toObjectId(id, 'ticketId');
 
