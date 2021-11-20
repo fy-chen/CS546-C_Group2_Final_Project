@@ -1,10 +1,12 @@
+const loginRoutes = require("./login");
 const landingRoutes = require("./landing");
 const projectRoutes = require("./projects");
 const ticketRoutes = require("./ticket");
 const path = require("path");
 
 const constructorMethod = (app) => {
-  app.use("/", landingRoutes);
+  app.use("/", loginRoutes);
+  app.use("/landingPage", landingRoutes);
   app.use("/projectPage", projectRoutes);
   app.use("/ticketPage", ticketRoutes);
 
