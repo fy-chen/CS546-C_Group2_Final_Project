@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const tickets = mongoCollections.tickets;
 let { ObjectId } = require('mongodb');
+let projectsData = require('./projects');
 
 
 let isAppropriateString = (string, name) => {
@@ -35,6 +36,7 @@ let areAppropriateParameters = (title, description, priority, creator, project, 
 
     //should check if creator exist
     //should check if project exist
+    await projectsData.get(project);
 
 }
 
@@ -42,9 +44,9 @@ let isValidcreatedTime = (createdTime) => {
 
     isAppropriateString(createdTime, 'createdTime');
 
-    let today = new Date();
+    let now = Date.now();
 
-    if(createdTime !== today.toUTCString()) throw 'Provided createdTime is not today';
+    if(createdTime !== now) throw 'Provided createdTime is not today';
 
 }
 
@@ -58,11 +60,11 @@ let isValidStatus = (status) => {
 
 }
 
-async function create(title, description, priority, creator, project, createdTime, errorType) {
+async function create(title, description, priority, creator, project, errorType) {
 
     areAppropriateParameters(title, description, priority, creator, project, errorType);
 
-    isValidcreatedTime(createdTime);
+    let createdTime = Date.now();
 
     TicketsCollection = await tickets();
 
@@ -328,11 +330,13 @@ async function getTicketsByPriority(priority) {
 
 }
 
-async function addHistory(id, history, modifiedTime) {
+async function addHistory(id, history) {
 
     isAppropriateString(history, 'modify history');
 
     let parsedId = toObjectId(id, 'ticketId');
+
+    let modifiedTime = Date.now();
 
     TicketsCollection = await tickets();
 
