@@ -36,7 +36,7 @@ async function areAppropriateParameters (title, description, priority, creator, 
 
     //should check if creator exist
     //should check if project exist
-    await projectsData.get(project);
+    // await projectsData.get(project);
 
 }
 
