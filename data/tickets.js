@@ -76,7 +76,8 @@ async function create(title, description, priority, creator, project, createdTim
         createdTime: createdTime,
         errorType: errorType,
         assignedUsers: [],
-        comments: []
+        comments: [],
+        history: [],
     };
 
     const insertInfo = await TicketsCollection.insertOne(newTicket);
@@ -224,16 +225,28 @@ async function updateStatus(id, status) {
 
 }
 
-async function getTicketsByUser(userId) {
+async function getTicketsByUser(userId, type) {
+
+    if(type !== 'assigned' || type !== 'creator') throw 'Provided user type not valid';
 
     let parsedId = toObjectId(userId, 'userId');
 
     TicketsCollection = await tickets();
-  
-    let ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
-  
-    for(let x of ticketlist){
-      x._id = x._id.toString();
+
+    if(type === 'assigned'){
+
+        let ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
+        
+        for(let x of ticketlist){
+            x._id = x._id.toString();
+        }
+    }else{
+
+        let ticketlist = await TicketsCollection.find({creator: parsedId}).toArray();
+        
+        for(let x of ticketlist){
+            x._id = x._id.toString();
+        }
     }
   
     return ticketlist;
@@ -315,6 +328,34 @@ async function getTicketsByPriority(priority) {
 
 }
 
+async function addHistory(id, history, modifiedTime) {
+
+    isAppropriateString(history, 'modify history');
+
+    let parsedId = toObjectId(id, 'ticketId');
+
+    TicketsCollection = await tickets();
+
+    await get(id);
+
+    let newHistory = {
+        history: history,
+        modifiedTime: modifiedTime,
+    };
+
+    const updatedInfo = await TicketsCollection.updateOne(
+        { _id: parsedId },
+        { $addToSet: {history: newHistory } }
+    );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update ticket status successfully';
+    }
+
+    return await get(id);
+
+}
+
 module.exports = {
     areAppropriateParameters,
     create,
@@ -329,5 +370,6 @@ module.exports = {
     getTicketsByProject,
     getTicketsByStatus,
     SortByPriority,
-    searchTicketsByTitle    
+    searchTicketsByTitle,
+    addHistory    
 }
