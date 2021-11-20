@@ -23,7 +23,7 @@ let toObjectId = (id, name) => {
     return parsedId;
 }
  
-let areAppropriateParameters = (title, description, priority, creator, project, errorType) => {
+async function areAppropriateParameters (title, description, priority, creator, project, errorType) {
 
     isAppropriateString(title, 'title');
     isAppropriateString(description, 'description');
@@ -62,7 +62,7 @@ let isValidStatus = (status) => {
 
 async function create(title, description, priority, creator, project, errorType) {
 
-    areAppropriateParameters(title, description, priority, creator, project, errorType);
+    await areAppropriateParameters(title, description, priority, creator, project, errorType);
 
     let createdTime = Date.now();
 
@@ -102,6 +102,10 @@ async function get(id) {
 
     ticket._id = ticket._id.toString();
 
+    for(let x of ticket.comments){
+        x._id = x._id.toString();
+    }
+
     return ticket;
 
 }
@@ -116,6 +120,10 @@ async function getAll() {
   
     for(let x of ticketlist){
       x._id = x._id.toString();
+      
+      for(let y of x.comments){
+          y._id = y._id.toString();
+        }
     }
   
     return ticketlist;
@@ -126,7 +134,7 @@ async function update(id, title, description, priority, creator, project, status
 
     let parsedId = toObjectId(id, 'ticketId');
 
-    areAppropriateParameters(title, description, priority, creator, project, errorType);
+    await areAppropriateParameters(title, description, priority, creator, project, errorType);
 
     isValidStatus(status);
 
@@ -239,15 +247,17 @@ async function getTicketsByUser(userId, type) {
 
         let ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
         
-        for(let x of ticketlist){
-            x._id = x._id.toString();
-        }
     }else{
 
         let ticketlist = await TicketsCollection.find({creator: parsedId}).toArray();
+
+    }
+
+    for(let x of ticketlist){
+        x._id = x._id.toString();
         
-        for(let x of ticketlist){
-            x._id = x._id.toString();
+        for(let y of x.comments){
+            y._id = y._id.toString();
         }
     }
   
@@ -263,7 +273,11 @@ async function getTicketsByProject(projectId) {
     let ticketlist = await TicketsCollection.find({project: parsedId}).toArray();
   
     for(let x of ticketlist){
-      x._id = x._id.toString();
+        x._id = x._id.toString();
+        
+        for(let y of x.comments){
+            y._id = y._id.toString();
+        }
     }
   
     return ticketlist;
@@ -278,7 +292,11 @@ async function searchTicketsByTitle(phrase) {
     let ticketlist = await TicketsCollection.find({ $text: { $search: phrase, $caseSensitive: false }}).toArray();
   
     for(let x of ticketlist){
-      x._id = x._id.toString();
+        x._id = x._id.toString();
+        
+        for(let y of x.comments){
+            y._id = y._id.toString();
+        }
     }
   
     return ticketlist;
@@ -292,7 +310,11 @@ async function SortByPriority() {
     let ticketlist = await TicketsCollection.find({}).sort({priority: 1}).toArray();
   
     for(let x of ticketlist){
-      x._id = x._id.toString();
+        x._id = x._id.toString();
+        
+        for(let y of x.comments){
+            y._id = y._id.toString();
+        }
     }
   
     return ticketlist;
@@ -307,7 +329,11 @@ async function getTicketsByStatus(status) {
     let ticketlist = await TicketsCollection.find({status: status}).toArray();
   
     for(let x of ticketlist){
-      x._id = x._id.toString();
+        x._id = x._id.toString();
+        
+        for(let y of x.comments){
+            y._id = y._id.toString();
+        }
     }
   
     return ticketlist;
@@ -323,7 +349,11 @@ async function getTicketsByPriority(priority) {
     let ticketlist = await TicketsCollection.find({priority: priority}).toArray();
   
     for(let x of ticketlist){
-      x._id = x._id.toString();
+        x._id = x._id.toString();
+        
+        for(let y of x.comments){
+            y._id = y._id.toString();
+        }
     }
   
     return ticketlist;
@@ -362,6 +392,8 @@ async function addHistory(id, history) {
 
 module.exports = {
     areAppropriateParameters,
+    isAppropriateString,
+    toObjectId,
     create,
     get,
     getAll,
