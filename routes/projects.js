@@ -11,6 +11,7 @@ router.get("/:id", async (req, res) => {
   try {
     const project = projectsData.get(req.params.id);
     res.render("/pages/projectPage", { project });
+    // res.status(200).json(project);
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -18,7 +19,13 @@ router.get("/:id", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    const project = projectsData.create("hello", "utsav");
+    const newProject = projectsData.create(
+      req.body.projectName,
+      req.body.description,
+      req.body.role
+    );
+    res.render("pages/projectPage", { project: project });
+    res.json(newProject);
   } catch (e) {
     res.status(500).json({ error: e });
   }

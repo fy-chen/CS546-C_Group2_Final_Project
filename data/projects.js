@@ -1,6 +1,7 @@
 const mongoCollections = require("../config/mongoCollections");
 const projects = mongoCollections.projects;
 let { ObjectId } = require("mongodb");
+const { parse } = require("handlebars");
 
 let isAppropriateString = (string, name) => {
   if (!string) {
@@ -32,9 +33,9 @@ async function create(projectName, description, role) {
   if (isNaN(Number(role))) {
     throw new Error("Provided role should not be NaN");
   }
-  if (Number(role) !== 1 || Number(role) !== 2 || Number(role) !== 3) {
-    throw new Error("Provided priority not valid");
-  }
+  // if (Number(role) !== 1 || Number(role) !== 2 || Number(role) !== 3) {
+  //   throw new Error("Provided role not valid");
+  // }
 
   if (role == 1) {
     projectsCollection = await projects();
@@ -50,9 +51,10 @@ async function create(projectName, description, role) {
     if (insertInfo.insertedCount === 0) {
       throw new Error(`Could not add a project`);
     }
-  } else throw new Error(`You don't have Admin access`);
-
-  return await get(insertInfo.insertedId.toString());
+    return await get(insertInfo.insertedId.toString());
+  } else {
+    throw new Error(`You don't have Admin access`);
+  }
 }
 
 async function get(id) {
@@ -196,6 +198,8 @@ async function searchProject(phrase) {
 }
 
 module.exports = {
+  isAppropriateString,
+  toObjectId,
   create,
   get,
   getAll,
