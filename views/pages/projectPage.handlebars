@@ -1,5 +1,26 @@
-<p>project page</p>
-<form action="/routes/projects.js/search" method="post">
-  <label for="phrase"></label>
-  <input type="search" name='phrase'>
-</form>
+<article class="new-post">
+  <h1>Create a New Project</h1>
+  <form action="/create" method="post" class="new-post-form">
+    <label for="projectName">Project name
+      <input type="text" name="projectName" class="full-width-input" />
+    </label>
+    <label for="description">Description
+      <textarea name="description" class="full-width-input"></textarea>
+    </label>
+    <button type="submit">Create Project</button>
+    <button type="reset">Clear</button>
+  </form>
+</article>
+
+
+<article>
+  <h1>All Projects</h1>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">{{projectName}}this is projectName</h4>
+      <p class="card-text">{{description}}this is project description</p>
+      <a href="/assginedUsers" class="btn btn-primary">go to assginedUsers</a><br>
+      <a href="/openTickets" class="btn btn-primary">go to openTickets</a>
+    </div>
+  </div>
+</article>
