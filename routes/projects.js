@@ -1,4 +1,5 @@
 const express = require("express");
+const { tickets } = require("../data");
 const router = express.Router();
 const data = require("../data");
 const projectsData = data.projects;
@@ -19,11 +20,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    const newProject = projectsData.create(
-      req.body.projectName,
-      req.body.description,
-      req.body.role
-    );
+    const newProject = projectsData.create();
     res.render("pages/projectPage", { project: project });
     res.json(newProject);
   } catch (e) {
@@ -47,6 +44,15 @@ router.post("/search", async (req, res) => {
     } else {
       res.render("pages/projectPage", { projects: projectList });
     }
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleteInfo = await projectsData.remove(req.params.id);
+    res.status(200).json(deleteInfo);
   } catch (e) {
     res.status(500).json({ error: e });
   }
