@@ -1,1 +1,35 @@
-<p>login works!</p>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+</style>
+</head>
+<body>
+
+<div class="sidenav">
+  <!-- <a href="/src/app/components/login/login.component.html">Login</a> -->
+
+</div>
+
+<div class="main">
+  <h2>Sign Up</h2>
+  <form action="/signup" method="POST" id="signup-form">
+    <label>
+        username:
+        <input type="text" id="username" name="username">
+        <br><br>
+        password:
+        <input type="password" id="password"  name="password">
+        <br><br>
+      <div id="errorU" class="error" hidden>I'm an error</div>
+      <br><br>
+      <button type="submit">Login</button>
+    </label>
+    
+  </form>
+</div>
+   
+</body>
+</html>
