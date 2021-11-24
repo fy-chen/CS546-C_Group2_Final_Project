@@ -32,7 +32,7 @@ async function areAppropriateParameters (title, description, priority, creator, 
     isAppropriateString(errorType, 'errorType');
 
     if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
-    else if(Number(priority) !== 1 || Number(priority) !== 2 || Number(priority) !== 3) throw 'Provided priority not valid';
+    else if(Number(priority) !== 1 && Number(priority) !== 2 && Number(priority) !== 3) throw 'Provided priority not valid';
 
     //should check if creator exist
     //should check if project exist
@@ -56,7 +56,7 @@ let isValidStatus = (status) => {
 
     //maybe more status
 
-    if(status !== 'open' || status !== 'closed' || status !== 'ready_to_close') throw 'Provided status not valid';
+    if(status !== 'open' && status !== 'closed' && status !== 'ready_to_close') throw 'Provided status not valid';
 
 }
 
@@ -237,19 +237,21 @@ async function updateStatus(id, status) {
 
 async function getTicketsByUser(userId, type) {
 
-    if(type !== 'assigned' || type !== 'creator') throw 'Provided user type not valid';
+    if(type !== 'assigned' && type !== 'creator') throw 'Provided user type not valid';
 
     let parsedId = toObjectId(userId, 'userId');
 
     TicketsCollection = await tickets();
 
+    let ticketlist = [];
+
     if(type === 'assigned'){
 
-        let ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
+        ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
         
     }else{
 
-        let ticketlist = await TicketsCollection.find({creator: parsedId}).toArray();
+        ticketlist = await TicketsCollection.find({creator: userId}).toArray();
 
     }
 
@@ -270,7 +272,7 @@ async function getTicketsByProject(projectId) {
 
     TicketsCollection = await tickets();
   
-    let ticketlist = await TicketsCollection.find({project: parsedId}).toArray();
+    let ticketlist = await TicketsCollection.find({project: projectId}).toArray();
   
     for(let x of ticketlist){
         x._id = x._id.toString();
@@ -288,8 +290,38 @@ async function searchTicketsByTitle(phrase) {
     isAppropriateString(phrase, 'title phrase');
 
     TicketsCollection = await tickets();
+
+    phrase = phrase.toLowerCase();
   
-    let ticketlist = await TicketsCollection.find({ $text: { $search: phrase, $caseSensitive: false }}).toArray();
+    let ticketlist = await TicketsCollection.find({
+        $where: "this.title.toLowerCase().indexOf('" + phrase + "') >= 0"
+      })
+      .toArray();
+  
+    for(let x of ticketlist){
+        x._id = x._id.toString();
+        
+        for(let y of x.comments){
+            y._id = y._id.toString();
+        }
+    }
+  
+    return ticketlist;
+    
+}
+
+async function searchTicketsByErrorType(phrase) {
+
+    isAppropriateString(phrase, 'error type phrase');
+
+    TicketsCollection = await tickets();
+
+    phrase = phrase.toLowerCase();
+  
+    let ticketlist = await TicketsCollection.find({
+        $where: "this.errorType.toLowerCase().indexOf('" + phrase + "') >= 0"
+      })
+      .toArray();
   
     for(let x of ticketlist){
         x._id = x._id.toString();
@@ -307,7 +339,7 @@ async function SortByPriority() {
     
     TicketsCollection = await tickets();
   
-    let ticketlist = await TicketsCollection.find({}).sort({priority: 1}).toArray();
+    let ticketlist = await TicketsCollection.find({}).sort({priority: -1}).toArray();
   
     for(let x of ticketlist){
         x._id = x._id.toString();
@@ -342,7 +374,7 @@ async function getTicketsByStatus(status) {
 async function getTicketsByPriority(priority) {
     
     if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
-    else if(Number(priority) !== 1 || Number(priority) !== 2 || Number(priority) !== 3) throw 'Provided priority not valid';
+    else if(Number(priority) !== 1 && Number(priority) !== 2 && Number(priority) !== 3) throw 'Provided priority not valid';
 
     TicketsCollection = await tickets();
   
@@ -413,5 +445,6 @@ module.exports = {
     getTicketsByStatus,
     SortByPriority,
     searchTicketsByTitle,
+    searchTicketsByErrorType,
     addHistory    
 }
