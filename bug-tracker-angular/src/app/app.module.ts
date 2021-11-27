@@ -10,6 +10,8 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
+import { TicketComponent } from './components/ticket/ticket.component';
+import { ticketService } from './components/service/ticket.service';
 
 
 @NgModule({
@@ -22,13 +24,13 @@ import { TicketHomeComponent } from './components/ticket-home/ticket-home.compon
     ProjectsHomeComponent,
     CreateTicketComponent,
     TicketHomeComponent,
- 
+    TicketComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ticketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
