@@ -7,12 +7,18 @@ import { DeveloperHomeComponent } from './components/developer-home/developer-ho
 import { SignupComponent } from './components/signup/signup.component';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
+import { CreateProjectComponent } from './components/create-project/create-project.component';
+import { ProjectsHomeComponent} from './components/projects-home/projects-home.component';
+
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'home', component: DeveloperHomeComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'createTicket', component: CreateTicketComponent},
-  {path: 'ticket', component: TicketHomeComponent}
+  {path: 'ticket', component: TicketHomeComponent},
+  {path: 'createProject', component: CreateProjectComponent},
+  {path: 'project', component: ProjectsHomeComponent}
+
 ];
 
 @NgModule({

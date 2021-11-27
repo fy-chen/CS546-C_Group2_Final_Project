@@ -10,6 +10,8 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
+import { CreateProjectComponent } from './components/create-project/create-project.component';
+
 
 
 @NgModule({
@@ -22,6 +24,8 @@ import { TicketHomeComponent } from './components/ticket-home/ticket-home.compon
     ProjectsHomeComponent,
     CreateTicketComponent,
     TicketHomeComponent,
+    CreateProjectComponent,
+
  
   ],
   imports: [
