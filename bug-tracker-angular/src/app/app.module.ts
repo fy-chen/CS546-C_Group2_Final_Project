@@ -8,6 +8,9 @@ import { DeveloperHomeComponent } from './components/developer-home/developer-ho
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
+import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
+import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { ProjectsHomeComponent } from './components/projects-home/projects-home.
     DeveloperHomeComponent,
     AdminHomeComponent,
     SignupComponent,
-    ProjectsHomeComponent
+    ProjectsHomeComponent,
+    CreateTicketComponent,
+    TicketHomeComponent,
+ 
   ],
   imports: [
     BrowserModule,

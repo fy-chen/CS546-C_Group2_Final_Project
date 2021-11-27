@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+</style>
+</head>
+<body>
+
+<div class="sidenav">
+  <!-- <a href="/src/app/components/login/login.component.html">Login</a> -->
+
+</div>
+
+<div class="main">
+    <h2>Create A New Ticket</h2>
+    <form action="/signup" method="POST" id="signup-form">
+      <label>
+        Ticket Title:
+        <input type="text" id="ticketTitle" name="ticketTitle">
+        <br><br>
+        Description :
+        <input type="text" id="ticketDescription"  name="ticketDescription">
+        <br><br>
+      <!-- <div id="errorU" class="error" hidden>I'm an error</div> -->
+    </label>
+      <label>
+        Priority
+      </label>
+      <select class="full-width-input" name="priority">
+          <option style="display:none"></option>
+          <option value=1>1 (less important)</option>
+          <option value=2>2 (medium important)</option>
+          <option value=3>3 (most important)</option>
+      </select>
+    <br><br>
+    <label>Bug Type
+      <input list="browsers" class="full-width-input" name="errorType" /></label>
+      <datalist id="browsers">
+              <option style="display:none"></option>
+              <option value="Functional errors">Functional errors</option>
+              <option value='Performance defects'>Performance defects</option>
+              <option value='Usability defects'>Usability defects</option>
+              <option value='Compatibility defects'>Compatibility defects</option>
+              <option value='Security defects'>Security defects</option>
+              <option value='Syntax errors'>Syntax errors</option>
+              <option value='Logic errors'>Logic errors</option>
+              <option value='Unit-level bugs'>Unit-level bugs</option>
+              <option value='System-level integration bugs'>System-level integration bugs</option>
+              <option value='Code Duplication'>Code Duplication</option>
+              <option value='Data Type Mismatch'>Data Type Mismatch</option>
+      </datalist>
+      <br><br>
+
+
+    <br><br>
+      <button type="submit">Create</button>
+      &nbsp;&nbsp;&nbsp;
+      <button type="reset">Clear</button>      
+    </form>
+
+</div>
+   
+</body>
+</html>
