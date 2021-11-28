@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -8,6 +8,7 @@ import { DeveloperHomeComponent } from './components/developer-home/developer-ho
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
+import { HttpClientModule } from '@angular/common/http';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
 import { TicketComponent } from './components/ticket/ticket.component';
@@ -28,7 +29,10 @@ import { ticketService } from './components/service/ticket.service';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [ticketService],
   bootstrap: [AppComponent]
