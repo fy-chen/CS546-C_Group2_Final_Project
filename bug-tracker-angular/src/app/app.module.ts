@@ -13,6 +13,7 @@ import { CreateTicketComponent } from './components/create-ticket/create-ticket.
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { TicketService } from './shared/ticket.service';
+import { CreateProjectComponent } from './components/create-project/create-project.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { TicketService } from './shared/ticket.service';
     ProjectsHomeComponent,
     CreateTicketComponent,
     TicketHomeComponent,
-    TicketComponent
+    TicketComponent,
+    CreateProjectComponent
   ],
   imports: [
     BrowserModule,
