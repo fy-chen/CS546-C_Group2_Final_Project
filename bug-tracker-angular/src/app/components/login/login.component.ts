@@ -27,7 +27,11 @@ export class LoginComponent implements OnInit {
     this.AuthService.login(this.loginForm).then(
       data=>{
         console.log(data);
+      },
+      err=>{
+        console.log(err)
       }
+      
       
     )
  }
