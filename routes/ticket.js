@@ -12,7 +12,7 @@ router.get('/:id', async(req, res) => {
 
     try{
         const ticket = await ticketsData.get(req.params.id);
-        res.render('pages/ticketPage', {ticket});
+        console.log(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
     }

@@ -9,7 +9,7 @@ const constructorMethod = (app) => {
   // app.use("/", loginRoutes);
   app.use("/landingPage", landingRoutes);
   app.use("/projectPage", projectRoutes);
-  app.use("/ticketPage", ticketRoutes);
+  app.use("/api/ticket", ticketRoutes);
   app.use("/signup", signupRoutes);
   app.use("/api/login", loginRoutes);
 

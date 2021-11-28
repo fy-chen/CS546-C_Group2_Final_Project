@@ -12,7 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
 import { TicketComponent } from './components/ticket/ticket.component';
-import { ticketService } from './components/service/ticket.service';
+import { TicketService } from './shared/ticket.service';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 
 @NgModule({
@@ -34,7 +35,9 @@ import { ticketService } from './components/service/ticket.service';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [ticketService],
+  providers: [
+    TicketService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

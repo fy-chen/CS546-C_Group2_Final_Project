@@ -15,7 +15,7 @@ const routes: Routes = [
   {path: 'signup', component: SignupComponent},
   {path: 'createTicket', component: CreateTicketComponent},
   {path: 'ticket', component: TicketHomeComponent},
-  {path: 'ticket:/id', component: TicketComponent}
+  {path: 'ticket/:id', component: TicketComponent}
 ];
 
 @NgModule({
