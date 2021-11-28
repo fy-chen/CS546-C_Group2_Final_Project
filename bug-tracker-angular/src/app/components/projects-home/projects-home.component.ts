@@ -9,4 +9,6 @@ export class ProjectsHomeComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  createProject() {}
 }
