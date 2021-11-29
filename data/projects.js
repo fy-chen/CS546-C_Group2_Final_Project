@@ -197,6 +197,17 @@ async function searchProject(phrase) {
   return projectList;
 }
 
+async function getProjectsByUser(userId) {
+  let parsedId = toObjectId(userId, "userId");
+  projectsCollection = await projects;
+  let projectList = [];
+
+  projectList = await projectsCollection.find({ users: parsedId });
+  for (let i = 0; i < projectList.length; i++) {
+    projectList[i]._id = projectList[i]._id.toString();
+  }
+}
+
 module.exports = {
   isAppropriateString,
   toObjectId,
@@ -209,4 +220,5 @@ module.exports = {
   addUser,
   addTickets,
   searchProject,
+  getProjectsByUser,
 };

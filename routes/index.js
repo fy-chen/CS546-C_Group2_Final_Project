@@ -1,18 +1,17 @@
-const loginRoutes = require("./login");
+// const loginRoutes = require("./login");
 const landingRoutes = require("./landing");
 const projectRoutes = require("./projects");
 const ticketRoutes = require("./ticket");
 const signupRoutes = require("./signup");
-const signinRoutes = require("./signin");
-const path = require("path");
+const loginRoutes = require("./login");
 
-const constructorMethod = (app) => {
-  app.use("/", loginRoutes);
+const constructorMethod = (app) => {  
+  // app.use("/", loginRoutes);
   app.use("/landingPage", landingRoutes);
   app.use("/projectPage", projectRoutes);
-  app.use("/ticketPage", ticketRoutes);
-  app.use("/signup", signupRoutes);
-  app.use("/signin", signinRoutes);
+  app.use("/api/ticket", ticketRoutes);
+  app.use("/api/signup", signupRoutes);
+  app.use("/api/login", loginRoutes);
 
   app.use("*", (req, res) => {
     res.sendStatus(404);

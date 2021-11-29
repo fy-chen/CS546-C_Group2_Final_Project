@@ -15,13 +15,13 @@
 
 <div class="main">
     <h2>Login</h2>
-    <form action="/signup" method="POST" id="signup-form">
+    <form [formGroup]= "loginForm" (ngSubmit)="login()" id="signup-form">
       <label>
-          username:
-          <input type="text" id="username" name="username">
+          Username:
+          <input type="text" id="username" name="username" formControlName="username">
           <br><br>
-          password:
-          <input type="password" id="password"  name="password">
+          Password:
+          <input type="password" id="password"  name="password" formControlName="password">
           <br><br>
         <div id="errorU" class="error" hidden>I'm an error</div>
         <br><br>
@@ -31,6 +31,7 @@
     </form>
     <br><br>
   <p>Not A User Yet? Sign up here</p>
+  <!-- <a href="/src/app/components/signup/signup.component.html">Sign Up</a>   -->
   <a href="/signup">Sign Up</a>  
     
   </div>

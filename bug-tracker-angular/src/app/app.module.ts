@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -8,10 +8,12 @@ import { DeveloperHomeComponent } from './components/developer-home/developer-ho
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
+import { HttpClientModule } from '@angular/common/http';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { TicketHomeComponent } from './components/ticket-home/ticket-home.component';
+import { TicketComponent } from './components/ticket/ticket.component';
+import { TicketService } from './shared/ticket.service';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
-
 
 
 @NgModule({
@@ -24,15 +26,19 @@ import { CreateProjectComponent } from './components/create-project/create-proje
     ProjectsHomeComponent,
     CreateTicketComponent,
     TicketHomeComponent,
-    CreateProjectComponent,
-
- 
+    TicketComponent,
+    CreateProjectComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    TicketService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
