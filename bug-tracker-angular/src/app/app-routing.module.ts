@@ -10,6 +10,7 @@ import { TicketHomeComponent } from './components/ticket-home/ticket-home.compon
 import { TicketComponent } from './components/ticket/ticket.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
+import { DashboardHomeComponent} from './components/dashboard-home/dashboard-home.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'ticket/:id', component: TicketComponent },
   { path: 'projects', component: ProjectsHomeComponent },
   { path: 'projects/create', component: CreateProjectComponent },
+  { path: 'dashboard', component : DashboardHomeComponent}
 ];
 
 @NgModule({

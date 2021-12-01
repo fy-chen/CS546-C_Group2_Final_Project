@@ -14,6 +14,8 @@ import { TicketHomeComponent } from './components/ticket-home/ticket-home.compon
 import { TicketComponent } from './components/ticket/ticket.component';
 import { TicketService } from './shared/ticket.service';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
+import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
+
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { CreateProjectComponent } from './components/create-project/create-proje
     CreateTicketComponent,
     TicketHomeComponent,
     TicketComponent,
-    CreateProjectComponent
+    CreateProjectComponent,
+    DashboardHomeComponent,
+
   ],
   imports: [
     BrowserModule,
