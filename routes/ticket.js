@@ -4,10 +4,6 @@ const data = require('../data');
 const ticketsData = data.tickets;
 const projectsData = data.projects;
 
-router.get('/',async(req,res) =>{
-    res.render('pages/ticketPage');
-});
-
 router.get('/:id', async(req, res) => {
 
     try{
@@ -20,10 +16,17 @@ router.get('/:id', async(req, res) => {
 
 router.get('/user/:id', async(req, res) => {
 
+    if(!req.body.tickettype){
+        return res.status(500).json({error: "Ticket Type missing"});
+    }
     try{
-        const createdTickets = await ticketsData.getTicketsByUser(req.params.id, 'creator');
-        const assignedTickets = await ticketsData.getTicketsByUser(req.params.id, 'assigned');
-        res.render('pages/ticketPage', {createdTickets: createdTickets, assignedTickets: assignedTickets});
+        if(req.body.tickettype = 'created'){
+            const createdTickets = await ticketsData.getTicketsByUser(req.params.id, 'creator');
+            return res.json(createdTickets);
+        }else if(req.body.tickettype = 'assigned'){
+            const assignedTickets = await ticketsData.getTicketsByUser(req.params.id, 'assigned');
+            return res.json(assignedTickets);
+        }
     }catch(e) {
         res.status(500).json({ error: e });
     }
@@ -43,23 +46,13 @@ router.post('/search', async(req, res) => {
     try{
         const ticketlist = await ticketsData.searchTicketsByTitle(req.body.phrase);
         if(ticketlist.length === 0){
-            res.render('pages/ticketPage', {notFound: true});
+            res.json({notFound: true});
         }else{
-            res.render('pages/ticketPage', {tickets: ticketlist});
+            res.json(ticketlist);
         }
     }catch(e) {
         res.status(500).json({ error: e });
     }
-});
-
-router.get('/create', async(req, res) => {
-
-    try{
-        res.render('pages/tickPage');
-    }catch(e) {
-        res.status(500).json({ error: e });
-    }
-    
 });
 
 router.post('/create', async(req, res) => {
@@ -115,13 +108,13 @@ router.post('/create', async(req, res) => {
     }
 
     if(Object.keys(errors).length !== 0){
-        res.render('pages/ticketPage', {ticketData: ticketData, error: true, errors: errors});
+        res.status(500).json({ticketData: ticketData, error: true, errors: errors});
         return;
     }
     
     try{
         const ticket = await ticketsData.create(ticketData.title, ticketData.description, ticketData.priority, ticketData.creator, ticketData.project, ticketData.errorType);
-        res.render('pages/ticketPage', {ticket: ticket});
+        res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
     }
@@ -133,16 +126,6 @@ router.delete('/:id', async (req, res) => {
         const DeleteInfo = await ticketsData.remove(req.params.id);
         res.status(200).json(DeleteInfo);
     }catch (e) {
-        res.status(500).json({ error: e });
-    }
-});
-
-router.get('/edit/:id', async(req, res) => {
-
-    try {
-        const ticket = await ticketsData.get(req.params.id);
-        res.render('/pages/ticketPage', {ticket:ticket});
-    }catch(e) {
         res.status(500).json({ error: e });
     }
 });
@@ -207,7 +190,7 @@ router.patch('/edit/:id', async(req, res) => {
     }
 
     if(Object.keys(errors).length !== 0){
-        res.render('pages/ticketPage', {ticketData: modifiedData, error: true, errors: errors});
+        res.json({ticketData: modifiedData, error: true, errors: errors});
         return;
     }
 
@@ -268,7 +251,7 @@ router.patch('/edit/:id', async(req, res) => {
 
     try{
         const ticket = await ticketsData.update(req.params.id, modifiedData.title, modifiedData.description, modifiedData.creator, modifiedData.project, modifiedData.errorType, modifiedData.status, modifiedData.priority);
-        res.render('pages/ticketPage', {ticket: ticket});
+        res.json({ticket: ticket, edited: true});
     }catch(e) {
         res.status(500).json({ error: e });
     }
