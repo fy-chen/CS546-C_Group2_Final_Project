@@ -14,11 +14,22 @@ export class AuthService {
     private http: HttpClient,
   ) {
    }
-
+   //login
    login(form: FormGroup){
     return new Promise((resolve, reject) => {
       const headers = new Headers(); 
       this.http.post(`${this.apiUrl}/login`, form.value).subscribe({
+        next: (data: any)=> { resolve(data);},
+        error: (error) => {  reject(error);}
+      }
+       );
+   });
+  }
+
+  signup(form: FormGroup){
+    return new Promise((resolve, reject) => {
+      const headers = new Headers(); 
+      this.http.post(`${this.apiUrl}/signup`, form.value).subscribe({
         next: (data: any)=> { resolve(data);},
         error: (error) => {  reject(error);}
       }

@@ -16,6 +16,8 @@ import { TicketService } from './shared/ticket.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from "./app.material-module";
 import { DatePipe } from '@angular/common';
+import { CreateProjectComponent } from './components/create-project/create-project.component';
+
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { DatePipe } from '@angular/common';
     ProjectsHomeComponent,
     CreateTicketComponent,
     TicketHomeComponent,
-    TicketComponent
+    TicketComponent,
+    CreateProjectComponent
   ],
   imports: [
     BrowserModule,

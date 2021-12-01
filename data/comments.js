@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const tickets = mongoCollections.tickets;
 const ticketsData = require('./tickets');
+let { ObjectId } = require('mongodb');
 
 
 async function create(ticketId, text, userId) {
@@ -69,7 +70,7 @@ async function get(commentId){
     if (ticket === null) throw 'No comment with that id';
 
     for(let x of ticket.comments){
-        if(x._id.toString() === reviewId){
+        if(x._id.toString() === commentId){
             x._id = x._id.toString();
             return x;
         }
@@ -98,3 +99,13 @@ async function remove(commentId) {
     return resultobj;
 
 }
+
+
+
+module.exports = {
+    create,
+    getAll,
+    get,
+    remove,
+}
+
