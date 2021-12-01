@@ -125,22 +125,27 @@ async function rename(id, newProjectName) {
   return await get(id.toString());
 }
 
-async function update(id, projectName, description) {
+async function update(id, projectName, description, role) {
   let parsedId = toObjectId(id, "ProjectId");
-  projectsCollection = await projects();
-  let updatedProject = {
-    projectName: projectName,
-    description: description,
-  };
 
-  const updatedInfo = await projectsCollection(
-    updateOne({ _id: parsedId }, { $set: updatedProject })
-  );
+  if (role == 1) {
+    projectsCollection = await projects();
+    let updatedProject = {
+      projectName: projectName,
+      description: description,
+    };
 
-  if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount) {
-    throw new Error(`Could not update project of id ${id}`);
+    const updatedInfo = await projectsCollection.updateOne(
+      { _id: parsedId },
+      { $set: updatedProject }
+    );
+    if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount) {
+      throw new Error(`Could not update project of id ${id}`);
+    }
+    return await get(id);
+  } else {
+    throw new Error(`You don't have Admin access`);
   }
-  return await get(id);
 }
 
 async function addUser(projectId, userId) {
@@ -182,12 +187,17 @@ async function addTickets(projectId, ticketId) {
 }
 
 async function searchProject(phrase) {
-  isAppropriateString(phrase, "Project name");
+  isAppropriateString(phrase, "Search phrase");
 
   projectsCollection = await projects();
 
   let projectList = await projectsCollection
-    .find({ $text: { $search: phrase, $caseSensitive: false } })
+    .find({
+      $or: [
+        { projectName: { $regex: ".*" + phrase + ".*", $options: "i" } },
+        { description: { $regex: ".*" + phrase + ".*", $options: "i" } },
+      ],
+    })
     .toArray();
 
   for (let i = 0; i < projectList.length(); i++) {
@@ -199,10 +209,10 @@ async function searchProject(phrase) {
 
 async function getProjectsByUser(userId) {
   let parsedId = toObjectId(userId, "userId");
-  projectsCollection = await projects;
+  projectsCollection = await projects();
   let projectList = [];
 
-  projectList = await projectsCollection.find({ users: parsedId });
+  projectList = await projectsCollection.find({ users: userId }).toArray();
   for (let i = 0; i < projectList.length; i++) {
     projectList[i]._id = projectList[i]._id.toString();
   }

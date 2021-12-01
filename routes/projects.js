@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const { tickets } = require("../data");
 const router = express.Router();
@@ -17,12 +18,18 @@ let isAppropriateString = (string, name) => {
 };
 
 router.get("/", async (req, res) => {
-  res.render("pages/projectPage");
+  // res.render("pages/projectPage");
+  try {
+    const projectList = await projectsData.getAll();
+    res.status(200).json(projectList);
+  } catch (e) {
+    res.status(404).json({ error: e });
+  }
 });
 
 router.get("/:id", async (req, res) => {
   try {
-    const project = projectsData.get(req.params.id);
+    const project = await projectsData.get(req.params.id);
     // res.render("/pages/projectPage", { project });
     res.json(project);
   } catch (e) {
@@ -30,18 +37,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("users/:id", async (req, res) => {
+router.get("/users/:id", async (req, res) => {
   try {
     const createdProjects = await projectsData.getProjectsByUser(req.params.id);
-    res.render("pages/projectPage", { createdProjects: createdProjects });
-  } catch (e) {
-    res.status(500).json({ error: e });
-  }
-});
-
-router.get("/create", async (req, res) => {
-  try {
-    res.render("pages/projectPage");
+    // res.render("pages/projectPage", { createdProjects: createdProjects });
+    res.json(createdProjects);
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -54,7 +54,8 @@ router.post("/create", async (req, res) => {
     isAppropriateString(projectData.description, "description");
     const newProject = projectsData.create(
       projectData.ProjectName,
-      projectData.description
+      projectData.description,
+      role
     );
     res.render("pages/projectPage", { project: project });
     res.json(newProject);
@@ -90,6 +91,27 @@ router.delete("/:id", async (req, res) => {
     res.status(200).json(deleteInfo);
   } catch (e) {
     res.status(500).json({ error: e });
+  }
+});
+
+router.put("/update/:id", async (req, res) => {
+  let projectData = req.body;
+  try {
+    const project = await projectsData.get(req.params.id);
+    res.status(200).json(project);
+  } catch (e) {
+    res.status(404).json({ error: "No projects found on this id." });
+  }
+  try {
+    const updatedProject = await projectsData.update(
+      req.params.id,
+      projectData.projectName,
+      projectData.description,
+      projectData.role
+    );
+    res.status(200).json(updatedProject);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });
 
