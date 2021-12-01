@@ -12,7 +12,7 @@ router.get('/:id', async(req, res) => {
 
     try{
         const ticket = await ticketsData.get(req.params.id);
-        console.log(ticket);
+        res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
     }

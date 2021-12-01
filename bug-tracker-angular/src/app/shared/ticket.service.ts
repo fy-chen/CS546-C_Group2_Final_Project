@@ -10,8 +10,6 @@ import { environment } from '../../environments/environment';
 
 export class TicketService{
 
-    ticket: any;
-
     apiUrl = environment.apiUrl;
     headers = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -20,9 +18,7 @@ export class TicketService{
     
     getTicket(id: string): Observable<Ticket>{
         
-        this.ticket = this.http.get<Ticket>(`${this.apiUrl}/ticket` + '/' + id);
-        
-        return this.ticket;
+        return this.http.get<Ticket>(`${this.apiUrl}/ticket` + '/' + id);
     }
 
 }
