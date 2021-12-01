@@ -1,4 +1,6 @@
-   
+
+import { History } from "./history";
+
 export interface Ticket {
     _id: string,
     title: string,
@@ -7,9 +9,9 @@ export interface Ticket {
     creator: string,
     project: string,
     status: string,
-    createdTime: string,
+    createdTime: number,
     errorType: string,
     assignedUsers: Array<string>,
     comment: Array<Object>,
-    history: Array<Object>,
+    history: History[],
   }
