@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: DeveloperHomeComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'createTicket', component: CreateTicketComponent },
+  { path: 'ticket/create', component: CreateTicketComponent },
   { path: 'ticket', component: TicketHomeComponent },
   { path: 'ticket/:id', component: TicketComponent },
   { path: 'projects', component: ProjectsHomeComponent },

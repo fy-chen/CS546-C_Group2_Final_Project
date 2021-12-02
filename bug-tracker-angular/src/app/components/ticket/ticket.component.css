@@ -4,7 +4,7 @@ table {
 
 h1 {
     margin-bottom: 40px;
-    margin-left: 20px;
+    margin-left: 180px;
     margin-top: 10px;
 }
 
@@ -55,4 +55,8 @@ h1 {
 
 #comments {
     margin-top: 50px;
+}
+
+.main {
+    margin-left: 160px;
 }

@@ -9,7 +9,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
-  styleUrls: ['./ticket.component.css']
+  styleUrls: ['./ticket.component.css', '../../app.component.css']
 })
 
 export class TicketComponent implements OnInit {
@@ -41,11 +41,11 @@ export class TicketComponent implements OnInit {
 
           this.assignedUsers = this.ticket.assignedUsers;
 
-          this.ticket.createdTime = this.datepipe.transform(this.ticket.createdTime, 'yyyy-MM--dd hh:mm:ss');
+          this.ticket.createdTime = this.datepipe.transform(this.ticket.createdTime, 'yyyy-MM-dd hh:mm:ss');
           
           for(let i = 0; i < this.ticket.history.length; i++){
             this.ticket.history[i].No = i + 1;
-            this.ticket.history[i].modifiedTime = this.datepipe.transform(this.ticket.history[i].modifiedTime, 'yyyy-MM--dd hh:mm:ss');
+            this.ticket.history[i].modifiedTime = this.datepipe.transform(this.ticket.history[i].modifiedTime, 'yyyy-MM-dd hh:mm:ss');
           }
 
           this.dataSource.data = this.ticket.history;
