@@ -19,6 +19,8 @@ export class TicketComponent implements OnInit {
   
   ticket: any;
 
+  assignedUsers: any;
+
   public displayedColumns = ['No', 'Property', 'Value', 'modifiedTime'];
 
   public dataSource = new MatTableDataSource<History>();
@@ -36,10 +38,14 @@ export class TicketComponent implements OnInit {
         .subscribe((data: Ticket) => {
 
           this.ticket = data;
+
+          this.assignedUsers = this.ticket.assignedUsers;
+
+          this.ticket.createdTime = this.datepipe.transform(this.ticket.createdTime, 'yyyy-MM--dd hh:mm:ss');
           
           for(let i = 0; i < this.ticket.history.length; i++){
             this.ticket.history[i].No = i + 1;
-            this.ticket.history[i].modifiedTime = this.datepipe.transform(this.ticket.history[i].modifiedTime, 'yyyy-MM--dd');
+            this.ticket.history[i].modifiedTime = this.datepipe.transform(this.ticket.history[i].modifiedTime, 'yyyy-MM--dd hh:mm:ss');
           }
 
           this.dataSource.data = this.ticket.history;
