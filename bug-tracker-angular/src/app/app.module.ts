@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -18,7 +18,8 @@ import { AppMaterialModule } from "./app.material-module";
 import { DatePipe } from '@angular/common';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
 import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
-
+import {MatRadioModule} from '@angular/material/radio';
+// import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { DashboardHomeComponent } from './components/dashboard-home/dashboard-ho
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AppMaterialModule
+    AppMaterialModule,
+    MatRadioModule,
   ],
   providers: [
     TicketService,

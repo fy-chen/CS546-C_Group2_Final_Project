@@ -16,18 +16,39 @@
 <div class="main">
   <h2>Sign Up</h2>
   <form [formGroup]= "signupForm" (ngSubmit)="signup()" id="signup-form">
-    <label>
-      Username:
-      <input type="text" id="username" name="username" formControlName="username">
+    
+      <label for="username">
+        Username:
+      </label>
+      <input type="text" id="username" name="username"  autocomplete="username" formControlName="username">
       <br><br>
-      Password:
-      <input type="password" id="password"  name="password" formControlName="password">
+      <label for="username">
+        Password:
+      </label>
+      <input type="password" id="password"  autocomplete="new-password" formControlName="password" >
       <br><br>
+      <label>
+        Role:
+      </label>
+      <br><br>
+      <mat-radio-group aria-label="Select an option" (change)="radioChange($event.value)">
+        <mat-radio-button value="1" selected>Developer</mat-radio-button>
+        <br><br><br>
+        <mat-radio-button value="2">Admin</mat-radio-button>
+      </mat-radio-group>
+
+      <br><br>
+      <div *ngIf="adminPassShow">
+        <label>
+          Admin Access Password:
+        </label>
+        <input type="password"  name="adminPassword" formControlName="adminAccess" autocomplete="current-password">
+        <br><br>
+      </div>
+     
     <div id="errorU" class="error" hidden>I'm an error</div>
     <br><br>
     <button type="submit">Login</button>
-  </label>
-    
   </form>
 </div>
    
