@@ -36,3 +36,19 @@ body {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+  
+   /*inner circle color change*/
+  ::ng-deep .mat-radio-button .mat-radio-outer-circle {
+    border-color: rgb(78, 69, 69)!important;  
+  }
+
+  /*inner circle color change*/
+  ::ng-deep .mat-radio-button .mat-radio-inner-circle {
+    background-color: rgb(91, 81, 119)!important;   
+  }
+  
+  /*outer ring color change*/
+  ::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color:rgb(101, 101, 143)!important; 
+  } 
+  

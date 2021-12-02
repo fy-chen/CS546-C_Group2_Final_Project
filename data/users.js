@@ -1,13 +1,37 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
-let { ObjectId } = require('mongodb');
 var crypto = require('crypto');
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "Wu-Tang is Forever";
-
+const admin = mongoCollections.admin;
 //Sign up 
 const adminPsGetter = async function adminPsGetter(userInput){
-    
+    let adminPassColl = await admin();
+    let adminPass = await adminPassColl.findOne({name:'user0'});
+    // console.log(adminPass)
+    const result = await validPassword(userInput,adminPass);
+    // console.log(result);
+    if (await validPassword(userInput, adminPass)){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+const adminPsSetter = async function adminPsSetter(userInput){
+    const salt = crypto.randomBytes(16).toString('hex'); 
+    const hash = crypto.pbkdf2Sync(userInput, salt,  
+    1000, 64, `sha512`).toString(`hex`);
+    let adminPassColl = await admin();
+    let adminPass = await adminPassColl.updateOne({name:'user0'},{$set:{hashedPassword: hash, salt: salt}});
+    if(adminPass.modifiedCount == 1){
+        console.log("done")
+        return "Password changed successfully!";
+    }
+    else{
+        return "Error in changing password!";
+    }
 }
 
 const signup = async function signup (body) {
@@ -46,8 +70,18 @@ const signup = async function signup (body) {
     const salt = crypto.randomBytes(16).toString('hex'); 
     const hash = crypto.pbkdf2Sync(body.password, salt,  
     1000, 64, `sha512`).toString(`hex`);
-    if (body.adminAccess){
-        const superAccess = await usersCollection.findOne({ "username":  body.username });
+
+    let role = 1;
+    console.log(body.adminAccess);
+    if (body.adminAccess!=null){
+        const result = await adminPsGetter(body.adminAccess);
+        console.log(result);
+        if ((await adminPsGetter(body.adminAccess))){
+            role = 2;
+        }
+        else{
+            throw "Error: Admin password incorrect";
+        }
     }
     
     //Storing user in DB
@@ -55,7 +89,7 @@ const signup = async function signup (body) {
         username: username,
         hashedPassword: hash,
         salt: salt,
-        role: 1,
+        role: role,
         assignedProjects: [],
         createdTickets : [],
         assignedTickets: [],
@@ -92,6 +126,27 @@ const validPassword = async function(password,userProfile) {
 
 
 const login = async function login (body) { 
+    let username = body.username;
+    let password = body.password;
+    if (typeof username != 'string' || /[^A-Z0-9]/ig.test(username)){
+        throw "Username is not a valid string."
+    }
+    if (username.length < 4){
+        throw "Username should be atleast 4 characters long"
+    }
+    if (typeof password != 'string'){
+        throw "Password is not a valid string."
+    }
+    if (password.length < 6){
+        throw "Password should be atleast 6 characters long"
+    }
+    const strArr = password.split('');
+    for (let i = 0; i<=password.length-1; i++){
+        if (strArr[i]==' '){
+            throw "Password should not contain spaces"
+        }
+    }
+    username = username.toLowerCase();
     let usersCollection = await users();
     const userProfile = await usersCollection.findOne({ "username":  body.username });
     console.log(userProfile);
@@ -115,3 +170,6 @@ module.exports= {
     login
     
 }
+
+
+// adminPsSetter("bigboss@42069");
