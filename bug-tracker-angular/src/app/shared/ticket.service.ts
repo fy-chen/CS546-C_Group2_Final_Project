@@ -23,7 +23,8 @@ export class TicketService{
     }
 
     createTicket(form: FormGroup) {
-        return this.http.post(`${this.apiUrl}/ticket/create`, form.value)
+        
+        return this.http.post(`${this.apiUrl}/ticket/create`, form.value);
     }
 
 }

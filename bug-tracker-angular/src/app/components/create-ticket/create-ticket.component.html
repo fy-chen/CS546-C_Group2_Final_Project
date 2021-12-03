@@ -19,25 +19,25 @@
     <form id="createTicket-form" [formGroup]= "createTicketForm" (ngSubmit)="createTicket()">
       <label>
         Ticket Title:
-        <input type="text" id="ticketTitle" name="ticketTitle">
+        <input type="text" id="title" name="title" value="" formControlName="title">
         <br><br>
         Description :
-        <input type="text" id="ticketDescription"  name="ticketDescription">
+        <input type="text" id="description"  name="description" value="" formControlName="description">
         <br><br>
       <!-- <div id="errorU" class="error" hidden>I'm an error</div> -->
     </label>
       <label>
         Priority
       </label>
-      <select class="full-width-input" name="priority">
+      <select class="full-width-input" name="priority" formControlName="priority">
           <option style="display:none"></option>
-          <option value=1>1 (less important)</option>
-          <option value=2>2 (medium important)</option>
-          <option value=3>3 (most important)</option>
+          <option value='1'>1 (less important)</option>
+          <option value='2'>2 (medium important)</option>
+          <option value='3'>3 (most important)</option>
       </select>
     <br><br>
     <label>Bug Type
-      <input list="browsers" class="full-width-input" name="errorType" /></label>
+      <input list="browsers" class="full-width-input" name="errorType" value="" formControlName="errorType"/></label>
       <datalist id="browsers">
               <option style="display:none"></option>
               <option value="Functional errors">Functional errors</option>
@@ -56,13 +56,14 @@
       <label>
         Project
       </label>
-      <select class="full-width-input" name="project">
+      <select class="full-width-input" name="project" formControlName="project">
           <option style="display:none"></option>
           <option value='p1'>Static Project 1</option>
           <option value='p2'>Static Project 2</option>
           <option value='p3'>Static Project 3</option>
       </select>
 
+      <br><br>
     <br><br>
       <button type="submit">Create</button>
       &nbsp;&nbsp;&nbsp;

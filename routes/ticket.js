@@ -59,6 +59,8 @@ router.post('/create', async(req, res) => {
 
     const ticketData = req.body;
 
+    console.log(ticketData);
+
     let errors = {};
 
     try{
@@ -93,7 +95,7 @@ router.post('/create', async(req, res) => {
 
     try{
         if(isNaN(Number(ticketData.priority))) throw 'Provided priority should not be NaN';
-        else if(Number(ticketData.priority) !== 1 || Number(ticketData.priority) !== 2 || Number(ticketData.priority) !== 3) throw 'Provided priority not valid';
+        else if(Number(ticketData.priority) !== 1 && Number(ticketData.priority) !== 2 && Number(ticketData.priority) !== 3) throw 'Provided priority not valid';
     }catch(e) {
         errors.priority_error = e;
     }
@@ -101,11 +103,12 @@ router.post('/create', async(req, res) => {
     //should check if creator exist
     //should check if project exist
         
+    /*
     try{
         await projectsData.get(project);
     }catch(e) {
         errors.project_not_exist = e;
-    }
+    }*/
 
     if(Object.keys(errors).length !== 0){
         res.status(500).json({ticketData: ticketData, error: true, errors: errors});
@@ -168,7 +171,7 @@ router.patch('/edit/:id', async(req, res) => {
 
     try{
         if(isNaN(Number(modifiedData.priority))) throw 'Provided priority should not be NaN';
-        else if(Number(modifiedData.priority) !== 1 || Number(modifiedData.priority) !== 2 || Number(modifiedData.priority) !== 3) throw 'Provided priority not valid';
+        else if(Number(modifiedData.priority) !== 1 && Number(modifiedData.priority) !== 2 && Number(modifiedData.priority) !== 3) throw 'Provided priority not valid';
     }catch(e) {
         errors.priority_error = e;
     }
@@ -176,15 +179,16 @@ router.patch('/edit/:id', async(req, res) => {
     //should check if creator exist
     //should check if project exist
         
+    /*
     try{
         await projectsData.get(project);
     }catch(e) {
         errors.project_not_exist = e;
-    }
+    }*/
 
     try{
         ticketsData.isAppropriateString(modifiedData.status, 'status');
-        if(modifiedData.status !== 'open' || modifiedData.status !== 'closed' || modifiedData.status !== 'ready_to_close') throw 'Provided status not valid';
+        if(modifiedData.status !== 'open' && modifiedData.status !== 'closed' && modifiedData.status !== 'ready_to_close') throw 'Provided status not valid';
     }catch(e) {
         errors.status_error = e;
     }
