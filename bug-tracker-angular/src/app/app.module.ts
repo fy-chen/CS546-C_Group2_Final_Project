@@ -19,6 +19,7 @@ import { DatePipe } from '@angular/common';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
 import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
 import {MatRadioModule} from '@angular/material/radio';
+import { EditTicketComponent } from './components/edit-ticket/edit-ticket.component';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -35,6 +36,7 @@ import {MatRadioModule} from '@angular/material/radio';
     TicketComponent,
     CreateProjectComponent,
     DashboardHomeComponent,
+    EditTicketComponent,
 
   ],
   imports: [

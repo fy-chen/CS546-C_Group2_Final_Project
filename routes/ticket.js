@@ -133,9 +133,11 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-router.patch('/edit/:id', async(req, res) => {
+router.put('/edit/:id', async(req, res) => {
 
     const modifiedData = req.body;
+
+    console.log(modifiedData);
 
     let errors = {}
 
@@ -149,12 +151,6 @@ router.patch('/edit/:id', async(req, res) => {
         ticketsData.isAppropriateString(modifiedData.description, 'description');
     }catch(e) {
         errors.description_error = e;
-    }
-
-    try{
-        ticketsData.isAppropriateString(modifiedData.creator, 'creator');
-    }catch(e) {
-        errors.creator_error = e;
     }
         
     try{
@@ -202,47 +198,46 @@ router.patch('/edit/:id', async(req, res) => {
     let history_value = '';
 
     try {
-        const ticket = ticketsData.get(req.params.id);
+        const ticket = await ticketsData.get(req.params.id);
+
+        console.log(ticket);
 
         if(ticket.title !== modifiedData.title){
             let modify_content = `title: ${modifiedData.title} \n`
-            history_value.concat(modify_content);
+            history_value = history_value.concat(modify_content);
         }
 
         if(ticket.description !== modifiedData.description){
             let modify_content = `description: ${modifiedData.description} \n`
-            history_value.concat(modify_content);
-        }
-
-        if(ticket.creator !== modifiedData.creator){
-            let modify_content = `creator: ${modifiedData.creator} \n`
-            history_value.concat(modify_content);
+            history_value = history_value.concat(modify_content);
         }
 
         if(ticket.project !== modifiedData.project){
             let modify_content = `project: ${modifiedData.project} \n`
-            history_value.concat(modify_content);
+            history_value = history_value.concat(modify_content);
         }
 
         if(ticket.errorType !== modifiedData.errorType){
             let modify_content = `errorType: ${modifiedData.errorType} \n`
-            history_value.concat(modify_content);
+            history_value = history_value.concat(modify_content);
         }
 
         if(ticket.priority !== modifiedData.priority){
             let modify_content = `priority: ${modifiedData.priority} \n`
-            history_value.concat(modify_content);
+            history_value = history_value.concat(modify_content);
         }
 
         if(ticket.status !== modifiedData.status){
             let modify_content = `status: ${modifiedData.status} \n`
-            history_value.concat(modify_content);
+            history_value = history_value.concat(modify_content);
         }
 
         history.Value = history_value;
 
+        console.log(history.Value);
+
         if(history.Value.trim().length === 0){
-            res.render('/pages/ticketPage', {noChanges: true});
+            res.status(500).json({noChanges: true});
             return;
         }
 
@@ -254,8 +249,8 @@ router.patch('/edit/:id', async(req, res) => {
 
 
     try{
-        const ticket = await ticketsData.update(req.params.id, modifiedData.title, modifiedData.description, modifiedData.creator, modifiedData.project, modifiedData.errorType, modifiedData.status, modifiedData.priority);
-        res.json({ticket: ticket, edited: true});
+        const ticket = await ticketsData.update(req.params.id, modifiedData.title, modifiedData.description, modifiedData.priority, modifiedData.project, modifiedData.status, modifiedData.errorType);
+        res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
     }

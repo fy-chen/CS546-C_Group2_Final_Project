@@ -27,4 +27,9 @@ export class TicketService{
         return this.http.post(`${this.apiUrl}/ticket/create`, form.value);
     }
 
+    updateTicket(id: string, form: FormGroup) {
+
+        return this.http.put(`${this.apiUrl}/ticket/edit/` + id, form.value)
+    }
+
 }

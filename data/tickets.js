@@ -23,18 +23,16 @@ let toObjectId = (id, name) => {
     return parsedId;
 }
  
-async function areAppropriateParameters (title, description, priority, creator, project, errorType) {
+async function areAppropriateParameters (title, description, priority, project, errorType) {
 
     isAppropriateString(title, 'title');
     isAppropriateString(description, 'description');
-    isAppropriateString(creator, 'creator');
     isAppropriateString(project, 'project');
     isAppropriateString(errorType, 'errorType');
 
     if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
     else if(Number(priority) !== 1 && Number(priority) !== 2 && Number(priority) !== 3) throw 'Provided priority not valid';
 
-    //should check if creator exist
     //should check if project exist
     // await projectsData.get(project);
 
@@ -62,7 +60,11 @@ let isValidStatus = (status) => {
 
 async function create(title, description, priority, creator, project, errorType) {
 
-    await areAppropriateParameters(title, description, priority, creator, project, errorType);
+    await areAppropriateParameters(title, description, priority, project, errorType);
+
+    isAppropriateString(creator, 'creator');
+
+    //should check if creator exists
 
     let createdTime = Date.now();
 
@@ -130,11 +132,11 @@ async function getAll() {
   
   }
 
-async function update(id, title, description, priority, creator, project, status, errorType) {
+async function update(id, title, description, priority, project, status, errorType) {
 
     let parsedId = toObjectId(id, 'ticketId');
 
-    await areAppropriateParameters(title, description, priority, creator, project, errorType);
+    await areAppropriateParameters(title, description, priority, project, errorType);
 
     isValidStatus(status);
 
@@ -146,7 +148,6 @@ async function update(id, title, description, priority, creator, project, status
         title: title,
         description: description,
         priority: priority,
-        creator: creator,
         project: project,
         status: status,
         errorType: errorType,

@@ -1,0 +1,89 @@
+<div class="sidenav">
+    <a href="/dashboard">dashboard</a>
+    <a href="/projects">Project</a>
+    <a href="/ticket">Ticket</a>
+</div>
+
+<div class="main">
+
+<h1>Edit Ticket</h1>
+<form id="editTicket-form" [formGroup]= "editTicketForm" (ngSubmit)="updateTicket()">
+    <div>
+    <mat-form-field class="input-width" appearance="fill">
+        <mat-label>Ticket Title</mat-label>
+        <input matInput formControlName="title" id="title">
+    </mat-form-field>
+
+    <br><br>
+
+    <mat-form-field class="input-width" appearance="fill" >
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" id="description">
+    </mat-form-field>
+    <br><br>
+
+    <mat-form-field appearance="fill" class="input-width">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority" id="priority">
+          <mat-option value="1">1 (less important)</mat-option>
+          <mat-option value="2">2 (medium important)</mat-option>
+          <mat-option value="3">3 (most important)</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br><br>
+
+    </div>
+
+    <div>
+        <mat-form-field appearance="fill" class="input-width">
+            <mat-label>Project</mat-label>
+            <mat-select formControlName="project" id="project">
+              <mat-option value="p1">Static Project 1</mat-option>
+              <mat-option value="{{this.ticket.project}}">{{this.ticket.project}}</mat-option>
+              <mat-option value="p3">Static Project 3</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br><br>
+
+        <mat-form-field appearance="fill" class="input-width">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status" id="status">
+              <mat-option value="open">Open</mat-option>
+              <mat-option value="ready_to_close">Ready to Close</mat-option>
+              <mat-option value="closed">Closed</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br><br>
+
+        <mat-form-field class="input-width" appearance="fill">
+            <mat-label>Error Type</mat-label>
+            <input type="text"
+                   aria-label="Error Type"
+                   matInput
+                   [matAutocomplete]="auto"
+                   formControlName="errorType" 
+                   id="errorType">
+            <mat-autocomplete autoActiveFirstmat-option #auto="matAutocomplete">
+                <mat-option value="Functional errors">Functional errors</mat-option>
+                <mat-option value='Performance defects'>Performance defects</mat-option>
+                <mat-option value='Usability defects'>Usability defects</mat-option>
+                <mat-option value='Compatibility defects'>Compatibility defects</mat-option>
+                <mat-option value='Security defects'>Security defects</mat-option>
+                <mat-option value='Syntax errors'>Syntax errors</mat-option>
+                <mat-option value='Logic errors'>Logic errors</mat-option>
+                <mat-option value='Unit-level bugs'>Unit-level bugs</mat-option>
+                <mat-option value='System-level integration bugs'>System-level integration bugs</mat-option>
+                <mat-option value='Code Duplication'>Code Duplication</mat-option>
+                <mat-option value='Data Type Mismatch'>Data Type Mismatch</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+    
+    </div>
+
+    <div>
+        <br><br>
+        <button mat-raised-button color="primary" type="submit">Confirm</button> 
+    </div>
+
+</form>
+</div>

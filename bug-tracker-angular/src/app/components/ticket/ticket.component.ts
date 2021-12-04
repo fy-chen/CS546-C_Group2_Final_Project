@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TicketService } from '../../shared/ticket.service';
-import {MatTableDataSource} from "@angular/material/table";
+import { MatTableDataSource } from "@angular/material/table";
 import { History } from '../history';
 import { Ticket } from '../tickets';
 import { DatePipe } from '@angular/common';
@@ -31,7 +31,7 @@ export class TicketComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.id = this.route.snapshot.paramMap.get('id')
+    this.id = this.route.snapshot.paramMap.get('id');
     
     
     this._ticketService.getTicket(this.id)
