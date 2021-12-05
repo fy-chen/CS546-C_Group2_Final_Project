@@ -248,7 +248,7 @@ router.put('/edit/:id', async(req, res) => {
         console.log(history.Value);
 
         if(history.Value.trim().length === 0){
-            res.status(500).json({noChanges: true});
+            res.json({noChanges: true});
             return;
         }
 
