@@ -14,12 +14,38 @@
         <input matInput formControlName="title" id="title">
     </mat-form-field>
 
+    <div *ngIf="editTicketForm.controls['title'].invalid && (editTicketForm.controls['title'].dirty || editTicketForm.controls['title'].touched)" class="alert">
+        <div *ngIf="editTicketForm.controls['title'].errors?.['required']">
+          Please enter ticket title
+        </div>
+        <div *ngIf="editTicketForm.controls['title'].errors?.['minlength']">
+          Ticket title must be at least 4 characters long
+        </div>
+        <div *ngIf="editTicketForm.controls['title'].errors?.['maxlength']">
+          Ticket title cannot be more than 20 characters long
+        </div>
+        <div *ngIf="editTicketForm.controls['title'].errors?.['onlywhitespace']">Title can not contain just spaces</div>
+    </div>
+
     <br><br>
 
     <mat-form-field class="input-width" appearance="fill" >
         <mat-label>Description</mat-label>
         <input matInput formControlName="description" id="description">
     </mat-form-field>
+
+    <div *ngIf="editTicketForm.controls['description'].invalid && (editTicketForm.controls['description'].dirty || editTicketForm.controls['description'].touched)" class="alert">
+        <div *ngIf="editTicketForm.controls['description'].errors?.['required']">
+          Please enter ticket description
+        </div>
+        <div *ngIf="editTicketForm.controls['description'].errors?.['minlength']">
+          Ticket description must be at least 4 characters long
+        </div>
+        <div *ngIf="editTicketForm.controls['description'].errors?.['maxlength']">
+          Ticket description cannot be more than 100 characters long
+        </div>
+        <div *ngIf="editTicketForm.controls['description'].errors?.['onlywhitespace']">Description can not contain just spaces</div>
+    </div>
     <br><br>
 
     <mat-form-field appearance="fill" class="input-width">
@@ -30,6 +56,13 @@
           <mat-option value="3">3 (most important)</mat-option>
         </mat-select>
     </mat-form-field>
+
+    <div *ngIf="editTicketForm.controls['priority'].invalid && (editTicketForm.controls['priority'].dirty || editTicketForm.controls['priority'].touched)" class="alert">
+        <div *ngIf="editTicketForm.controls['priority'].errors?.['required']">
+          Please choose ticket priority
+        </div>
+    </div>
+
     <br><br>
 
     </div>
@@ -43,6 +76,13 @@
               <mat-option value="p3">Static Project 3</mat-option>
             </mat-select>
         </mat-form-field>
+
+        <div *ngIf="editTicketForm.controls['project'].invalid && (editTicketForm.controls['project'].dirty || editTicketForm.controls['project'].touched)" class="alert">
+            <div *ngIf="editTicketForm.controls['project'].errors?.['required']">
+              Please choose ticket project
+            </div>
+        </div>
+
         <br><br>
 
         <mat-form-field appearance="fill" class="input-width">
@@ -53,6 +93,13 @@
               <mat-option value="closed">Closed</mat-option>
             </mat-select>
         </mat-form-field>
+
+        <div *ngIf="editTicketForm.controls['status'].invalid && (editTicketForm.controls['status'].dirty || editTicketForm.controls['status'].touched)" class="alert">
+            <div *ngIf="editTicketForm.controls['status'].errors?.['required']">
+              Please choose ticket status
+            </div>
+        </div>
+
         <br><br>
 
         <mat-form-field class="input-width" appearance="fill">
@@ -78,11 +125,26 @@
             </mat-autocomplete>
           </mat-form-field>
     
+        <div *ngIf="editTicketForm.controls['errorType'].invalid && (editTicketForm.controls['errorType'].dirty || editTicketForm.controls['errorType'].touched)" class="alert">
+            <div *ngIf="editTicketForm.controls['errorType'].errors?.['required']">
+              Please enter ticket errorType
+            </div>
+            <div *ngIf="editTicketForm.controls['errorType'].errors?.['minlength']">
+              Ticket errorType must be at least 4 characters long
+            </div>
+            <div *ngIf="editTicketForm.controls['errorType'].errors?.['maxlength']">
+              Ticket errorType cannot be more than 20 characters long
+            </div>
+            <div *ngIf="editTicketForm.controls['errorType'].errors?.['onlywhitespace']">ErrorType can not contain just spaces</div>
+        </div>
+
     </div>
+
+    
 
     <div>
         <br><br>
-        <button mat-raised-button color="primary" type="submit">Confirm</button> 
+        <button mat-raised-button color="primary" type="submit" [disabled]="!editTicketForm.valid">Confirm</button> 
     </div>
 
 </form>

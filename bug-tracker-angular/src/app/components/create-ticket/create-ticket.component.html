@@ -20,9 +20,33 @@
       <label>
         Ticket Title:
         <input type="text" id="title" name="title" value="" formControlName="title">
+        <div *ngIf="createTicketForm.controls['title'].invalid && (createTicketForm.controls['title'].dirty || createTicketForm.controls['title'].touched)" class="alert">
+        <div *ngIf="createTicketForm.controls['title'].errors?.['required']">
+          Please enter ticket title
+        </div>
+        <div *ngIf="createTicketForm.controls['title'].errors?.['minlength']">
+          Ticket title must be at least 4 characters long
+        </div>
+        <div *ngIf="createTicketForm.controls['title'].errors?.['maxlength']">
+          Ticket title cannot be more than 20 characters long
+        </div>
+        <div *ngIf="createTicketForm.controls['title'].errors?.['onlywhitespace']">Title can not contain just spaces</div>
+      </div>
         <br><br>
         Description :
         <input type="text" id="description"  name="description" value="" formControlName="description">
+        <div *ngIf="createTicketForm.controls['description'].invalid && (createTicketForm.controls['description'].dirty || createTicketForm.controls['description'].touched)" class="alert">
+          <div *ngIf="createTicketForm.controls['description'].errors?.['required']">
+            Please enter ticket description
+          </div>
+          <div *ngIf="createTicketForm.controls['description'].errors?.['minlength']">
+            Ticket description must be at least 4 characters long
+          </div>
+          <div *ngIf="createTicketForm.controls['description'].errors?.['maxlength']">
+            Ticket description cannot be more than 100 characters long
+          </div>
+          <div *ngIf="createTicketForm.controls['description'].errors?.['onlywhitespace']">Description can not contain just spaces</div>
+        </div>
         <br><br>
       <!-- <div id="errorU" class="error" hidden>I'm an error</div> -->
     </label>
@@ -35,6 +59,11 @@
           <option value='2'>2 (medium important)</option>
           <option value='3'>3 (most important)</option>
       </select>
+      <div *ngIf="createTicketForm.controls['priority'].invalid && (createTicketForm.controls['priority'].dirty || createTicketForm.controls['priority'].touched)" class="alert">
+        <div *ngIf="createTicketForm.controls['priority'].errors?.['required']">
+          Please choose ticket priority
+        </div>
+      </div>
     <br><br>
     <label>Bug Type
       <input list="browsers" class="full-width-input" name="errorType" value="" formControlName="errorType"/></label>
@@ -52,6 +81,18 @@
               <option value='Code Duplication'>Code Duplication</option>
               <option value='Data Type Mismatch'>Data Type Mismatch</option>
       </datalist>
+      <div *ngIf="createTicketForm.controls['errorType'].invalid && (createTicketForm.controls['errorType'].dirty || createTicketForm.controls['errorType'].touched)" class="alert">
+        <div *ngIf="createTicketForm.controls['errorType'].errors?.['required']">
+          Please enter ticket errorType
+        </div>
+        <div *ngIf="createTicketForm.controls['errorType'].errors?.['minlength']">
+          Ticket errorType must be at least 4 characters long
+        </div>
+        <div *ngIf="createTicketForm.controls['errorType'].errors?.['maxlength']">
+          Ticket errorType cannot be more than 20 characters long
+        </div>
+        <div *ngIf="createTicketForm.controls['errorType'].errors?.['onlywhitespace']">ErrorType can not contain just spaces</div>
+      </div>
       <br><br>
       <label>
         Project
@@ -63,9 +104,15 @@
           <option value='p3'>Static Project 3</option>
       </select>
 
+      <div *ngIf="createTicketForm.controls['project'].invalid && (createTicketForm.controls['project'].dirty || createTicketForm.controls['project'].touched)" class="alert">
+        <div *ngIf="createTicketForm.controls['project'].errors?.['required']">
+          Please choose ticket priority
+        </div>
+      </div>
+
       <br><br>
     <br><br>
-      <button type="submit">Create</button>
+      <button type="submit" [disabled]="!createTicketForm.valid">Create</button>
       &nbsp;&nbsp;&nbsp;
       <button type="reset">Clear</button>      
     </form>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { Router } from '@angular/router';
 import { TicketService } from 'src/app/shared/ticket.service';
 
@@ -14,11 +14,17 @@ export class CreateTicketComponent implements OnInit {
   ticket: any;
 
   createTicketForm = this.formbuilder.group({
-    title: '',
-    description: '',
-    priority: '',
-    errorType: '',
-    project: '',
+    title: new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.minLength(4), Validators.maxLength(20), this.onlySpaceValidator])),
+    description: new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.minLength(4), Validators.maxLength(100), this.onlySpaceValidator])),
+    priority: new FormControl('', Validators.required),
+    errorType: new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.minLength(4), Validators.maxLength(20), this.onlySpaceValidator])),
+    project: new FormControl('', Validators.required),
     creator: ''
   });
 
@@ -44,5 +50,11 @@ export class CreateTicketComponent implements OnInit {
       
     )
  }
+
+public onlySpaceValidator(control: FormControl) {
+  const onlyWhitespace = control.value.trim().length === 0;
+  const isValid = !onlyWhitespace;
+  return isValid ? null : { 'onlywhitespace': true };
+}
 
 }
