@@ -4,6 +4,7 @@ const projectRoutes = require("./projects");
 const ticketRoutes = require("./ticket");
 const signupRoutes = require("./signup");
 const loginRoutes = require("./login");
+const commentRoutes = require("./comment");
 
 const constructorMethod = (app) => {
   // app.use("/", loginRoutes);
@@ -12,6 +13,7 @@ const constructorMethod = (app) => {
   app.use("/api/ticket", ticketRoutes);
   app.use("/api/signup", signupRoutes);
   app.use("/api/login", loginRoutes);
+  app.use("/api/comment", commentRoutes);
 
   app.use("*", (req, res) => {
     res.sendStatus(404);
