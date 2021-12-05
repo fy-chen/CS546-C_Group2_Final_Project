@@ -20,6 +20,7 @@ import { CreateProjectComponent } from './components/create-project/create-proje
 import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { EditTicketComponent } from './components/edit-ticket/edit-ticket.component';
+import { ChartsModule } from 'ng2-charts';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -48,6 +49,7 @@ import { EditTicketComponent } from './components/edit-ticket/edit-ticket.compon
     BrowserAnimationsModule,
     AppMaterialModule,
     MatRadioModule,
+    ChartsModule,
   ],
   providers: [
     TicketService,
