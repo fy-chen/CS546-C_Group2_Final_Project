@@ -14,6 +14,17 @@ router.get('/:id', async(req, res) => {
     }
 });
 
+router.get('/getAll', async(req, res) => {
+
+    try{
+        const tickets = await ticketsData.getAll();
+        res.json(tickets);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
+
 router.get('/user/:id', async(req, res) => {
 
     if(!req.body.tickettype){
