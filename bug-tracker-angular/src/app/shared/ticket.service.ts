@@ -22,6 +22,10 @@ export class TicketService{
         return this.http.get<Ticket>(`${this.apiUrl}/ticket` + '/' + id);
     }
 
+    getAllTickets(): Observable<Ticket[]> {
+        return this.http.get<Ticket[]>(`${this.apiUrl}/ticket/getAll`);
+    }
+
     createTicket(form: FormGroup) {
         
         return this.http.post(`${this.apiUrl}/ticket/create`, form.value);
