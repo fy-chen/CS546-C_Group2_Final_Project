@@ -12,7 +12,7 @@ import { ProjectsHomeComponent } from './components/projects-home/projects-home.
 import { CreateProjectComponent } from './components/create-project/create-project.component';
 import { DashboardHomeComponent} from './components/dashboard-home/dashboard-home.component';
 import { EditTicketComponent } from './components/edit-ticket/edit-ticket.component';
-
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: DeveloperHomeComponent },
@@ -24,6 +24,7 @@ const routes: Routes = [
   { path: 'projects/create', component: CreateProjectComponent },
   { path: 'dashboard', component : DashboardHomeComponent},
   { path: 'ticket/edit/:id', component: EditTicketComponent },
+  {path:'admin-home', component: AdminHomeComponent},
 ];
 
 @NgModule({

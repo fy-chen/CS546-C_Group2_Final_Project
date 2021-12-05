@@ -14,12 +14,25 @@ export class AuthService {
     private http: HttpClient,
   ) {
    }
+
+   isLoggedIn() {
+     return new Promise((resolve, reject) => {
+      const headers = new Headers(); 
+      this.http.get(`${this.apiUrl}/login`).subscribe({
+        next: (data: Object)=> { resolve(data);},
+        error: (error) => {  reject(error);}
+      }
+       );
+   });
+
+  }
+
    //login
    login(form: FormGroup){
     return new Promise((resolve, reject) => {
       const headers = new Headers(); 
       this.http.post(`${this.apiUrl}/login`, form.value).subscribe({
-        next: (data: any)=> { resolve(data);},
+        next: (data: object)=> { resolve(data);},
         error: (error) => {  reject(error);}
       }
        );

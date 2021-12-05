@@ -74,11 +74,13 @@ router.post("/search", async (req, res) => {
   }
 
   try {
-    const projectList = projectsData.searchProject(req.body.phrase);
+    const projectList = await projectsData.searchProject(req.body.phrase);
     if (projectList.length === 0) {
-      res.render("pages/projectPage", { notFound: true });
+      res.status(200).send([]);
+      // res.render("pages/projectPage", { notFound: true });
     } else {
-      res.render("pages/projectPage", { projects: projectList });
+      res.status(200).send(projectList);
+      // res.render("pages/projectPage", { projects: projectList });
     }
   } catch (e) {
     res.status(500).json({ error: e });

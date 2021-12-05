@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router(); 
 const users = require("../data").users;
 
+
+router.get('/',async(req,res)=>{
+    if (req.session.user){
+        res.status(200).json({loggedIn:true, role :req.session.user.userRole});
+    }
+    else{
+        res.status(200).json({loggedIn: false});
+    }
+});
+
 router.post('/',async(req,res) =>{
 
     const loginResponse =  await users.login(req.body);

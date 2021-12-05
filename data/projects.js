@@ -199,8 +199,8 @@ async function searchProject(phrase) {
       ],
     })
     .toArray();
-
-  for (let i = 0; i < projectList.length(); i++) {
+  console.log(await projectList)
+  for (let i = 0; i < projectList.length; i++) {
     projectList[i]._id = projectList[i]._id.toString();
   }
 

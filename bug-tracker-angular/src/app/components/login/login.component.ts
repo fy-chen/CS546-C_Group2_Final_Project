@@ -1,5 +1,7 @@
+import { JsonpClientBackend } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
 @Component({
   selector: 'app-login',
@@ -17,16 +19,34 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder : FormBuilder,
     private AuthService : AuthService,
+    private router : Router,
   ) { }
 
   ngOnInit(): void {
+    this.checkLogin();
   }
+  async checkLogin(){
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    // console.log(loggedIn);
 
+    //if loggedIn already, got to role home
+      if (loggedIn.loggedIn === true){
+        if (loggedIn.role  == 2){
+          this.router.navigate(['/ticket/create']) // CHANGE TO ADMIN HOME
+        }
+        else{
+          this.router.navigate(['/home'])
+        }
+      }
+    //else nothing
+  }
   login(): void{
     console.log("pressed")
     this.AuthService.login(this.loginForm).then(
-      data=>{
-        console.log(data);
+      (data:any)=>{
+        if (data['login'] === true ){
+          this.router.navigate(['/home'])
+        }
       },
       err=>{
         console.log(err)

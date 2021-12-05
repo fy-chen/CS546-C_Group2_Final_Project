@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/shared/auth.service';
 export class SignupComponent implements OnInit {
 
   role : undefined | undefined;
+  
   adminPassShow = false;
   signupForm = this.formBuilder.group({
     username: '',
@@ -22,6 +23,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private formBuilder : FormBuilder,
     private AuthService : AuthService,
+    public router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -43,6 +45,7 @@ export class SignupComponent implements OnInit {
     this.AuthService.signup(this.signupForm).then(
       data=>{
         
+        this.router.navigate(['/login/'])
       }
       
     )
