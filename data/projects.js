@@ -30,9 +30,9 @@ let toObjectId = (id, name) => {
 async function create(projectName, description, role) {
   isAppropriateString(projectName, "Project Name");
   isAppropriateString(description, "Description");
-  if (isNaN(Number(role))) {
-    throw new Error("Provided role should not be NaN");
-  }
+  // if (isNaN(Number(role))) {
+  //   throw new Error("Provided role should not be NaN");
+  // }
   // if (Number(role) !== 1 || Number(role) !== 2 || Number(role) !== 3) {
   //   throw new Error("Provided role not valid");
   // }
