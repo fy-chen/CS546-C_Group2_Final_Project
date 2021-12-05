@@ -50,12 +50,12 @@ router.get("/users/:id", async (req, res) => {
 router.post("/create", async (req, res) => {
   let projectData = req.body;
   try {
-    isAppropriateString(projectData.ProjectName, "Project Name");
+    isAppropriateString(projectData.projectName, "Project Name");
     isAppropriateString(projectData.description, "description");
-    const newProject = projectsData.create(
-      projectData.ProjectName,
+    const newProject = await projectsData.create(
+      projectData.projectName,
       projectData.description,
-      role
+      projectData.role
     );
     res.render("pages/projectPage", { project: project });
     res.json(newProject);
