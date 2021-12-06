@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class EditTicketComponent implements OnInit {
   id: any;
   ticket: any;
   project: any;
+  projectlist: any;
 
   editTicketForm = this.formbuilder.group({
     title: new FormControl('', Validators.compose([
@@ -29,7 +31,7 @@ export class EditTicketComponent implements OnInit {
     status: new FormControl('', Validators.required)
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService) { }
 
   ngOnInit(): void {
 
@@ -41,16 +43,25 @@ export class EditTicketComponent implements OnInit {
 
           this.ticket = data;
 
-          this.editTicketForm.setValue({
-            title: this.ticket.title,
-            description: this.ticket.description,
-            priority: this.ticket.priority.toString(),
-            project: this.ticket.project,
-            status: this.ticket.status,
-            errorType: this.ticket.errorType
-          }, { onlySelf: true });
-
-    });
+          this.projectService.getProject(this.ticket.project).subscribe(
+            (data) => {
+              this.project = data;
+              this.editTicketForm.setValue({
+                title: this.ticket.title,
+                description: this.ticket.description,
+                priority: this.ticket.priority.toString(),
+                project: this.project._id,
+                status: this.ticket.status,
+                errorType: this.ticket.errorType
+              }, { onlySelf: true });
+            });
+          });
+          
+          this.projectService.getAllProjects().subscribe(
+            (data) => {
+              this.projectlist = data;
+              console.log(this.projectlist);
+            });
 
   }
 

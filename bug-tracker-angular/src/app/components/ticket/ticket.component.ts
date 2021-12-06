@@ -5,6 +5,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { History } from '../history';
 import { Ticket } from '../tickets';
 import { DatePipe } from '@angular/common';
+import { ProjectService } from 'src/app/shared/project.service';
 
 @Component({
   selector: 'app-ticket',
@@ -21,12 +22,14 @@ export class TicketComponent implements OnInit {
 
   assignedUsers: any;
 
+  project: any;
+
   public displayedColumns = ['No', 'Property', 'Value', 'modifiedTime'];
 
   public dataSource = new MatTableDataSource<History>();
 
 
-  constructor(private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe) { }
+  constructor(private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService) { }
 
 
   ngOnInit(): void {
@@ -38,6 +41,14 @@ export class TicketComponent implements OnInit {
         .subscribe((data: Ticket) => {
 
           this.ticket = data;
+
+          this.project = this.ticket.project;
+
+          this.projectService.getProject(this.ticket.project).subscribe(
+            (data) => {
+              this.project = data;
+            });
+          
 
           this.assignedUsers = this.ticket.assignedUsers;
 

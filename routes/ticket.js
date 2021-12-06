@@ -111,15 +111,13 @@ router.post('/create', async(req, res) => {
         errors.priority_error = e;
     }
         
-    //should check if creator exist
-    //should check if project exist
-        
-    /*
+    //should check if creator exist  
+    
     try{
-        await projectsData.get(project);
+        await projectsData.get(ticketData.project);
     }catch(e) {
         errors.project_not_exist = e;
-    }*/
+    }
 
     if(Object.keys(errors).length !== 0){
         res.status(500).json({ticketData: ticketData, error: true, errors: errors});
@@ -128,6 +126,7 @@ router.post('/create', async(req, res) => {
     
     try{
         const ticket = await ticketsData.create(ticketData.title, ticketData.description, ticketData.priority, ticketData.creator, ticketData.project, ticketData.errorType);
+        const project = await projectsData.addTickets(ticketData.project, ticket._id);
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });

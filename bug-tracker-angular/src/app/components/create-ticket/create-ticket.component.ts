@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { Router } from '@angular/router';
+import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
 
 @Component({
@@ -12,6 +13,7 @@ export class CreateTicketComponent implements OnInit {
 
   id: any;
   ticket: any;
+  projectlist:any;
 
   createTicketForm = this.formbuilder.group({
     title: new FormControl('', Validators.compose([
@@ -28,9 +30,14 @@ export class CreateTicketComponent implements OnInit {
     creator: ''
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router) { }
+  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private projectService: ProjectService) { }
 
   ngOnInit(): void {
+    this.projectService.getAllProjects().subscribe(
+      (data) => {
+        this.projectlist = data;
+        console.log(this.projectlist);
+    });
   }
 
   createTicket(): void{

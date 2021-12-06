@@ -27,14 +27,14 @@ async function areAppropriateParameters (title, description, priority, project, 
 
     isAppropriateString(title, 'title');
     isAppropriateString(description, 'description');
-    isAppropriateString(project, 'project');
+    toObjectId(project, 'project');
     isAppropriateString(errorType, 'errorType');
 
     if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
     else if(Number(priority) !== 1 && Number(priority) !== 2 && Number(priority) !== 3) throw 'Provided priority not valid';
 
     //should check if project exist
-    // await projectsData.get(project);
+    await projectsData.get(project);
 
 }
 
@@ -270,6 +270,10 @@ async function getTicketsByUser(userId, type) {
 async function getTicketsByProject(projectId) {
     
     let parsedId = toObjectId(projectId, 'projectId');
+
+    let project = await projectsData.get(project);
+
+    if(project === null) throw "project no exist";
 
     TicketsCollection = await tickets();
   

@@ -33,7 +33,7 @@ export class TicketService{
 
     updateTicket(id: string, form: FormGroup) {
 
-        return this.http.put(`${this.apiUrl}/ticket/edit/` + id, form.value)
+        return this.http.put(`${this.apiUrl}/ticket/edit/` + id, form.value);
     }
 
 }

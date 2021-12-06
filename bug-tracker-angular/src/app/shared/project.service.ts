@@ -23,4 +23,12 @@ export class ProjectService {
        );
    });
   }
+
+  getAllProjects() {
+    return this.http.get(`${this.apiUrl}/projects/`);
+  }
+
+  getProject(id: string) {
+    return this.http.get(`${this.apiUrl}/projects/` + id);
+  }
 }
