@@ -44,6 +44,10 @@ h1{
   margin-left: 100px;
 }
 
+.alert {
+  color: red;
+}
+
   
   @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}

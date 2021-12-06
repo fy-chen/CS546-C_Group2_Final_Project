@@ -52,7 +52,7 @@ export class CreateTicketComponent implements OnInit {
  }
 
 public onlySpaceValidator(control: FormControl) {
-  const onlyWhitespace = control.value.trim().length === 0;
+  const onlyWhitespace = control.value.trim().length === 0 && control.value;
   const isValid = !onlyWhitespace;
   return isValid ? null : { 'onlywhitespace': true };
 }
