@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
 
-</style>
-</head>
-<body>
 
 <div class="sidenav">
     <a href="/dashboard">dashboard</a>
@@ -15,11 +7,14 @@
 </div>
 
 <div class="main">
-    <h2>Create A New Ticket</h2>
+    <h1>Create A New Ticket</h1>
     <form id="createTicket-form" [formGroup]= "createTicketForm" (ngSubmit)="createTicket()">
-      <label>
-        Ticket Title:
-        <input type="text" id="title" name="title" value="" formControlName="title">
+
+        <mat-form-field class="input-width" appearance="fill">
+            <mat-label>Ticket Title</mat-label>
+            <input matInput formControlName="title" id="title">
+        </mat-form-field>
+    
         <div *ngIf="createTicketForm.controls['title'].invalid && (createTicketForm.controls['title'].dirty || createTicketForm.controls['title'].touched)" class="alert">
         <div *ngIf="createTicketForm.controls['title'].errors?.['required']">
           Please enter ticket title
@@ -31,10 +26,14 @@
           Ticket title cannot be more than 20 characters long
         </div>
         <div *ngIf="createTicketForm.controls['title'].errors?.['onlywhitespace']">Title can not contain just spaces</div>
-      </div>
+        </div>
         <br><br>
-        Description :
-        <input type="text" id="description"  name="description" value="" formControlName="description">
+
+      <mat-form-field class="input-width" appearance="fill" >
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" id="description">
+      </mat-form-field>
+
         <div *ngIf="createTicketForm.controls['description'].invalid && (createTicketForm.controls['description'].dirty || createTicketForm.controls['description'].touched)" class="alert">
           <div *ngIf="createTicketForm.controls['description'].errors?.['required']">
             Please enter ticket description
@@ -49,38 +48,46 @@
         </div>
         <br><br>
       <!-- <div id="errorU" class="error" hidden>I'm an error</div> -->
-    </label>
-      <label>
-        Priority
-      </label>
-      <select class="full-width-input" name="priority" formControlName="priority">
-          <option style="display:none"></option>
-          <option value='1'>1 (less important)</option>
-          <option value='2'>2 (medium important)</option>
-          <option value='3'>3 (most important)</option>
-      </select>
+
+      <mat-form-field appearance="fill" class="input-width">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority" id="priority">
+          <mat-option value="1">1 (less important)</mat-option>
+          <mat-option value="2">2 (medium important)</mat-option>
+          <mat-option value="3">3 (most important)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <div *ngIf="createTicketForm.controls['priority'].invalid && (createTicketForm.controls['priority'].dirty || createTicketForm.controls['priority'].touched)" class="alert">
         <div *ngIf="createTicketForm.controls['priority'].errors?.['required']">
           Please choose ticket priority
         </div>
       </div>
-    <br><br>
-    <label>Bug Type
-      <input list="browsers" class="full-width-input" name="errorType" value="" formControlName="errorType"/></label>
-      <datalist id="browsers">
-              <option style="display:none"></option>
-              <option value="Functional errors">Functional errors</option>
-              <option value='Performance defects'>Performance defects</option>
-              <option value='Usability defects'>Usability defects</option>
-              <option value='Compatibility defects'>Compatibility defects</option>
-              <option value='Security defects'>Security defects</option>
-              <option value='Syntax errors'>Syntax errors</option>
-              <option value='Logic errors'>Logic errors</option>
-              <option value='Unit-level bugs'>Unit-level bugs</option>
-              <option value='System-level integration bugs'>System-level integration bugs</option>
-              <option value='Code Duplication'>Code Duplication</option>
-              <option value='Data Type Mismatch'>Data Type Mismatch</option>
-      </datalist>
+      <br><br>
+
+      <mat-form-field class="input-width" appearance="fill">
+        <mat-label>Error Type</mat-label>
+        <input type="text"
+               aria-label="Error Type"
+               matInput
+               [matAutocomplete]="auto"
+               formControlName="errorType" 
+               id="errorType">
+        <mat-autocomplete autoActiveFirstmat-option #auto="matAutocomplete">
+            <mat-option value="Functional errors">Functional errors</mat-option>
+            <mat-option value='Performance defects'>Performance defects</mat-option>
+            <mat-option value='Usability defects'>Usability defects</mat-option>
+            <mat-option value='Compatibility defects'>Compatibility defects</mat-option>
+            <mat-option value='Security defects'>Security defects</mat-option>
+            <mat-option value='Syntax errors'>Syntax errors</mat-option>
+            <mat-option value='Logic errors'>Logic errors</mat-option>
+            <mat-option value='Unit-level bugs'>Unit-level bugs</mat-option>
+            <mat-option value='System-level integration bugs'>System-level integration bugs</mat-option>
+            <mat-option value='Code Duplication'>Code Duplication</mat-option>
+            <mat-option value='Data Type Mismatch'>Data Type Mismatch</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    
       <div *ngIf="createTicketForm.controls['errorType'].invalid && (createTicketForm.controls['errorType'].dirty || createTicketForm.controls['errorType'].touched)" class="alert">
         <div *ngIf="createTicketForm.controls['errorType'].errors?.['required']">
           Please enter ticket errorType
@@ -94,15 +101,15 @@
         <div *ngIf="createTicketForm.controls['errorType'].errors?.['onlywhitespace']">ErrorType can not contain just spaces</div>
       </div>
       <br><br>
-      <label>
-        Project
-      </label>
-      <select class="full-width-input" name="project" formControlName="project">
-          <option style="display:none"></option>
-          <option value='p1'>Static Project 1</option>
-          <option value='p2'>Static Project 2</option>
-          <option value='p3'>Static Project 3</option>
-      </select>
+
+      <mat-form-field appearance="fill" class="input-width">
+        <mat-label>Project</mat-label>
+        <mat-select formControlName="project" id="project">
+          <mat-option value="p1">Static Project 1</mat-option>
+          <mat-option value="p2">Static Project 2</mat-option>
+          <mat-option value="p3">Static Project 3</mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <div *ngIf="createTicketForm.controls['project'].invalid && (createTicketForm.controls['project'].dirty || createTicketForm.controls['project'].touched)" class="alert">
         <div *ngIf="createTicketForm.controls['project'].errors?.['required']">
@@ -110,14 +117,13 @@
         </div>
       </div>
 
-      <br><br>
     <br><br>
-      <button type="submit" [disabled]="!createTicketForm.valid">Create</button>
+    <div id="buttons">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!createTicketForm.valid">Submit</button>
       &nbsp;&nbsp;&nbsp;
-      <button type="reset">Clear</button>      
+      <button mat-raised-button color="primary" type="reset">Clear</button>
+    </div>      
     </form>
 
 </div>
-   
-</body>
-</html>
+
