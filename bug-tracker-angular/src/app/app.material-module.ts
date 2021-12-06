@@ -7,6 +7,7 @@ import {MatSortModule} from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list'
 
 @NgModule({
 // since we're exporting these modules, add them to export
@@ -18,7 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
         MatPaginatorModule,
         MatSelectModule,
         MatAutocompleteModule,
-        MatButtonModule
+        MatButtonModule,
+        MatListModule
        
     ]
 })

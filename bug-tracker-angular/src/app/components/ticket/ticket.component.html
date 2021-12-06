@@ -89,33 +89,24 @@
       </ul>
     </div>
 
-    <!-- <div id="comments">
+<div id="comment">
   <h2>Comments</h2>
+
+  <ul class="comments">
+    <mat-list-item *ngFor="let item of comments">
+      <div mat-line>{{item.userId}}</div>
+      <div mat-line> {{item.text}} </div>
+    </mat-list-item>
+  </ul>
+
   <form class="comment-form">
     <mat-form-field class="full-width" appearance="fill">
       <mat-label>Leave a comment</mat-label>
-      <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      <textarea matInput #comment id="newComment"></textarea>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Submit</button> 
+    <button mat-raised-button color="primary" type="submit" (click)="createComment(comment.value);
+    comment.value=''">Submit</button> 
   </form>
-</div> -->
+</div>
 
-    <div id="comment">
-      <label for="newComment">Comment: </label>
-      <input type="text" #comment id="newComment">
-
-      <!-- (click) passes input value to add() and then clears the input -->
-      <button (click)="createComment(comment.value);
-  comment.value=''">
-        Submit
-      </button>
-    </div>
-
-    <ul class="comments">
-      <li *ngFor = "let item of comments">
-        <span>
-          {{item.text}}
-        </span>
-      </li>
-
-    </ul>
+    

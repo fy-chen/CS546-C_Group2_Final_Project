@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
 import { ProjectService } from 'src/app/shared/project.service';
 
 import {Comment} from '../comment';
-import { CommentService } from './comment.service';
+import { CommentService } from '../../shared/comment.service';
 
 @Component({
   selector: 'app-ticket',
@@ -64,6 +64,7 @@ export class TicketComponent implements OnInit {
     .deleteComment(comment._id)
     .subscribe();
   }
+
   ngOnInit(): void {
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -92,10 +93,10 @@ export class TicketComponent implements OnInit {
           }
 
           this.dataSource.data = this.ticket.history;
-
+        
         });
 
-        this.getAllComment();
+    this.getAllComment();
     
 
   }
