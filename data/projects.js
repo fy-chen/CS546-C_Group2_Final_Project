@@ -176,7 +176,7 @@ async function addTickets(projectId, ticketId) {
 
   const updatedInfo = await projectsCollection.updateOne(
     { _id: parsedProjectId },
-    { $addToSet: { users: parsedTicketId } }
+    { $addToSet: { tickets: parsedTicketId } }
   );
 
   if (updatedInfo.modifiedCount === 0) {
