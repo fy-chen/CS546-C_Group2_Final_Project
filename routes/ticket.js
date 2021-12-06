@@ -185,12 +185,12 @@ router.put('/edit/:id', async(req, res) => {
     //should check if creator exist
     //should check if project exist
         
-    /*
+    
     try{
-        await projectsData.get(project);
+        await projectsData.get(modifiedData.project);
     }catch(e) {
         errors.project_not_exist = e;
-    }*/
+    }
 
     try{
         ticketsData.isAppropriateString(modifiedData.status, 'status');
@@ -223,7 +223,8 @@ router.put('/edit/:id', async(req, res) => {
         }
 
         if(ticket.project !== modifiedData.project){
-            let modify_content = `project: ${modifiedData.project} \n`
+            let project = await projectsData.get(modifiedData.project);
+            let modify_content = `project: ${project.projectName} \n`
             history_value = history_value.concat(modify_content);
         }
 
