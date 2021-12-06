@@ -7,8 +7,12 @@ import { Ticket } from '../tickets';
 import { DatePipe } from '@angular/common';
 import { ProjectService } from 'src/app/shared/project.service';
 
+import {Comment} from '../comment';
+import { CommentService } from './comment.service';
+
 @Component({
   selector: 'app-ticket',
+  providers: [CommentService],
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.css', '../../app.component.css']
 })
@@ -24,14 +28,42 @@ export class TicketComponent implements OnInit {
 
   project: any;
 
+  comments: any;
+
   public displayedColumns = ['No', 'Property', 'Value', 'modifiedTime'];
 
   public dataSource = new MatTableDataSource<History>();
 
 
-  constructor(private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService) { }
+  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService) { }
 
+  getAllComment(): void{
+    this.CommentService.getAllComment(this.id)
+    .subscribe((comments) => (this.comments = comments));
+  }
 
+  createComment(text: string): void{
+    text = text.trim();
+    if(!text){
+      return;
+    }
+  
+    const newComment: Comment = {text} as Comment;
+    newComment.ticketId = this.id;
+    newComment.userId = "creator";
+    this.CommentService
+      .createComment(newComment)
+      .subscribe(comment => {
+        this.comments = comment;
+        console.log(this.comments);
+      });
+  }
+
+  delete(comment:Comment):void{
+    this.CommentService
+    .deleteComment(comment._id)
+    .subscribe();
+  }
   ngOnInit(): void {
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -63,6 +95,7 @@ export class TicketComponent implements OnInit {
 
         });
 
+        this.getAllComment();
     
 
   }

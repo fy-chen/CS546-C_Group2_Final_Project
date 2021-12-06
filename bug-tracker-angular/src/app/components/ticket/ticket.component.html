@@ -1,7 +1,7 @@
 <div id="head">
-<h1>Ticket</h1>
+  <h1>Ticket</h1>
 
-<a mat-raised-button color="primary" href="/ticket/edit/{{id}}" id="gottoEdit">Edit Ticket</a>
+  <a mat-raised-button color="primary" href="/ticket/edit/{{id}}" id="gottoEdit">Edit Ticket</a>
 </div>
 
 <div class="sidenav">
@@ -11,85 +11,85 @@
 </div>
 
 <div class="main">
-<div id="left_row">
-<div id="ticket">
-  <h2 class="table_head">Ticket Details</h2>
-  <table>
-    <tr>
-      <td class="table_title">Title</td>
-      <td class="table_title">Description</td>
-    </tr>
-    <tr>
-      <td class="table_content">{{ticket.title}}</td>
-      <td class="table_content">{{ticket.description}}</td>
-    </tr>
-    <tr>
-      <td class="table_title">Priority</td>
-      <td class="table_title">Status</td>
-    </tr>
-    <tr>
-      <td class="table_content">{{ticket.priority}}</td>
-      <td class="table_content">{{ticket.status}}</td>
-    </tr>
-    <tr>
-      <td class="table_title">Created Time</td>
-      <td class="table_title">Error Type</td>
-    </tr>
-    <tr>
-      <td class="table_content">{{ticket.createdTime}}</td>
-      <td class="table_content">{{ticket.errorType}}</td>
-    </tr>
-    <tr>
-      <td class="table_title">Creator</td>
-      <td class="table_title">Project</td>
-    </tr>
-    <tr>
-      <td class="table_content">{{ticket.creator}}</td>
-      <td class="table_content">{{project.projectName}}</td>
-    </tr>
-  </table>
-</div>
+  <div id="left_row">
+    <div id="ticket">
+      <h2 class="table_head">Ticket Details</h2>
+      <table>
+        <tr>
+          <td class="table_title">Title</td>
+          <td class="table_title">Description</td>
+        </tr>
+        <tr>
+          <td class="table_content">{{ticket.title}}</td>
+          <td class="table_content">{{ticket.description}}</td>
+        </tr>
+        <tr>
+          <td class="table_title">Priority</td>
+          <td class="table_title">Status</td>
+        </tr>
+        <tr>
+          <td class="table_content">{{ticket.priority}}</td>
+          <td class="table_content">{{ticket.status}}</td>
+        </tr>
+        <tr>
+          <td class="table_title">Created Time</td>
+          <td class="table_title">Error Type</td>
+        </tr>
+        <tr>
+          <td class="table_content">{{ticket.createdTime}}</td>
+          <td class="table_content">{{ticket.errorType}}</td>
+        </tr>
+        <tr>
+          <td class="table_title">Creator</td>
+          <td class="table_title">Project</td>
+        </tr>
+        <tr>
+          <td class="table_content">{{ticket.creator}}</td>
+          <td class="table_content">{{project.projectName}}</td>
+        </tr>
+      </table>
+    </div>
 
 
-<div id="ticket_history">
-  <h2 class="table_head">Ticket history</h2>
-  <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="No">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.No}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="Property">
-      <th mat-header-cell *matHeaderCellDef> Property </th>
-      <td mat-cell *matCellDef="let element"> {{element.history.Property}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="Value">
-      <th mat-header-cell *matHeaderCellDef> Value </th>
-      <td mat-cell *matCellDef="let element"> {{element.history.Value }} </td>
-    </ng-container>
-    <ng-container matColumnDef="modifiedTime">
-      <th mat-header-cell *matHeaderCellDef> modified Time </th>
-      <td mat-cell *matCellDef="let element"> {{element.modifiedTime}} </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</div>
+    <div id="ticket_history">
+      <h2 class="table_head">Ticket history</h2>
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="No">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        </ng-container>
 
-</div>
+        <ng-container matColumnDef="Property">
+          <th mat-header-cell *matHeaderCellDef> Property </th>
+          <td mat-cell *matCellDef="let element"> {{element.history.Property}} </td>
+        </ng-container>
 
-<div id="right_row">
+        <ng-container matColumnDef="Value">
+          <th mat-header-cell *matHeaderCellDef> Value </th>
+          <td mat-cell *matCellDef="let element"> {{element.history.Value }} </td>
+        </ng-container>
+        <ng-container matColumnDef="modifiedTime">
+          <th mat-header-cell *matHeaderCellDef> modified Time </th>
+          <td mat-cell *matCellDef="let element"> {{element.modifiedTime}} </td>
+        </ng-container>
 
-<div id="assigned_user">
-  <h2>Assigned Users</h2>
-  <ul *ngFor="let user of assignedUsers">
-    <li>{{user}}</li>
-  </ul>
-</div>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
 
-<div id="comments">
+  </div>
+
+  <div id="right_row">
+
+    <div id="assigned_user">
+      <h2>Assigned Users</h2>
+      <ul *ngFor="let user of assignedUsers">
+        <li>{{user}}</li>
+      </ul>
+    </div>
+
+    <!-- <div id="comments">
   <h2>Comments</h2>
   <form class="comment-form">
     <mat-form-field class="full-width" appearance="fill">
@@ -98,8 +98,24 @@
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit">Submit</button> 
   </form>
-</div>
+</div> -->
 
-</div>
-</div>
-  
+    <div id="comment">
+      <label for="newComment">Comment: </label>
+      <input type="text" #comment id="newComment">
+
+      <!-- (click) passes input value to add() and then clears the input -->
+      <button (click)="createComment(comment.value);
+  comment.value=''">
+        Submit
+      </button>
+    </div>
+
+    <ul class="comments">
+      <li *ngFor = "let item of comments">
+        <span>
+          {{item.text}}
+        </span>
+      </li>
+
+    </ul>

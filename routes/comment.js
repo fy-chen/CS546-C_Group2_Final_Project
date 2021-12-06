@@ -12,9 +12,9 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.get('/getAll', async(req, res) => {
+router.get('/getAll/:id', async(req, res) => {
     try {
-        const comments = await commentData.getAll();
+        const comments = await commentData.getAll(req.params.id);
         res.json(comments);
     } catch (e) {
         res.status(500).json({ error: e });
@@ -22,7 +22,8 @@ router.get('/getAll', async(req, res) => {
 });
 
 router.post('/create', async(req, res) => {
-    const commentData = req.body;
+    const commentsData = req.body;
+    console.log(commentsData);
     let errors = {};
 
     // try {
@@ -34,9 +35,10 @@ router.post('/create', async(req, res) => {
     // if(Object.keys(err))
 
     try {
-        const comment = await commentData.create(commentData.ticketId, commentData.text, commentData.userId);
+        const comment = await commentData.create(commentsData.ticketId, commentsData.text, commentsData.userId);
         res.json(comment)
     } catch (e) {
+        console.log(e);
         res.status(500).json({error : e});
     }
 });

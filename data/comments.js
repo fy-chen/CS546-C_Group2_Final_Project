@@ -8,7 +8,7 @@ async function create(ticketId, text, userId) {
 
     ticketsData.isAppropriateString(text, 'text');
 
-    let parseduserId = ticketsData.toObjectId(userId, 'userId');
+    //let parseduserId = ticketsData.toObjectId(userId, 'userId');
     let parsedticketId = ticketsData.toObjectId(ticketId, 'ticketId');
     
     let createdTime = Date.now();
@@ -40,7 +40,7 @@ async function create(ticketId, text, userId) {
         x._id = x._id.toString();
     }
 
-    return ticket;
+    return ticket.comments;
 
 
 }
@@ -55,7 +55,7 @@ async function getAll(ticketId) {
       x._id = x._id.toString();
     }
   
-    return ticket.reviews;
+    return ticket.comments;
   
 }
 
