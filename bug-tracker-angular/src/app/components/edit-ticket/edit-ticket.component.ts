@@ -67,6 +67,12 @@ export class EditTicketComponent implements OnInit {
 
   updateTicket(): void{
 
+    this.editTicketForm.value.title = this.editTicketForm.value.title.trim();
+
+    this.editTicketForm.value.description = this.editTicketForm.value.description.trim();
+
+    this.editTicketForm.value.errorType = this.editTicketForm.value.errorType.trim();
+
     console.log(this.editTicketForm.value);
     
     this.ticketService.updateTicket(this.id, this.editTicketForm).subscribe(

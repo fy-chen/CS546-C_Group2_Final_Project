@@ -45,6 +45,13 @@ export class CreateTicketComponent implements OnInit {
       creator: "static user 1"
     }
     this.createTicketForm.patchValue(creator);
+
+    this.createTicketForm.value.title = this.createTicketForm.value.title.trim();
+
+    this.createTicketForm.value.description = this.createTicketForm.value.description.trim();
+
+    this.createTicketForm.value.errorType = this.createTicketForm.value.errorType.trim();
+
     console.log("pressed")
     console.log(this.createTicketForm.value);
     this.ticketService.createTicket(this.createTicketForm).subscribe(
