@@ -23,11 +23,15 @@ export class AdminHomeComponent implements OnInit {
 
   showAssignedUsers: any;
 
+  showTicketsbyPriority: any;
+
   haveBeenAssigned: any;
 
   noAssignedUsers: any;
   
   tickets: any;
+
+  ticketsByPriority: any;
 
   users: any;
 
@@ -49,11 +53,19 @@ export class AdminHomeComponent implements OnInit {
 
   public ticketsDataSource = new MatTableDataSource<TicketTable>();
 
+  public Priority1DataSource = new MatTableDataSource<TicketTable>();
+
+  public Priority2DataSource = new MatTableDataSource<TicketTable>();
+
+  public Priority3DataSource = new MatTableDataSource<TicketTable>();
+
   constructor(private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.ticketService.getAllTickets().subscribe((data) => {
       this.tickets = data;
+
+      this.ticketstable = [] as TicketTable[];
 
       for(let i = 0; i < this.tickets.length; i++) {
         let ticketobj: TicketTable = {} as TicketTable;
@@ -73,6 +85,8 @@ export class AdminHomeComponent implements OnInit {
     this.userService.getAllUsers().subscribe((data) =>{
       this.users = data;
     });
+
+    this.getTicketsByPriority();
     
   }
 
@@ -84,6 +98,7 @@ export class AdminHomeComponent implements OnInit {
     this.showAssigntoUser = false;
     this.showTickets = true;
     this.showRemoveTicket = false;
+    this.showTicketsbyPriority = false;
   }
 
   showAssigntoUserButtonClicked() {
@@ -91,7 +106,7 @@ export class AdminHomeComponent implements OnInit {
     this.showAssigntoUser = true;
     this.showTickets = false;
     this.showRemoveTicket = false;
-    this.noAssignedUsers = false;
+    this.showTicketsbyPriority = false;
   }
 
   showRemoveUserButtonClicked() {
@@ -99,6 +114,14 @@ export class AdminHomeComponent implements OnInit {
     this.showAssigntoUser = false;
     this.showTickets = false;
     this.showRemoveTicket = true;
+    this.showTicketsbyPriority = false;
+  }
+
+  showTicketsSortedByPriority() {
+    this.showAssigntoUser = false;
+    this.showTickets = false;
+    this.showRemoveTicket = false;
+    this.showTicketsbyPriority = true;
   }
 
   deleteTicket(id: string) {
@@ -149,6 +172,61 @@ export class AdminHomeComponent implements OnInit {
         }
       });
     }
+  }
+
+  getTicketsByPriority() {
+    this.ticketService.getTicketsByPriority().subscribe((data) => {
+      this.ticketsByPriority = data;
+      let ticketsPriority1 = this.ticketsByPriority.ticketsPriority1;
+      let ticketsPriority2 = this.ticketsByPriority.ticketsPriority2;
+      let ticketsPriority3 = this.ticketsByPriority.ticketsPriority3;
+
+      
+
+      for(let i = 0; i < ticketsPriority1.length; i++) {
+        this.ticketstable = [] as TicketTable[];
+        let ticketobj: TicketTable = {} as TicketTable;
+        ticketobj.No = i + 1;
+        ticketobj._id = ticketsPriority1[i]._id;
+        ticketobj.title = ticketsPriority1[i].title;
+        ticketobj.description = ticketsPriority1[i].description;
+        ticketobj.creator = ticketsPriority1[i].creator;
+        ticketobj.status = ticketsPriority1[i].status;
+        ticketobj.createdTime = this.datepipe.transform(ticketsPriority1[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+        this.ticketstable.push(ticketobj);
+        this.Priority1DataSource.data = this.ticketstable;
+      }
+
+      for(let i = 0; i < ticketsPriority2.length; i++) {
+        this.ticketstable = [] as TicketTable[];
+        let ticketobj: TicketTable = {} as TicketTable;
+        ticketobj.No = i + 1;
+        ticketobj._id = ticketsPriority2[i]._id;
+        ticketobj.title = ticketsPriority2[i].title;
+        ticketobj.description = ticketsPriority2[i].description;
+        ticketobj.creator = ticketsPriority2[i].creator;
+        ticketobj.status = ticketsPriority2[i].status;
+        ticketobj.createdTime = this.datepipe.transform(ticketsPriority2[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+        this.ticketstable.push(ticketobj);
+        this.Priority2DataSource.data = this.ticketstable;
+      }
+
+      for(let i = 0; i < ticketsPriority3.length; i++) {
+        this.ticketstable = [] as TicketTable[];
+        let ticketobj: TicketTable = {} as TicketTable;
+        ticketobj.No = i + 1;
+        ticketobj._id = ticketsPriority3[i]._id;
+        ticketobj.title = ticketsPriority3[i].title;
+        ticketobj.description = ticketsPriority3[i].description;
+        ticketobj.creator = ticketsPriority3[i].creator;
+        ticketobj.status = ticketsPriority3[i].status;
+        ticketobj.createdTime = this.datepipe.transform(ticketsPriority3[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+        this.ticketstable.push(ticketobj);
+        this.Priority3DataSource.data = this.ticketstable;
+      }
+
+      
+    });
   }
 
 }

@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/`);
   }
 
+  getUser(id: string) {
+    return this.http.get(`${this.apiUrl}/user/` + id);
+  }
+
   assignTickettoUser(form: FormGroup) {
     return this.http.post(`${this.apiUrl}/user/assignTicket`, form.value);
   }

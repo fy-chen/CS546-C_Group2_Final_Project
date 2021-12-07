@@ -30,19 +30,49 @@ router.get('/', async(req, res) => {
 });
 
 
-router.get('/user/:id', async(req, res) => {
+router.get('/status/', async(req, res) => {
 
-    if(!req.body.tickettype){
-        return res.status(500).json({error: "Ticket Type missing"});
-    }
+    let tickets = {};
     try{
-        if(req.body.tickettype = 'created'){
-            const createdTickets = await ticketsData.getTicketsByUser(req.params.id, 'creator');
-            return res.json(createdTickets);
-        }else if(req.body.tickettype = 'assigned'){
-            const assignedTickets = await ticketsData.getTicketsByUser(req.params.id, 'assigned');
-            return res.json(assignedTickets);
+        const openTickets = ticketsData.getTicketsByStatus("open");
+        tickets.openTickets = openTickets;
+        const ticketsReadytoClose = ticketsData.getTicketsByStatus("ready_to_close");
+        tickets.ticketsReadytoClose = ticketsReadytoClose;
+        const closedTickets = ticketsData.getTicketsByStatus("closed");
+        tickets.closedTickets = closedTickets;
+        res.json(tickets);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
+
+router.get('/priority/get/', async(req, res) => {
+
+    let tickets = {};
+    try{
+        const ticketsPriority1 = await ticketsData.getTicketsByPriority(1);
+        for(let x of ticketsPriority1){
+            let user = await userData.get(x.creator);
+            x.creator = user.username;
         }
+        tickets.ticketsPriority1 = ticketsPriority1;
+        
+        const ticketsPriority2 = await ticketsData.getTicketsByPriority(2);
+        for(let x of ticketsPriority2){
+            let user = await userData.get(x.creator);
+            x.creator = user.username;
+        }
+        tickets.ticketsPriority2 = ticketsPriority2;
+        
+        const ticketsPriority3 = await ticketsData.getTicketsByPriority(3);
+        for(let x of ticketsPriority3){
+            let user = await userData.get(x.creator);
+            x.creator = user.username;
+        }
+        tickets.ticketsPriority3 = ticketsPriority3;
+        console.log(tickets);
+        res.json(tickets);
     }catch(e) {
         res.status(500).json({ error: e });
     }
