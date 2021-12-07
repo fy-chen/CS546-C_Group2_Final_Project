@@ -49,6 +49,7 @@ router.get("/users/:id", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   let projectData = req.body;
+  projectData.role = 1;
   try {
     isAppropriateString(projectData.projectName, "Project Name");
     isAppropriateString(projectData.description, "description");
@@ -57,7 +58,7 @@ router.post("/create", async (req, res) => {
       projectData.description,
       projectData.role
     );
-    res.render("pages/projectPage", { project: project });
+    // res.render("pages/projectPage", { project: project });
     res.json(newProject);
   } catch (e) {
     res.status(500).json({ error: e });

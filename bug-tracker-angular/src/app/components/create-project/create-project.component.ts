@@ -20,7 +20,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   createProjectForm = this.formbuilder.group({
-    title: new FormControl(
+    projectName: new FormControl(
       '',
       Validators.compose([
         Validators.required,
@@ -42,7 +42,7 @@ export class CreateProjectComponent implements OnInit {
 
   constructor(
     private formbuilder: FormBuilder,
-    private ticketService: ProjectService,
+    private ProjectService: ProjectService,
     private router: Router
   ) {
     console.log('click');
@@ -59,13 +59,13 @@ export class CreateProjectComponent implements OnInit {
 
     console.log('pressed');
     console.log(this.createProjectForm.value);
-    this.ticketService
-      .createProject(this.createProjectForm)
-      .subscribe((data) => {
+    this.ProjectService.createProject(this.createProjectForm).subscribe(
+      (data) => {
         console.log(data);
         this.project = data;
         this.id = this.project._id;
         this.router.navigate([`/projects/${this.id}`]);
-      });
+      }
+    );
   }
 }
