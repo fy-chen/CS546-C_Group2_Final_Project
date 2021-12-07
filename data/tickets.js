@@ -63,6 +63,8 @@ async function create(title, description, priority, creator, project, errorType)
 
     await areAppropriateParameters(title, description, priority, project, errorType);
 
+    priority = Number(priority);
+
     isAppropriateString(creator, 'creator');
 
     await userData.get(creator);
@@ -318,16 +320,20 @@ async function getTicketsByProject(projectId) {
     return ticketlist;
 }
 
-async function searchTicketsByTitle(phrase) {
+async function search(phrase) {
 
-    isAppropriateString(phrase, 'title phrase');
+    isAppropriateString(phrase, 'phrase');
 
     TicketsCollection = await tickets();
 
     phrase = phrase.toLowerCase();
   
     let ticketlist = await TicketsCollection.find({
-        $where: "this.title.toLowerCase().indexOf('" + phrase + "') >= 0"
+        $or: [
+          { title: { $regex: ".*" + phrase + ".*", $options: "i" } },
+          { description: { $regex: ".*" + phrase + ".*", $options: "i" } },
+          { errorType: { $regex: ".*" + phrase + ".*", $options: "i" }},
+        ],
       })
       .toArray();
   
@@ -478,7 +484,7 @@ module.exports = {
     getTicketsByProject,
     getTicketsByStatus,
     SortByPriority,
-    searchTicketsByTitle,
+    search,
     searchTicketsByErrorType,
     addHistory    
 }
