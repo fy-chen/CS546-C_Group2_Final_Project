@@ -24,6 +24,7 @@ router.get('/getAll/:id', async(req, res) => {
 router.post('/create', async(req, res) => {
     const commentsData = req.body;
     console.log(commentsData);
+    let userId = req.session.user.userId;
     let errors = {};
 
     // try {
@@ -35,7 +36,7 @@ router.post('/create', async(req, res) => {
     // if(Object.keys(err))
 
     try {
-        const comment = await commentData.create(commentsData.ticketId, commentsData.text, commentsData.userId);
+        const comment = await commentData.create(commentsData.ticketId, commentsData.text, userId);
         res.json(comment)
     } catch (e) {
         console.log(e);
