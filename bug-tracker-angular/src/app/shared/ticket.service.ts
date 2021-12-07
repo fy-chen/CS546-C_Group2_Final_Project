@@ -26,6 +26,10 @@ export class TicketService{
         return this.http.get<Ticket[]>(`${this.apiUrl}/ticket/`);
     }
 
+    getTicketsByPriority() {
+        return this.http.get(`${this.apiUrl}/ticket/priority/get/`);
+    }
+
     createTicket(form: FormGroup) {
         
         return this.http.post(`${this.apiUrl}/ticket/create`, form.value);

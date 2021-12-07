@@ -17,6 +17,11 @@
     margin-left: 30px;
 }
 
+#tickets_by_priority {
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
 .alert {
     color: red;
 }
