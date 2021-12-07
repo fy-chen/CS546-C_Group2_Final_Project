@@ -50,6 +50,15 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/:id", async (req, res) => {
+    try {
+      const user = await users.get(req.params.id);
+      res.status(200).json(user);
+    } catch (e) {
+      res.status(404).json({ error: e });
+    }
+});
+
 router.post('/removeTicket',async(req,res) =>{
     //Has to be admin
     // if (req.session.user.role != 1){

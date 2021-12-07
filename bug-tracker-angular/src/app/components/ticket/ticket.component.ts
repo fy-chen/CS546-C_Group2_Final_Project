@@ -9,6 +9,7 @@ import { ProjectService } from 'src/app/shared/project.service';
 
 import {Comment} from '../comment';
 import { CommentService } from '../../shared/comment.service';
+import { UserService } from 'src/app/shared/user.service';
 
 @Component({
   selector: 'app-ticket',
@@ -30,12 +31,14 @@ export class TicketComponent implements OnInit {
 
   comments: any;
 
+  creator: any;
+
   public displayedColumns = ['No', 'Property', 'Value', 'modifiedTime'];
 
   public dataSource = new MatTableDataSource<History>();
 
 
-  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService) { }
+  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService) { }
 
   getAllComment(): void{
     this.CommentService.getAllComment(this.id)
@@ -80,7 +83,15 @@ export class TicketComponent implements OnInit {
           this.projectService.getProject(this.ticket.project).subscribe(
             (data) => {
               this.project = data;
-            });
+          });
+
+          this.creator = this.ticket.creator;
+
+          this.userService.getUser(this.creator).subscribe(
+            (data) => {
+              this.creator = data;
+            }
+          )
           
 
           this.assignedUsers = this.ticket.assignedUsers;
