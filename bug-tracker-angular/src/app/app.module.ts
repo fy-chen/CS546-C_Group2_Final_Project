@@ -21,6 +21,7 @@ import { DashboardHomeComponent } from './components/dashboard-home/dashboard-ho
 import {MatRadioModule} from '@angular/material/radio';
 import { EditTicketComponent } from './components/edit-ticket/edit-ticket.component';
 import { ChartsModule } from 'ng2-charts';
+import { AccessGuard } from './shared/access.guard';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -53,7 +54,8 @@ import { ChartsModule } from 'ng2-charts';
   ],
   providers: [
     TicketService,
-    DatePipe
+    DatePipe,
+    AccessGuard,
   ],
   bootstrap: [AppComponent]
 })

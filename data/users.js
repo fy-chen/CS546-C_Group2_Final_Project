@@ -1,9 +1,13 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 var crypto = require('crypto');
-const jwt = require("jsonwebtoken");
-const SECRET_KEY = "Wu-Tang is Forever";
-const admin = mongoCollections.admin;
+// const jwt = require("jsonwebtoken");
+// const SECRET_KEY = "Wu-Tang is Forever";
+const admin = mongoCollections.admin; //admin password storage
+const tickets = mongoCollections.tickets;
+var mongodb = require('mongodb');
+
+
 //Sign up 
 const adminPsGetter = async function adminPsGetter(userInput){
     let adminPassColl = await admin();
@@ -61,7 +65,7 @@ const signup = async function signup (body) {
     username = username.toLowerCase();
 
     //Checking if user exists or not
-    const userObj = await get(username);
+    const userObj = await getByUsername(username);
     if (!("message" in userObj)){
         throw "Error: User already exists"
     }
@@ -71,13 +75,13 @@ const signup = async function signup (body) {
     const hash = crypto.pbkdf2Sync(body.password, salt,  
     1000, 64, `sha512`).toString(`hex`);
 
-    let role = 1;
+    let role = 2;
     console.log(body.adminAccess);
     if (body.adminAccess!=null){
         const result = await adminPsGetter(body.adminAccess);
         console.log(result);
         if ((await adminPsGetter(body.adminAccess))){
-            role = 2;
+            role = 1;
         }
         else{
             throw "Error: Admin password incorrect";
@@ -105,7 +109,7 @@ const signup = async function signup (body) {
 }
 
 //Getter function for user
-const get = async function get(username){
+const getByUsername = async function getByUsername(username){
     const userCollection = await users();
     const userObj = await userCollection.findOne({ username: username });
     if (userObj != null){
@@ -165,9 +169,143 @@ const login = async function login (body) {
     }
 }
 
+
+const get = async function get(id){
+    if(typeof id != 'string'){
+        throw "Id is not a string"
+    }
+    if(!mongodb.ObjectId.isValid(id)){
+        throw "Not a valid ObjectId";
+    }
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: mongodb.ObjectId(id) });
+    if (user != null){
+        user._id = String(user._id);
+        return user;
+    }
+    else{
+        return null; 
+    }
+}
+
+const remove = async function remove(id){
+
+    if(typeof id != 'string'){
+        throw "Id is not a string"
+    }
+    if(!mongodb.ObjectId.isValid(id)){
+        throw "Not a valid ObjectId";
+    }
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ _id: mongodb.ObjectId(id) });
+    if(user == null){
+        throw "No entry exists for the ID:" +id;
+    }
+    const deletionInfo = await usersCollection.deleteOne({ _id: mongodb.ObjectId(id)  });
+    if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete user with id of ${id}`;
+    }
+    return {'userId' : id, 'deleted': true };
+}
+
+
+const addTicket = async function addTicket (body){
+
+    let ticketId = body.ticketId;
+    let userId = body.userId;
+    if (!mongodb.ObjectId.isValid(userId)){
+        throw "userId is not a valid ObjectId";
+    }
+    if (!mongodb.ObjectId.isValid(ticketId)){
+        throw "ticketId is not a valid ObjectId";
+    }
+    //find if user exists
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+    if(userProfile == null){
+        throw "User does not exist"
+    }
+ 
+    //find if ticket exists
+    let ticketsCollection = await tickets();
+    const ticketProfile = await ticketsCollection.findOne({ _id:  mongodb.ObjectId(ticketId)});
+    if(ticketProfile == null){
+        throw "User does not exist"
+    }
+
+   
+    const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(userId)},{$addToSet: { assignedTickets: mongodb.ObjectId(ticketId) }});
+    if (updatedInfo == null){
+        throw "Could not add ticket to user"
+    }
+    return await get(String(userId));    
+
+}
+
+const removeTicket = async function removeTicket (body){
+
+    let ticketId = body.ticketId;
+    let userId = body.userId;
+    if (!mongodb.ObjectId.isValid(userId)){
+        throw "userId is not a valid ObjectId";
+    }
+    if (!mongodb.ObjectId.isValid(ticketId)){
+        throw "ticketId is not a valid ObjectId";
+    }
+    //find if user exists
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+    
+    if(userProfile == null){
+        throw "User does not exist"
+    }
+
+    const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(userId)},{$pull: { assignedTickets: mongodb.ObjectId(ticketId) }});
+    if (updatedInfo == null){
+        throw "Could not remove ticket to user"
+    }
+    return await get(String(userId));
+    
+}
+
+// const addProject = async function addProject (body){
+
+//     let projectId = body.projectId;
+//     let userId = body.userId;
+//     if (!mongodb.ObjectId.isValid(userId)){
+//         throw "userId is not a valid ObjectId";
+//     }
+//     if (!mongodb.ObjectId.isValid(projectId)){
+//         throw "ticketId is not a valid ObjectId";
+//     }
+//     //find if user exists
+//     let usersCollection = await users();
+//     const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+//     if(userProfile == null){
+//         throw "User does not exist"
+//     }
+ 
+//     //find if ticket exists
+//     let projectId = await tickets();
+//     const ticketProfile = await ticketsCollection.findOne({ _id:  mongodb.ObjectId(ticketId)});
+//     if(ticketProfile == null){
+//         throw "User does not exist"
+//     }
+
+   
+//     const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(id)},{$addToSet: { assignedUsers: mongodb.ObjectId(ticketId) }});
+//     if (updatedInfo == null){
+//         throw "Could not add ticket to user"
+//     }
+//     return await get(String(id));    
+// }
+
 module.exports= {
     signup,
-    login
+    login,
+    get,
+    addTicket,
+    removeTicket
     
 }
 

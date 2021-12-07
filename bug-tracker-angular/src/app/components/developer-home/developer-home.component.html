@@ -3,7 +3,7 @@
 <input type='text' id='serchProj' [(ngModel)]='searchTerm'>
 <button (click)= 'search()'>Search!</button>
 <button (click) ="create()">create</button>
-
+<button (click)="logout()">Logout</button>
 <ul>
     <li *ngFor="let project of searchRes">{{project}}</li>
 </ul>

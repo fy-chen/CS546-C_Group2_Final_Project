@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
 
     //if loggedIn already, got to role home
       if (loggedIn.loggedIn === true){
-        if (loggedIn.role  == 2){
-          this.router.navigate(['/ticket/create']) // CHANGE TO ADMIN HOME
+        if (loggedIn.role  == 1){
+          this.router.navigate(['/admin-home']) // CHANGE TO ADMIN HOME
         }
         else{
           this.router.navigate(['/home'])

@@ -49,4 +49,16 @@ export class AuthService {
        );
    });
   }
+
+  //logout
+  logout(){
+    return new Promise((resolve, reject) => {
+      const headers = new Headers(); 
+      this.http.get(`${this.apiUrl}/logout`).subscribe({
+        next: (data: any)=> { resolve(data);},
+        error: (error) => {  reject(error);}
+      }
+       );
+   });
+  }
 }

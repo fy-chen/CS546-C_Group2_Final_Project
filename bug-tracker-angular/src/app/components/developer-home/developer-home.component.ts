@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/shared/project.service';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from 'src/app/shared/auth.service';
 @Component({
   selector: 'app-developer-home',
   templateUrl: './developer-home.component.html',
@@ -10,13 +11,26 @@ export class DeveloperHomeComponent implements OnInit {
   constructor(
     private projectService : ProjectService,
     private router : Router,
+    private AuthService :AuthService
   ) {}
 
   createproject = '';
   searchTerm = '';
   searchRes: Array<any> =[];
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.AuthService.isLoggedIn().then(
+    //   (data:any)=>{
+    //     if (data===true){
+    //       //do nothing
+    //     }
+    //     else{
+    //       this.router.navigate(['/login']);
+    //     }
+    //   }
+    // );
+  }
 
+  
   create() {
     this.createproject = 'cs546';
   }
@@ -37,6 +51,19 @@ export class DeveloperHomeComponent implements OnInit {
       }
     )
 
+  }
+
+  logout(){
+    this.AuthService.logout().then(
+      (data:any)=>{
+        if (data['loggedOut']=true){
+          this.router.navigate(['/login']);
+        }
+      },
+      error=>{
+        console.log(error);
+      }
+    )
   }
   // ngmodal, ngif, ngfor
 }

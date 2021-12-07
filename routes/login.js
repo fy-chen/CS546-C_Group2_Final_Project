@@ -5,7 +5,7 @@ const users = require("../data").users;
 
 router.get('/',async(req,res)=>{
     if (req.session.user){
-        res.status(200).json({loggedIn:true, role :req.session.user.userRole});
+        res.status(200).json({loggedIn:true, role :parseInt(req.session.user.userRole)});
     }
     else{
         res.status(200).json({loggedIn: false});
