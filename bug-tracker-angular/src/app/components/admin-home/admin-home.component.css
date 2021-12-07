@@ -8,6 +8,12 @@
 }
 
 #assign_tickets {
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+#remove_tickets {
+    margin-top: 20px;
     margin-left: 30px;
 }
 

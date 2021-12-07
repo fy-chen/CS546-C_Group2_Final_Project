@@ -1,150 +1,16 @@
 <p>admin-home works!</p>
-<button>Logout</button>
-<button>All Projects</button>
-<button>All Developers</button>
+<button mat-raised-button color="primary" >Logout</button>
+<button mat-raised-button color="primary" >All Projects</button>
+<button mat-raised-button color="primary" >All Developers</button>
 
 <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>
 
 <button mat-raised-button color="primary" (click)="showTicketsButtonClicked()">All tickets</button>
 
-<div id="all_tickets" *ngIf = "showTickets">
-    <h2 class="table_head">Tickets</h2>
-      <table mat-table [dataSource]="ticketsDataSource" id="ticket_table">
-        <ng-container matColumnDef="No">
-          <th mat-header-cell *matHeaderCellDef> No. </th>
-          <td mat-cell *matCellDef="let element"> {{element.No}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Title">
-          <th mat-header-cell *matHeaderCellDef> Title </th>
-          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a> </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Description">
-          <th mat-header-cell *matHeaderCellDef> Description </th>
-          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Creator">
-            <th mat-header-cell *matHeaderCellDef> Creator </th>
-            <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Status">
-            <th mat-header-cell *matHeaderCellDef> Status </th>
-            <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="createdTime">
-          <th mat-header-cell *matHeaderCellDef> Created Time </th>
-          <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="deleteButton">
-            <th mat-header-cell *matHeaderCellDef>  </th>
-            <td mat-cell *matCellDef="let element"> 
-                <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" id="gotoEdit">Edit</a>
-                <button mat-raised-button color="primary" (click)="deleteTicket(element._id)">Delete</button> 
-            </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-</div>
-
 <button mat-raised-button color="primary" (click)="showAssigntoUserButtonClicked()">Assign tickets</button>
-
-<div id="assign_tickets" *ngIf = "showAssigntoUser">
-    <form id="assignTicket-form" [formGroup]= "assignTicketForm" (ngSubmit)="assignTicket()">
-        <mat-form-field appearance="fill" class="input-width" class="tickets">
-            <mat-label>Tickets</mat-label>
-            <mat-select formControlName="ticketId" id="ticketId">
-              <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
-                {{ticket.title}}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div *ngIf="assignTicketForm.controls['ticketId'].invalid && (assignTicketForm.controls['ticketId'].dirty || assignTicketForm.controls['ticketId'].touched)" class="alert">
-            <div *ngIf="assignTicketForm.controls['ticketId'].errors?.['required']">
-              Please choose a ticket
-            </div>
-        </div>
-
-        <br><br>
-
-        <mat-form-field appearance="fill" class="input-width" class="users">
-            <mat-label>Users</mat-label>
-            <mat-select formControlName="userId" id="userId">
-              <mat-option *ngFor="let user of users" value="{{user._id}}">
-                {{user.username}}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
-            <div *ngIf="assignTicketForm.controls['userId'].errors?.['required']">
-              Please choose a user
-            </div>
-        </div>
-        
-        <br><br>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!assignTicketForm.valid">Confirm</button>
-
-        <div *ngIf="haveBeenAssigned" class="alert">
-            User has been Assigned
-        </div>
-
-    </form>
-</div>
-
 
 <button mat-raised-button color="primary" (click)="showRemoveUserButtonClicked()">Remove tickets</button>
 
-<div id="remove_tickets" *ngIf = "showRemoveTicket">
-    <form id="removeTicket-form" [formGroup]= "removeTicketForm" (ngSubmit)="removeTicket()">
-        <mat-form-field appearance="fill" class="input-width" class="tickets">
-            <mat-label>Tickets</mat-label>
-            <mat-select formControlName="ticketId" id="ticketId" (selectionChange)="getAssignedUsers()">
-              <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
-                {{ticket.title}}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div *ngIf="removeTicketForm.controls['ticketId'].invalid && (removeTicketForm.controls['ticketId'].dirty || removeTicketForm.controls['ticketId'].touched)" class="alert">
-            <div *ngIf="removeTicketForm.controls['ticketId'].errors?.['required']">
-              Please choose a ticket
-            </div>
-        </div>
-
-        <br><br>
-
-        <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignedUsers">
-            <mat-label>Users</mat-label>
-            <mat-select formControlName="userId" id="userId">
-              <mat-option *ngFor="let user of assignedusers" value="{{user._id}}">
-                {{user.username}}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div *ngIf="removeTicketForm.controls['userId'].invalid && (removeTicketForm.controls['userId'].dirty || removeTicketForm.controls['userId'].touched)" class="alert">
-            <div *ngIf="removeTicketForm.controls['userId'].errors?.['required']">
-              Please choose a user
-            </div>
-        </div>
-        
-        <br><br>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!removeTicketForm.valid">Confirm</button>
-
-        <div *ngIf="noAssignedUsers" class="alert">
-            This ticket have no assigned users
-        </div>
-
-    </form>
-</div>
 
 <label>Search:</label>
 <input type="text">
@@ -152,3 +18,137 @@
 <ol id="pending-tickets">
     <li>pending tickets</li>
 </ol>
+
+<div id="all_tickets" *ngIf = "showTickets">
+  <h2 class="table_head">Tickets</h2>
+    <table mat-table [dataSource]="ticketsDataSource" id="ticket_table">
+      <ng-container matColumnDef="No">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Title">
+        <th mat-header-cell *matHeaderCellDef> Title </th>
+        <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Creator">
+          <th mat-header-cell *matHeaderCellDef> Creator </th>
+          <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdTime">
+        <th mat-header-cell *matHeaderCellDef> Created Time </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="deleteButton">
+          <th mat-header-cell *matHeaderCellDef>  </th>
+          <td mat-cell *matCellDef="let element"> 
+              <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" id="gotoEdit">Edit</a>
+              <button mat-raised-button color="primary" (click)="deleteTicket(element._id)">Delete</button> 
+          </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+
+<div id="assign_tickets" *ngIf = "showAssigntoUser">
+  <form id="assignTicket-form" [formGroup]= "assignTicketForm" (ngSubmit)="assignTicket()">
+      <mat-form-field appearance="fill" class="input-width" class="tickets">
+          <mat-label>Tickets</mat-label>
+          <mat-select formControlName="ticketId" id="ticketId">
+            <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
+              {{ticket.title}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="assignTicketForm.controls['ticketId'].invalid && (assignTicketForm.controls['ticketId'].dirty || assignTicketForm.controls['ticketId'].touched)" class="alert">
+          <div *ngIf="assignTicketForm.controls['ticketId'].errors?.['required']">
+            Please choose a ticket
+          </div>
+      </div>
+
+      <br><br>
+
+      <mat-form-field appearance="fill" class="input-width" class="users">
+          <mat-label>Users</mat-label>
+          <mat-select formControlName="userId" id="userId">
+            <mat-option *ngFor="let user of users" value="{{user._id}}">
+              {{user.username}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
+          <div *ngIf="assignTicketForm.controls['userId'].errors?.['required']">
+            Please choose a user
+          </div>
+      </div>
+      
+      <br><br>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!assignTicketForm.valid">Confirm</button>
+
+      <div *ngIf="haveBeenAssigned" class="alert">
+          User has been Assigned
+      </div>
+
+  </form>
+</div>
+
+<div id="remove_tickets" *ngIf = "showRemoveTicket">
+  <form id="removeTicket-form" [formGroup]= "removeTicketForm" (ngSubmit)="removeTicket()">
+      <mat-form-field appearance="fill" class="input-width" class="tickets">
+          <mat-label>Tickets</mat-label>
+          <mat-select formControlName="ticketId" id="ticketId" (selectionChange)="getAssignedUsers()">
+            <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
+              {{ticket.title}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="removeTicketForm.controls['ticketId'].invalid && (removeTicketForm.controls['ticketId'].dirty || removeTicketForm.controls['ticketId'].touched)" class="alert">
+          <div *ngIf="removeTicketForm.controls['ticketId'].errors?.['required']">
+            Please choose a ticket
+          </div>
+      </div>
+
+      <br><br>
+
+      <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignedUsers">
+          <mat-label>Users</mat-label>
+          <mat-select formControlName="userId" id="userId">
+            <mat-option *ngFor="let user of assignedusers" value="{{user._id}}">
+              {{user.username}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="removeTicketForm.controls['userId'].invalid && (removeTicketForm.controls['userId'].dirty || removeTicketForm.controls['userId'].touched)" class="alert">
+          <div *ngIf="removeTicketForm.controls['userId'].errors?.['required']">
+            Please choose a user
+          </div>
+      </div>
+      
+      <br><br>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!removeTicketForm.valid">Confirm</button>
+
+      <div *ngIf="noAssignedUsers" class="alert">
+          This ticket have no assigned users
+      </div>
+
+  </form>
+</div>
