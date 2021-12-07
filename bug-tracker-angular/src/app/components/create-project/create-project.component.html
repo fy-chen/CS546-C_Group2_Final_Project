@@ -1,37 +1,93 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-
-</style>
-</head>
-<body>
-
-  <div class="sidenav">
-    <a href="/dashboard">dashboard</a>
-    <a href="/projects">Project</a>
-    <a href="/ticket">Ticket</a>
+<div class="sidenav">
+  <a href="/dashboard">dashboard</a>
+  <a href="/projects">Project</a>
+  <a href="/ticket">Ticket</a>
 </div>
-
 <div class="main">
-    <h2>CreateProject</h2>
-    <form action="/signup" method="POST" id="signup-form">
-      <label>
-          Project Title:
-          <input type="text" id="username" name="username">
-          <br><br>
+  <h1>Create A New Project</h1>
+  <form
+    id="createProject-form"
+    [formGroup]="createProjectForm"
+    (ngSubmit)="createProject()"
+  >
+    <mat-form-field class="input-width" appearance="fill">
+      <mat-label>Project Title</mat-label>
+      <input matInput formControlName="title" id="title" />
+    </mat-form-field>
 
-        <div id="errorU" class="error" hidden>I'm an error</div>
-        <br><br>
-        <button type="submit">Create</button>
-      </label>
-      
-    </form>
- 
-    
-  </div>
-   
-</body>
-</html>
+    <div
+      *ngIf="
+        createProjectForm.controls['title'].invalid &&
+        (createProjectForm.controls['title'].dirty ||
+          createProjectForm.controls['title'].touched)
+      "
+      class="alert"
+    >
+      <div *ngIf="createProjectForm.controls['title'].errors?.['required']">
+        Please enter Project title
+      </div>
+      <div *ngIf="createProjectForm.controls['title'].errors?.['minlength']">
+        Project title must be at least 4 characters long
+      </div>
+      <div *ngIf="createProjectForm.controls['title'].errors?.['maxlength']">
+        Project title cannot be more than 20 characters long
+      </div>
+      <div
+        *ngIf="createProjectForm.controls['title'].errors?.['onlywhitespace']"
+      >
+        Title can not contain just spaces
+      </div>
+    </div>
+
+    <br /><br />
+
+    <mat-form-field class="input-width" appearance="fill">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" id="description" />
+    </mat-form-field>
+
+    <div
+      *ngIf="
+        createProjectForm.controls['description'].invalid &&
+        (createProjectForm.controls['description'].dirty ||
+          createProjectForm.controls['description'].touched)
+      "
+      class="alert"
+    >
+      <div
+        *ngIf="createProjectForm.controls['description'].errors?.['required']"
+      >
+        Please enter project description
+      </div>
+      <div
+        *ngIf="createProjectForm.controls['description'].errors?.['minlength']"
+      >
+        Project description must be at least 4 characters long
+      </div>
+      <div
+        *ngIf="createProjectForm.controls['description'].errors?.['maxlength']"
+      >
+        Project description cannot be more than 100 characters long
+      </div>
+      <div
+        *ngIf="createProjectForm.controls['description'].errors?.['onlywhitespace']"
+      >
+        Description can not contain just spaces
+      </div>
+    </div>
+    <br /><br />
+
+    <div id="buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!createProjectForm.valid"
+      >
+        Submit
+      </button>
+      &nbsp;&nbsp;&nbsp;
+      <button mat-raised-button color="primary" type="reset">Clear</button>
+    </div>
+  </form>
+</div>
