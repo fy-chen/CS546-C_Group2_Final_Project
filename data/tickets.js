@@ -2,6 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const tickets = mongoCollections.tickets;
 let { ObjectId } = require('mongodb');
 let projectsData = require('./projects');
+let userData = require('./users');
 
 
 let isAppropriateString = (string, name) => {
@@ -64,7 +65,7 @@ async function create(title, description, priority, creator, project, errorType)
 
     isAppropriateString(creator, 'creator');
 
-    //should check if creator exists
+    await userData.get(creator);
 
     let createdTime = Date.now();
 
@@ -176,9 +177,36 @@ async function addAssignedUser(ticketId, userId) {
 
     await get(ticketId);
 
-    //should check if user exist
+    const user = await userData.get(userId);
 
-    const updatedInfo = await TicketsCollection.updateOne({ _id: parsedticketId }, { $addToSet: { assignedUsers: parseduserId } });
+    let userinfo = {
+        _id: userId,
+        username: user.username
+    }
+
+    const updatedInfo = await TicketsCollection.updateOne({ _id: parsedticketId }, { $addToSet: { assignedUsers: userinfo } });
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add assigned user successfully';
+    }
+
+    return await get(ticketId);
+
+}
+
+async function removeAssignedUser(ticketId, userId) {
+
+    let parsedticketId = toObjectId(ticketId, 'ticketId');
+
+    let parseduserId = toObjectId(userId, 'userId');
+
+    TicketsCollection = await tickets();
+
+    await get(ticketId);
+
+    const user = await userData.get(userId);
+
+    const updatedInfo = await TicketsCollection.updateOne({ _id: parsedticketId }, { $pull: { assignedUsers: { _id: userId }} });
 
     if (updatedInfo.modifiedCount === 0) {
         throw 'could not add assigned user successfully';
@@ -248,7 +276,7 @@ async function getTicketsByUser(userId, type) {
 
     if(type === 'assigned'){
 
-        ticketlist = await TicketsCollection.find({assignedUsers: parsedId}).toArray();
+        ticketlist = await TicketsCollection.find({assignedUsers: userId}).toArray();
         
     }else{
 
@@ -442,6 +470,7 @@ module.exports = {
     getAll,
     update,
     addAssignedUser,
+    removeAssignedUser,
     remove,
     updateStatus,
     getTicketsByUser,

@@ -11,7 +11,7 @@ export interface Ticket {
     status: string,
     createdTime: number,
     errorType: string,
-    assignedUsers: Array<string>,
+    assignedUsers: AssignedUsers[],
     comment: Array<Object>,
     history: History[],
 }
@@ -24,4 +24,9 @@ export interface TicketTable {
   creator: any,
   status: any,
   createdTime: any,
+}
+
+export interface AssignedUsers {
+  _id: any,
+  username: any
 }

@@ -188,6 +188,20 @@ const get = async function get(id){
     }
 }
 
+const getAll = async function getAll(){
+    const userCollection = await users();
+    const userlist = await userCollection.find({}).toArray();
+    if (userlist != null){
+        for(let user of userlist){
+            user._id = String(user._id);
+        }
+        return userlist;
+    }
+    else{
+        return null; 
+    }
+}
+
 const remove = async function remove(id){
 
     if(typeof id != 'string'){
@@ -268,6 +282,37 @@ const removeTicket = async function removeTicket (body){
     
 }
 
+const addcreatedTicket = async function addcreatedTicket (userId, ticketId){
+
+    if (!mongodb.ObjectId.isValid(userId)){
+        throw "userId is not a valid ObjectId";
+    }
+    if (!mongodb.ObjectId.isValid(ticketId)){
+        throw "ticketId is not a valid ObjectId";
+    }
+    //find if user exists
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+    if(userProfile == null){
+        throw "User does not exist"
+    }
+ 
+    //find if ticket exists
+    let ticketsCollection = await tickets();
+    const ticketProfile = await ticketsCollection.findOne({ _id:  mongodb.ObjectId(ticketId)});
+    if(ticketProfile == null){
+        throw "User does not exist"
+    }
+
+   
+    const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(userId)},{$addToSet: { createdTickets: mongodb.ObjectId(ticketId) }});
+    if (updatedInfo == null){
+        throw "Could not add ticket to user"
+    }
+    return await get(String(userId));    
+
+}
+
 // const addProject = async function addProject (body){
 
 //     let projectId = body.projectId;
@@ -307,7 +352,9 @@ module.exports= {
     getByUsername,
     adminPsSetter,
     addTicket,
-    removeTicket
+    removeTicket,
+    getAll,
+    addcreatedTicket
     
 }
 

@@ -53,6 +53,99 @@
       </table>
 </div>
 
+<button mat-raised-button color="primary" (click)="showAssigntoUserButtonClicked()">Assign tickets</button>
+
+<div id="assign_tickets" *ngIf = "showAssigntoUser">
+    <form id="assignTicket-form" [formGroup]= "assignTicketForm" (ngSubmit)="assignTicket()">
+        <mat-form-field appearance="fill" class="input-width" class="tickets">
+            <mat-label>Tickets</mat-label>
+            <mat-select formControlName="ticketId" id="ticketId">
+              <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
+                {{ticket.title}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="assignTicketForm.controls['ticketId'].invalid && (assignTicketForm.controls['ticketId'].dirty || assignTicketForm.controls['ticketId'].touched)" class="alert">
+            <div *ngIf="assignTicketForm.controls['ticketId'].errors?.['required']">
+              Please choose a ticket
+            </div>
+        </div>
+
+        <br><br>
+
+        <mat-form-field appearance="fill" class="input-width" class="users">
+            <mat-label>Users</mat-label>
+            <mat-select formControlName="userId" id="userId">
+              <mat-option *ngFor="let user of users" value="{{user._id}}">
+                {{user.username}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
+            <div *ngIf="assignTicketForm.controls['userId'].errors?.['required']">
+              Please choose a user
+            </div>
+        </div>
+        
+        <br><br>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!assignTicketForm.valid">Confirm</button>
+
+        <div *ngIf="haveBeenAssigned" class="alert">
+            User has been Assigned
+        </div>
+
+    </form>
+</div>
+
+
+<button mat-raised-button color="primary" (click)="showRemoveUserButtonClicked()">Remove tickets</button>
+
+<div id="remove_tickets" *ngIf = "showRemoveTicket">
+    <form id="removeTicket-form" [formGroup]= "removeTicketForm" (ngSubmit)="removeTicket()">
+        <mat-form-field appearance="fill" class="input-width" class="tickets">
+            <mat-label>Tickets</mat-label>
+            <mat-select formControlName="ticketId" id="ticketId" (selectionChange)="getAssignedUsers()">
+              <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
+                {{ticket.title}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="removeTicketForm.controls['ticketId'].invalid && (removeTicketForm.controls['ticketId'].dirty || removeTicketForm.controls['ticketId'].touched)" class="alert">
+            <div *ngIf="removeTicketForm.controls['ticketId'].errors?.['required']">
+              Please choose a ticket
+            </div>
+        </div>
+
+        <br><br>
+
+        <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignedUsers">
+            <mat-label>Users</mat-label>
+            <mat-select formControlName="userId" id="userId">
+              <mat-option *ngFor="let user of assignedusers" value="{{user._id}}">
+                {{user.username}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="removeTicketForm.controls['userId'].invalid && (removeTicketForm.controls['userId'].dirty || removeTicketForm.controls['userId'].touched)" class="alert">
+            <div *ngIf="removeTicketForm.controls['userId'].errors?.['required']">
+              Please choose a user
+            </div>
+        </div>
+        
+        <br><br>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!removeTicketForm.valid">Confirm</button>
+
+        <div *ngIf="noAssignedUsers" class="alert">
+            This ticket have no assigned users
+        </div>
+
+    </form>
+</div>
+
 <label>Search:</label>
 <input type="text">
 <button></button>

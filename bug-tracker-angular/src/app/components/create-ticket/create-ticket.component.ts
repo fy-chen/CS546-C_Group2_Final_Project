@@ -27,7 +27,6 @@ export class CreateTicketComponent implements OnInit {
       Validators.required,
       Validators.minLength(4), Validators.maxLength(20), this.onlySpaceValidator])),
     project: new FormControl('', Validators.required),
-    creator: ''
   });
 
   constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private projectService: ProjectService) { }
@@ -41,10 +40,6 @@ export class CreateTicketComponent implements OnInit {
   }
 
   createTicket(): void{
-    let creator = {
-      creator: "static user 1"
-    }
-    this.createTicketForm.patchValue(creator);
 
     this.createTicketForm.value.title = this.createTicketForm.value.title.trim();
 
@@ -60,9 +55,7 @@ export class CreateTicketComponent implements OnInit {
         this.ticket = data;
         this.id = this.ticket._id;
         this.router.navigate([`/ticket/${this.id}`]);
-      }
-      
-    )
+      });
  }
 
 public onlySpaceValidator(control: FormControl) {

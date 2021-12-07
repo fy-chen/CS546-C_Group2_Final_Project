@@ -16,7 +16,6 @@ router.get('/:id', async(req, res) => {
 });
 
 router.get('/', async(req, res) => {
-
     try{
         const tickets = await ticketsData.getAll();
         for(let x of tickets){
@@ -80,6 +79,8 @@ router.post('/create', async(req, res) => {
 
     console.log(req.session.user.userId);
 
+    let userId = req.session.user.userId;
+
     let errors = {};
 
     try{
@@ -120,6 +121,12 @@ router.post('/create', async(req, res) => {
     }
         
     //should check if creator exist  
+    try{
+        await userData.get(userId);
+    }catch(e) {
+        errors.user_not_exist = e;
+    }
+
     
     try{
         await projectsData.get(ticketData.project);
@@ -133,8 +140,9 @@ router.post('/create', async(req, res) => {
     }
     
     try{
-        const ticket = await ticketsData.create(ticketData.title, ticketData.description, ticketData.priority, ticketData.creator, ticketData.project, ticketData.errorType);
+        const ticket = await ticketsData.create(ticketData.title, ticketData.description, ticketData.priority, userId, ticketData.project, ticketData.errorType);
         const project = await projectsData.addTickets(ticketData.project, ticket._id);
+        const user = await userData.addcreatedTicket(req.session.user.userId, ticket._id);
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
