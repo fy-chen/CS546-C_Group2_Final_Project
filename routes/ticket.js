@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const ticketsData = data.tickets;
 const projectsData = data.projects;
+const userData = data.users;
 
 router.get('/:id', async(req, res) => {
 
@@ -14,10 +15,15 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.get('/getAll', async(req, res) => {
+router.get('/', async(req, res) => {
 
     try{
         const tickets = await ticketsData.getAll();
+        for(let x of tickets){
+            let user = await userData.get(x.creator);
+            x.creator = user.username;
+        }
+        console.log(tickets);
         res.json(tickets);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -72,6 +78,8 @@ router.post('/create', async(req, res) => {
 
     console.log(ticketData);
 
+    console.log(req.session.user.userId);
+
     let errors = {};
 
     try{
@@ -87,7 +95,7 @@ router.post('/create', async(req, res) => {
     }
 
     try{
-        ticketsData.isAppropriateString(ticketData.creator, 'creator');
+        ticketsData.isAppropriateString(req.session.user.userId, 'creator');
     }catch(e) {
         errors.creator_error = e;
     }

@@ -14,4 +14,14 @@ export interface Ticket {
     assignedUsers: Array<string>,
     comment: Array<Object>,
     history: History[],
-  }
+}
+
+export interface TicketTable {
+  No: number,
+  _id: any,
+  title: any,
+  description: any,
+  creator: any,
+  status: any,
+  createdTime: any,
+}

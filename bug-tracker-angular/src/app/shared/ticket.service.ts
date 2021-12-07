@@ -23,7 +23,7 @@ export class TicketService{
     }
 
     getAllTickets(): Observable<Ticket[]> {
-        return this.http.get<Ticket[]>(`${this.apiUrl}/ticket/getAll`);
+        return this.http.get<Ticket[]>(`${this.apiUrl}/ticket/`);
     }
 
     createTicket(form: FormGroup) {
@@ -34,6 +34,11 @@ export class TicketService{
     updateTicket(id: string, form: FormGroup) {
 
         return this.http.put(`${this.apiUrl}/ticket/edit/` + id, form.value);
+    }
+
+    removeTicket(id: string) {
+
+        return this.http.delete(`${this.apiUrl}/ticket/` + id);
     }
 
 }

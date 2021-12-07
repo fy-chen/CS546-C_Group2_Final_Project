@@ -304,6 +304,8 @@ module.exports= {
     signup,
     login,
     get,
+    getByUsername,
+    adminPsSetter,
     addTicket,
     removeTicket
     
