@@ -1,4 +1,4 @@
-/* body {
+body {
     font-family: "Lato", sans-serif;
   }
   
@@ -39,7 +39,7 @@
     .sidenav a {
       font-size: 18px;
     }
-  } */
+  }
 #divChart{
   display: block;
   width: 400px;

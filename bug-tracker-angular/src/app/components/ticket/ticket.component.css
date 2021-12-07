@@ -60,3 +60,12 @@ table {
 .main {
     margin-left: 160px;
 }
+
+.badge {
+    padding: .5em .6em;
+    color: white;
+    background-color: #435B60;
+    min-width: 16px;
+    margin-right: .8em;
+    border-radius: 4px 0 0 4px;
+  }

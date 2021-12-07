@@ -50,7 +50,6 @@ export class TicketComponent implements OnInit {
   
     const newComment: Comment = {text} as Comment;
     newComment.ticketId = this.id;
-    newComment.userId = "creator";
     this.CommentService
       .createComment(newComment)
       .subscribe(comment => {
