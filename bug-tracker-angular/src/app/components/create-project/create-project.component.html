@@ -11,29 +11,35 @@
     (ngSubmit)="createProject()"
   >
     <mat-form-field class="input-width" appearance="fill">
-      <mat-label>Project Title</mat-label>
-      <input matInput formControlName="title" id="title" />
+      <mat-label>Project Name</mat-label>
+      <input matInput formControlName="projectName" id="title" />
     </mat-form-field>
 
     <div
       *ngIf="
-        createProjectForm.controls['title'].invalid &&
-        (createProjectForm.controls['title'].dirty ||
-          createProjectForm.controls['title'].touched)
+        createProjectForm.controls['projectName'].invalid &&
+        (createProjectForm.controls['projectName'].dirty ||
+          createProjectForm.controls['projectName'].touched)
       "
       class="alert"
     >
-      <div *ngIf="createProjectForm.controls['title'].errors?.['required']">
-        Please enter Project title
-      </div>
-      <div *ngIf="createProjectForm.controls['title'].errors?.['minlength']">
-        Project title must be at least 4 characters long
-      </div>
-      <div *ngIf="createProjectForm.controls['title'].errors?.['maxlength']">
-        Project title cannot be more than 20 characters long
+      <div
+        *ngIf="createProjectForm.controls['projectName'].errors?.['required']"
+      >
+        Please enter Project name
       </div>
       <div
-        *ngIf="createProjectForm.controls['title'].errors?.['onlywhitespace']"
+        *ngIf="createProjectForm.controls['projectName'].errors?.['minlength']"
+      >
+        Project name must be at least 4 characters long
+      </div>
+      <div
+        *ngIf="createProjectForm.controls['projectName'].errors?.['maxlength']"
+      >
+        Project Name cannot be more than 20 characters long
+      </div>
+      <div
+        *ngIf="createProjectForm.controls['projectName'].errors?.['onlywhitespace']"
       >
         Title can not contain just spaces
       </div>
