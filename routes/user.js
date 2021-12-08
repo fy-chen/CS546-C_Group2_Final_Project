@@ -24,10 +24,10 @@ router.post('/assignTicket',async(req,res) =>{
         res.status(400).json({message:"ticketId is not a valid ObjectId"});
     }
     try{
-        const userUpdated =  await users.addTicket(xss(req.body));
-        await tickets.addAssignedUser(xss(req.body.ticketId), xss(req.body.userId));
+        const userUpdated =  await users.addTicket(req.body);
+        await tickets.addAssignedUser(ticketId, userId);
         let history = {Property: 'AssigntoUser', Value: userUpdated.username};
-        await tickets.addHistory(xss(req.body.ticketId), history);
+        await tickets.addHistory(ticketId, history);
         res.status(200).json(userUpdated);
     }
     catch(e){
