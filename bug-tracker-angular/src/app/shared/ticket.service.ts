@@ -50,7 +50,7 @@ export class TicketService{
     }
 
     ChangeTicketStatus(status: string, id: string){
-        return this.http.get(`${this.apiUrl}/ticket/`+ status + id);
+        return this.http.get(`${this.apiUrl}/ticket/`+ status + '/' + id);
     }
 
     checkedit(id: string){

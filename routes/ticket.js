@@ -366,7 +366,7 @@ router.put('/edit/:id', async(req, res) => {
 router.get('/readyToClose/:id', async(req, res) => {
 
     try{
-        const result = await ticketsData.updateStatus('ready_to_close', req.params.id);
+        const result = await ticketsData.updateStatus(req.params.id, 'ready_to_close');
         res.json(result);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -376,7 +376,7 @@ router.get('/readyToClose/:id', async(req, res) => {
 router.get('/close/:id', async(req, res) => {
 
     try{
-        const result = await ticketsData.updateStatus('closed', req.params.id);
+        const result = await ticketsData.updateStatus(req.params.id, 'closed');
         res.json(result);
     }catch(e) {
         res.status(500).json({ error: e });

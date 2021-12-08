@@ -57,7 +57,7 @@
         <ng-container matColumnDef="editButton">
             <th mat-header-cell *matHeaderCellDef>  </th>
             <td mat-cell *matCellDef="let element"> 
-                <button mat-raised-button color="primary">Close</button>
+                <button *ngIf="isopen(element.status)" mat-raised-button color="primary" (click)="ApplytoClose(element._id)">Apply to Close</button>
                 <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" id="gotoEdit">Edit</a>
             </td>
         </ng-container>

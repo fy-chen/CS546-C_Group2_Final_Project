@@ -7,6 +7,7 @@ import { TicketService } from 'src/app/shared/ticket.service';
 import { MatTableDataSource } from "@angular/material/table";
 import { UserService } from 'src/app/shared/user.service';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-developer-home',
@@ -23,13 +24,16 @@ export class DeveloperHomeComponent implements OnInit {
   tickets: any;
 
   ticketstable: TicketTable[] = [] as TicketTable[];
+  applyResult: any;
 
   constructor(
     private projectService : ProjectService,
     private router : Router,
     private AuthService :AuthService,
     private userService: UserService,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private ticketService: TicketService,
+    private _snackBar: MatSnackBar
   ) {}
 
   createproject = '';
@@ -46,6 +50,12 @@ export class DeveloperHomeComponent implements OnInit {
     //     }
     //   }
     // );
+    
+    this.getTicketFromUser();
+
+  }
+
+  getTicketFromUser() {
     this.userService.getTicketsFromUser().subscribe((data) => {
       this.tickets = data;
 
@@ -67,7 +77,7 @@ export class DeveloperHomeComponent implements OnInit {
       }
 
       this.ticketstable = [] as TicketTable[];
-      
+
       for(let i = 0; i < this.tickets.assignedTicket.length; i++) {
         let ticketobj: TicketTable = {} as TicketTable;
         ticketobj.No = i + 1;
@@ -86,7 +96,10 @@ export class DeveloperHomeComponent implements OnInit {
     });
   }
 
-  
+  openSnackBar(value: string) {
+    this._snackBar.open(value, 'Done');
+  }
+
   create() {
     this.createproject = 'cs546';
   }
@@ -122,4 +135,25 @@ export class DeveloperHomeComponent implements OnInit {
     )
   }
   // ngmodal, ngif, ngfor
+
+  ApplytoClose(id: string) {
+    this.ticketService.ChangeTicketStatus("readyToClose", id).subscribe(
+      (data) => {
+        this.applyResult = data;
+        if(this.applyResult.updated === true){
+          this.openSnackBar("Apply to close ticket succeed");
+          this.getTicketFromUser();
+        }
+      }
+    );
+  }
+
+  isopen(status: string) {
+    if(status === "open") {
+      return true;
+    }else {
+      return false;
+    }
+  }
+
 }
