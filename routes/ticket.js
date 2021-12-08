@@ -129,6 +129,12 @@ router.post('/create', async(req, res) => {
         errors.title_error = e;
     }
 
+    if(title.length < 4 || title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
+
+    if(description.length < 4 || description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
+
+    if(errorType.length < 4 || errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
+
     try{
         ticketsData.isAppropriateString(ticketData.description, 'description');
     }catch(e) {
@@ -191,6 +197,12 @@ router.post('/create', async(req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
+
+    //Has to be admin
+    // if (req.session.user.role != 1){
+    //     res.status(401).json({"err": "Unauthorized!"})
+    // }
+
     try {
         const ticket = await ticketsData.get(req.params.id);
         let assignedUsers = ticket.assignedUsers;
@@ -213,6 +225,21 @@ router.put('/edit/:id', async(req, res) => {
     const modifiedData = req.body;
 
     console.log(modifiedData);
+
+    // let ticket = await ticketsData.get(req.params.id);
+
+    // let isAssignedUser = false;
+
+    // for(let x of ticket.assignedUsers){
+    //     if(x._id === req.session.user.userId){
+    //         isAssignedUser = true;
+    //         break;
+    //     }
+    // }
+
+    // if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+    //     res.status(500).json({ NotAuthorized: true });
+    // }
 
     let errors = {}
 
@@ -246,9 +273,12 @@ router.put('/edit/:id', async(req, res) => {
     }catch(e) {
         errors.priority_error = e;
     }
-        
-    //should check if creator exist
-    //should check if project exist
+
+    if(title.length < 4 || title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
+
+    if(description.length < 4 || description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
+
+    if(errorType.length < 4 || errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
         
     
     try{
