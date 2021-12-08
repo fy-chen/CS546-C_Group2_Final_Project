@@ -129,12 +129,6 @@ router.post('/create', async(req, res) => {
         errors.title_error = e;
     }
 
-    if(title.length < 4 || title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
-
-    if(description.length < 4 || description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
-
-    if(errorType.length < 4 || errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
-
     try{
         ticketsData.isAppropriateString(ticketData.description, 'description');
     }catch(e) {
@@ -165,6 +159,12 @@ router.post('/create', async(req, res) => {
     }catch(e) {
         errors.priority_error = e;
     }
+
+    if(ticketData.title.length < 4 || ticketData.title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
+
+    if(ticketData.description.length < 4 || ticketData.description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
+
+    if(ticketData.errorType.length < 4 || ticketData.errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
         
     //should check if creator exist  
     try{
@@ -226,20 +226,20 @@ router.put('/edit/:id', async(req, res) => {
 
     console.log(modifiedData);
 
-    // let ticket = await ticketsData.get(req.params.id);
+    let ticket = await ticketsData.get(req.params.id);
 
-    // let isAssignedUser = false;
+    let isAssignedUser = false;
 
-    // for(let x of ticket.assignedUsers){
-    //     if(x._id === req.session.user.userId){
-    //         isAssignedUser = true;
-    //         break;
-    //     }
-    // }
+    for(let x of ticket.assignedUsers){
+        if(x._id === req.session.user.userId){
+            isAssignedUser = true;
+            break;
+        }
+    }
 
-    // if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
-    //     res.status(500).json({ NotAuthorized: true });
-    // }
+    if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+        res.status(500).json({ NotAuthorized: true });
+    }
 
     let errors = {}
 
@@ -274,11 +274,11 @@ router.put('/edit/:id', async(req, res) => {
         errors.priority_error = e;
     }
 
-    if(title.length < 4 || title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
+    if(modifiedData.title.length < 4 || modifiedData.title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
 
-    if(description.length < 4 || description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
+    if(modifiedData.description.length < 4 || modifiedData.description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
 
-    if(errorType.length < 4 || errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
+    if(modifiedData.errorType.length < 4 || modifiedData.errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
         
     
     try{
