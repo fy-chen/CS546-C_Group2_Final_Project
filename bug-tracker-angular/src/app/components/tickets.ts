@@ -18,7 +18,7 @@ export interface Ticket {
 
 export interface TicketTable {
   No: number,
-  _id: any,
+  _id: string,
   title: any,
   description: any,
   creator: any,
@@ -36,4 +36,8 @@ export interface AssignedUsers {
 export interface searchResult {
   notFound?: boolean,
   tickets?: Ticket[]
+}
+
+export interface deletResult {
+  deleted?: boolean,
 }

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { DeveloperHomeComponent } from './components/developer-home/developer-home.component';
-import { AdminHomeComponent } from './components/admin-home/admin-home.component';
+import { AdminHomeComponent, ConfirmDeleteDialog } from './components/admin-home/admin-home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -39,6 +39,7 @@ import { AccessGuard } from './shared/access.guard';
     CreateProjectComponent,
     DashboardHomeComponent,
     EditTicketComponent,
+    ConfirmDeleteDialog
 
   ],
   imports: [

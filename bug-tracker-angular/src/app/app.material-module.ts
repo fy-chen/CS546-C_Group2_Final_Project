@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
 // since we're exporting these modules, add them to export
@@ -24,7 +25,8 @@ import { MatMenuModule } from '@angular/material/menu';
         MatButtonModule,
         MatListModule,
         MatSnackBarModule,
-        MatMenuModule
+        MatMenuModule,
+        MatDialogModule
        
     ]
 })

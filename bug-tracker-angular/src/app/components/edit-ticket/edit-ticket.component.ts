@@ -20,14 +20,14 @@ export class EditTicketComponent implements OnInit {
   editTicketForm = this.formbuilder.group({
     title: new FormControl('', Validators.compose([
       Validators.required,
-      Validators.minLength(4), Validators.maxLength(20), this.onlySpaceValidator])),
+      Validators.minLength(4), Validators.maxLength(30), this.onlySpaceValidator])),
     description: new FormControl('', Validators.compose([
       Validators.required,
       Validators.minLength(4), Validators.maxLength(100), this.onlySpaceValidator])),
     priority: new FormControl('', Validators.required),
     errorType: new FormControl('', Validators.compose([
       Validators.required,
-      Validators.minLength(4), Validators.maxLength(20), this.onlySpaceValidator])),
+      Validators.minLength(4), Validators.maxLength(30), this.onlySpaceValidator])),
     project: new FormControl('', Validators.required),
     status: new FormControl('', Validators.required)
   });

@@ -313,6 +313,32 @@ const addcreatedTicket = async function addcreatedTicket (userId, ticketId){
 
 }
 
+const removecreatedTicket = async function removecreatedTicket (body){
+
+    let ticketId = body.ticketId;
+    let userId = body.userId;
+    if (!mongodb.ObjectId.isValid(userId)){
+        throw "userId is not a valid ObjectId";
+    }
+    if (!mongodb.ObjectId.isValid(ticketId)){
+        throw "ticketId is not a valid ObjectId";
+    }
+    //find if user exists
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+    
+    if(userProfile == null){
+        throw "User does not exist"
+    }
+
+    const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(userId)},{$pull: { createdTickets: mongodb.ObjectId(ticketId) }});
+    if (updatedInfo == null){
+        throw "Could not remove ticket to user"
+    }
+    return await get(String(userId));
+    
+}
+
 // const addProject = async function addProject (body){
 
 //     let projectId = body.projectId;
@@ -354,7 +380,8 @@ module.exports= {
     addTicket,
     removeTicket,
     getAll,
-    addcreatedTicket
+    addcreatedTicket,
+    removecreatedTicket
     
 }
 

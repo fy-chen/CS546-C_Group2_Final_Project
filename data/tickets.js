@@ -232,7 +232,7 @@ async function remove(id) {
         throw `Could not delete ticket with id of ${id}`;
     }
 
-    let deleteresult = `${ticket.title} has been successfully deleted!`;
+    let deleteresult = {deleted: true};
     
     return deleteresult;
 

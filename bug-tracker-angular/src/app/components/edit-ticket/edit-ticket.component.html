@@ -22,7 +22,7 @@
           Ticket title must be at least 4 characters long
         </div>
         <div *ngIf="editTicketForm.controls['title'].errors?.['maxlength']">
-          Ticket title cannot be more than 20 characters long
+          Ticket title cannot be more than 30 characters long
         </div>
         <div *ngIf="editTicketForm.controls['title'].errors?.['onlywhitespace']">Title can not contain just spaces</div>
     </div>
@@ -133,7 +133,7 @@
               Ticket errorType must be at least 4 characters long
             </div>
             <div *ngIf="editTicketForm.controls['errorType'].errors?.['maxlength']">
-              Ticket errorType cannot be more than 20 characters long
+              Ticket errorType cannot be more than 30 characters long
             </div>
             <div *ngIf="editTicketForm.controls['errorType'].errors?.['onlywhitespace']">ErrorType can not contain just spaces</div>
         </div>

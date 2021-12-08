@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TicketService } from 'src/app/shared/ticket.service';
 import { MatTableDataSource } from "@angular/material/table";
 import { DatePipe } from '@angular/common';
-import { TicketTable, searchResult } from '../tickets';
+import { TicketTable, searchResult, deletResult } from '../tickets';
 import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface DialogData {
+  _id: string;
+}
 
 @Component({
   selector: 'app-admin-home',
@@ -85,9 +90,11 @@ export class AdminHomeComponent implements OnInit {
 
   public ticketsSearchResultDataSource = new MatTableDataSource<TicketTable>();
 
-  constructor(private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder) { }
+  constructor(public dialog: MatDialog, private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder) { }
 
   ngOnInit(): void {
+
+    this.getAllTickets();
 
     this.userService.getAllUsers().subscribe((data) =>{
       this.users = data;
@@ -159,9 +166,27 @@ export class AdminHomeComponent implements OnInit {
     this.getTicketsByErrorType();
   }
 
+  openDialog(id: string) {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {data: {_id: id}});
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if(result){
+        this.deleteTicket(id);
+      }
+    });
+  }
+
   deleteTicket(id: string) {
     console.log(id);
-    this.ticketService.removeTicket(id);
+    this.ticketService.removeTicket(id).subscribe((data) =>{
+      let result: deletResult = data;
+      console.log(result);
+      if(result.deleted === true){
+        location.reload();
+        this.openSnackBar("Ticket has been succesfully deleted");
+      }
+    });
   }
 
   getAllTickets() {
@@ -461,4 +486,23 @@ export class AdminHomeComponent implements OnInit {
 
   }
 
+}
+
+@Component({
+  selector: 'confirm-delete-dialog',
+  templateUrl: 'dialog.html',
+})
+
+export class ConfirmDeleteDialog {
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmDeleteDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private ticketService: TicketService
+  ) {}
+
+  public id = this.data;
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }

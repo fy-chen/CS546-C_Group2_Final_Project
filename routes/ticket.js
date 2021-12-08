@@ -192,6 +192,15 @@ router.post('/create', async(req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
+        const ticket = await ticketsData.get(req.params.id);
+        let assignedUsers = ticket.assignedUsers;
+        let creator = ticket.creator;
+        let creatorbody = {userId: creator, ticketId: req.params.id};
+        await userData.removecreatedTicket(creatorbody);
+        for(let x of assignedUsers){
+            let body = {userId: x._id, ticketId: req.params.id};
+            await userData.removeTicket(body);
+        }
         const DeleteInfo = await ticketsData.remove(req.params.id);
         res.status(200).json(DeleteInfo);
     }catch (e) {
