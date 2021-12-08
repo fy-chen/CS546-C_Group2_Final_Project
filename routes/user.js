@@ -35,10 +35,6 @@ router.post('/assignTicket',async(req,res) =>{
         res.status(500).json({error: e})
     }
     
-    
-    
-    
-    
 });
 
 router.get("/", async (req, res) => {
@@ -54,6 +50,17 @@ router.get("/:id", async (req, res) => {
     try {
       const user = await users.get(req.params.id);
       res.status(200).json(user);
+    } catch (e) {
+      res.status(404).json({ error: e });
+    }
+});
+
+router.get("/getTickets", async (req, res) => {
+
+    
+    try {
+      const tickets = await users.getAssignedTickets(req.session.user.userId);
+      res.status(200).json(tickets);
     } catch (e) {
       res.status(404).json({ error: e });
     }

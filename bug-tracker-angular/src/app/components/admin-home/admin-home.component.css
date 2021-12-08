@@ -3,8 +3,17 @@
     margin-bottom: 30px;
 }
 
+#bar {
+    width: 100%;
+}
+
 #gotoEdit {
     margin-right: 20px;
+}
+
+#all_tickets {
+    margin-top: 20px;
+    margin-left: 30px;
 }
 
 #assign_tickets {
@@ -18,6 +27,21 @@
 }
 
 #tickets_by_priority {
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+#tickets_by_project {
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+#tickets_by_errorType {
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+#search_results {
     margin-top: 20px;
     margin-left: 30px;
 }

@@ -22,6 +22,8 @@ router.get('/', async(req, res) => {
         for(let x of tickets){
             let user = await userData.get(x.creator);
             x.creator = user.username;
+            let project = await projectsData.get(x.project);
+            x.project = project.projectName;
         }
         console.log(tickets);
         res.json(tickets);
@@ -56,6 +58,8 @@ router.get('/priority/get/', async(req, res) => {
         for(let x of ticketsPriority1){
             let user = await userData.get(x.creator);
             x.creator = user.username;
+            let project = await projectsData.get(x.project);
+            x.project = project.projectName;
         }
         tickets.ticketsPriority1 = ticketsPriority1;
         
@@ -63,6 +67,8 @@ router.get('/priority/get/', async(req, res) => {
         for(let x of ticketsPriority2){
             let user = await userData.get(x.creator);
             x.creator = user.username;
+            let project = await projectsData.get(x.project);
+            x.project = project.projectName;
         }
         tickets.ticketsPriority2 = ticketsPriority2;
         
@@ -70,6 +76,8 @@ router.get('/priority/get/', async(req, res) => {
         for(let x of ticketsPriority3){
             let user = await userData.get(x.creator);
             x.creator = user.username;
+            let project = await projectsData.get(x.project);
+            x.project = project.projectName;
         }
         tickets.ticketsPriority3 = ticketsPriority3;
         console.log(tickets);
@@ -92,11 +100,11 @@ router.post('/search', async(req, res) => {
     }
 
     try{
-        const ticketlist = await ticketsData.searchTicketsByTitle(cleanedPhrase);
+        const ticketlist = await ticketsData.search(cleanedPhrase);
         if(ticketlist.length === 0){
             res.json({notFound: true});
         }else{
-            res.json(ticketlist);
+            res.json({tickets: ticketlist});
         }
     }catch(e) {
         res.status(500).json({ error: e });

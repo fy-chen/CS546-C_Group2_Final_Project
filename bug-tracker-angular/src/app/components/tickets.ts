@@ -23,10 +23,17 @@ export interface TicketTable {
   description: any,
   creator: any,
   status: any,
+  project: any,
+  errorType: any,
   createdTime: any,
 }
 
 export interface AssignedUsers {
   _id: any,
   username: any
+}
+
+export interface searchResult {
+  notFound?: boolean,
+  tickets?: Ticket[]
 }

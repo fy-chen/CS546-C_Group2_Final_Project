@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-ticket',
@@ -31,7 +32,7 @@ export class EditTicketComponent implements OnInit {
     status: new FormControl('', Validators.required)
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService) { }
+  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService, private location: Location) { }
 
   ngOnInit(): void {
 
@@ -82,7 +83,8 @@ export class EditTicketComponent implements OnInit {
         if(this.ticket.nochanged === true){
           console.log("nochanges");
         }
-        this.router.navigate([`/ticket/${this.id}`]);
+        //this.router.navigate([`/ticket/${this.id}`]);
+        this.location.back();
       }
       
     )

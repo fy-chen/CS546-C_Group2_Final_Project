@@ -40,6 +40,10 @@ export class TicketService{
         return this.http.put(`${this.apiUrl}/ticket/edit/` + id, form.value);
     }
 
+    searchTickets(form: FormGroup) {
+        return this.http.post(`${this.apiUrl}/ticket/search/`, form.value);
+    }
+
     removeTicket(id: string) {
 
         return this.http.delete(`${this.apiUrl}/ticket/` + id);
