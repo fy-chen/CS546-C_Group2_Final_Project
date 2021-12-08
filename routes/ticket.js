@@ -9,6 +9,12 @@ const xss = require('xss');
 router.get('/:id', async(req, res) => {
 
     try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
         const ticket = await ticketsData.get(xss(req.params.id));
         res.json(ticket);
     }catch(e) {
@@ -119,7 +125,7 @@ router.post('/create', async(req, res) => {
 
     console.log(req.session.user.userId);
 
-    let userId = req.session.user.userId;
+    let userId = xss(req.session.user.userId);
 
     let errors = {};
 
@@ -204,6 +210,8 @@ router.delete('/:id', async (req, res) => {
     // }
 
     try {
+        ticketsData.toObjectId(xss(req.params.id));
+
         const ticket = await ticketsData.get(xss(req.params.id));
         let assignedUsers = ticket.assignedUsers;
         let creator = ticket.creator;
@@ -221,6 +229,13 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.put('/edit/:id', async(req, res) => {
+
+    try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+    
 
     const modifiedData = req.body;
 
@@ -366,6 +381,12 @@ router.put('/edit/:id', async(req, res) => {
 router.get('/readyToClose/:id', async(req, res) => {
 
     try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
         const result = await ticketsData.updateStatus(xss(req.params.id), 'ready_to_close');
         res.json(result);
     }catch(e) {
@@ -376,6 +397,12 @@ router.get('/readyToClose/:id', async(req, res) => {
 router.get('/close/:id', async(req, res) => {
 
     try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
         const result = await ticketsData.updateStatus(xss(req.params.id), 'closed');
         res.json(result);
     }catch(e) {
@@ -384,6 +411,12 @@ router.get('/close/:id', async(req, res) => {
 });
 
 router.get('/check/edit/:id', async(req, res) => {
+
+    try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
 
     try{
         let ticket = await ticketsData.get(xss(req.params.id));
