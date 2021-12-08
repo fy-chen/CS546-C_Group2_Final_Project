@@ -141,6 +141,8 @@ async function update(id, title, description, priority, project, status, errorTy
 
     await areAppropriateParameters(title, description, priority, project, errorType);
 
+    priority = Number(priority);
+
     isValidStatus(status);
 
     TicketsCollection = await tickets();
