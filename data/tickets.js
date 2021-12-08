@@ -270,7 +270,7 @@ async function updateStatus(id, status) {
         throw 'could not update ticket status successfully';
     }
 
-    return await get(id);
+    return {updated: true};
 
 }
 

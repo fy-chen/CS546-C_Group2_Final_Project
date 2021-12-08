@@ -363,5 +363,50 @@ router.put('/edit/:id', async(req, res) => {
     
 });
 
+router.get('/readyToClose/:id', async(req, res) => {
+
+    try{
+        const result = await ticketsData.updateStatus('ready_to_close', req.params.id);
+        res.json(result);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
+router.get('/close/:id', async(req, res) => {
+
+    try{
+        const result = await ticketsData.updateStatus('closed', req.params.id);
+        res.json(result);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
+router.get('/check/edit/:id', async(req, res) => {
+
+    try{
+        let ticket = await ticketsData.get(req.params.id);
+        
+        let isAssignedUser = false;
+        
+        for(let x of ticket.assignedUsers){
+            if(x._id === req.session.user.userId){
+                isAssignedUser = true;
+                break;
+            }
+        }
+        
+        if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+            res.status(200).json({ NotAuthorized: true });
+        }else{
+            res.status(200).json({ Authorized: true });
+        }
+
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
 
 module.exports = router;
