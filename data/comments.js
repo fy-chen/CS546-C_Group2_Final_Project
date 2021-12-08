@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const tickets = mongoCollections.tickets;
 const ticketsData = require('./tickets');
 let { ObjectId } = require('mongodb');
-
+const userData = require('./users');
 
 async function create(ticketId, text, userId) {
 
@@ -19,11 +19,14 @@ async function create(ticketId, text, userId) {
 
     let commentId = new ObjectId();
 
+    let currentUser = await userData.get(userId);
+
     let newComment = {
         _id: commentId,
         text: text,
         userId: userId,
-        createdTime, createdTime
+        createdTime: createdTime,
+        username: currentUser.username
     };
 
     const updatedInfo = await TicketsCollection.updateOne({ _id: parsedticketId }, { $addToSet: { comments: newComment } });

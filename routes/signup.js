@@ -3,12 +3,12 @@ const router = express.Router();
 const users = require('../data').users;
 // const mongoCollections = require('../config/mongoCollections');
 // const userCollection = mongoCollections.users;
-
+const xss = require('xss');
 
 router.post('/',async(req,res) =>{
     //assigning credentials to variables
-    let username = req.body.username;
-    let password = req.body.password;
+    let username = xss(req.body.username);
+    let password = xss(req.body.password);
     
     //Valdiations
     if (typeof username != 'string' || /[^A-Z0-9]/ig.test(username)){
