@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const commentData = data.comments;
 const ticketData = data.tickets;
-
+const xss = require('xss');
 router.get('/:id', async(req, res) => {
     try {
         const comment = await commentData.get(req.params.id);
@@ -24,7 +24,7 @@ router.get('/getAll/:id', async(req, res) => {
 router.post('/create', async(req, res) => {
     const commentsData = req.body;
     console.log(commentsData);
-    let userId = req.session.user.userId;
+    let userId = xss(req.session.user.userId);
     let errors = {};
 
     // try {

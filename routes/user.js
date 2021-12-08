@@ -5,15 +5,15 @@ const tickets = require('../data').tickets;
 // const mongoCollections = require('../config/mongoCollections');
 // const userCollection = mongoCollections.users;
 var mongodb = require('mongodb');
-
+const xss = require('xss');
 
 router.post('/assignTicket',async(req,res) =>{
     //Has to be admin
     // if (req.session.user.role != 1){
     //     res.status(401).json({"err": "Unauthorized!"})
     // }
-    let ticketId = req.body.ticketId;
-    let userId = req.body.userId;
+    let ticketId = xss(req.body.ticketId);
+    let userId = xss(req.body.userId);
     console.log(req.body)
 
     //Validations
@@ -24,10 +24,10 @@ router.post('/assignTicket',async(req,res) =>{
         res.status(400).json({message:"ticketId is not a valid ObjectId"});
     }
     try{
-        const userUpdated =  await users.addTicket(req.body);
-        await tickets.addAssignedUser(req.body.ticketId, req.body.userId);
+        const userUpdated =  await users.addTicket(xss(req.body));
+        await tickets.addAssignedUser(xss(req.body.ticketId), xss(req.body.userId));
         let history = {Property: 'AssigntoUser', Value: userUpdated.username};
-        await tickets.addHistory(req.body.ticketId, history);
+        await tickets.addHistory(xss(req.body.ticketId), history);
         res.status(200).json(userUpdated);
     }
     catch(e){
@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-      const user = await users.get(req.params.id);
+      const user = await users.get(xss(req.params.id));
       res.status(200).json(user);
     } catch (e) {
       res.status(404).json({ error: e });
@@ -65,8 +65,8 @@ router.post('/removeTicket',async(req,res) =>{
     //     res.status(401).json({"err": "Unauthorized!"})
     // }
 
-    let ticketId = req.body.ticketId;
-    let userId = req.body.userId;
+    let ticketId = xss(req.body.ticketId);
+    let userId = xss(req.body.userId);
 
     //Validations
     if (!mongodb.ObjectId.isValid(userId)){
@@ -77,10 +77,10 @@ router.post('/removeTicket',async(req,res) =>{
     }
     
     try{
-        const userUpdated =  await users.removeTicket(req.body);
-        await tickets.removeAssignedUser(req.body.ticketId, req.body.userId);
+        const userUpdated =  await users.removeTicket(xss(req.body));
+        await tickets.removeAssignedUser(xss(req.body.ticketId), xss(req.body.userId));
         let history = {Property: 'RemoveAssignedUser', Value: userUpdated.username};
-        await tickets.addHistory(req.body.ticketId, history);
+        await tickets.addHistory(xss(req.body.ticketId), history);
         res.status(200).json(userUpdated);
     }
     catch(e){
