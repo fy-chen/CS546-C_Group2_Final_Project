@@ -10,29 +10,44 @@ router.post('/',async(req,res) =>{
     let username = xss(req.body.username);
     let password = xss(req.body.password);
     
-    //Valdiations
     if (typeof username != 'string' || /[^A-Z0-9]/ig.test(username)){
-        throw "Username is not a valid string."
+        res.status(400).json({msg: "Username is not a valid string."});
+        return;
     }
+    
     if (username.length < 4){
-        throw "Username should be atleast 4 characters long"
+        res.status(400).json({msg: "Username should be atleast 4 characters long"});
+        return;
     }
+    
     if (typeof password != 'string'){
-        throw "Password is not a valid string."
+        res.status(400).json({msg: "Password is not a valid string."});
+        return;
     }
+
     if (password.length < 6){
-        throw "Password should be atleast 6 characters long"
+        res.status(400).json({msg: "Password should be atleast 6 characters long"});
+        return;
     }
+    
     const strArr = password.split('');
     for (let i = 0; i<=password.length-1; i++){
         if (strArr[i]==' '){
-            throw "Password should not contain spaces"
+            res.status(400).json({msg: "Password should not contain spaces"});
+            return;
         }
     }
     username = username.toLowerCase();
-
-    const userCreated =  await users.signup(req.body);
-    res.status(200).json(userCreated);
+    try{
+        const userCreated =  await users.signup(req.body);
+        res.status(200).json({msg: userCreated});
+    }
+    catch(e){
+        if (e.status){
+            res.status(e.status).json(e)
+        }
+    }
+    
     
     
     

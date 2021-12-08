@@ -13,17 +13,26 @@ router.get('/',async(req,res)=>{
 });
 
 router.post('/',async(req,res) =>{
+     let username = req.body.username;
+     let password = req.body.password;
+     username = username.toLowerCase();
+    try {
+        const loginResponse =  await users.login(username,password);
+        console.log(loginResponse)
+        if (loginResponse.login==true){
+            req.session.user ={ username: loginResponse.username, userId : loginResponse.userId ,userRole: loginResponse.userRole }
+            res.status(200).json(loginResponse);
+        }
+        else{
+            res.status(401).json(loginResponse);
+        }
+    }
+    catch(e){
+        res.sendStatus(500);
+    }
 
-    const loginResponse =  await users.login(req.body);
     // res.status(200).render("./pages/signupPage",{title:'Signup', userCreated: userCreated});
-    console.log(loginResponse)
-    if (loginResponse.login==true){
-        req.session.user ={ username: loginResponse.username, userId : loginResponse.userId ,userRole: loginResponse.userRole }
-        res.status(200).json(loginResponse);
-    }
-    else{
-        res.status(401).json(loginResponse);
-    }
+    
     
     
     

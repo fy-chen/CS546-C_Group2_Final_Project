@@ -2,6 +2,8 @@ import { Component, EventEmitter, OnInit} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-signup',
@@ -24,9 +26,14 @@ export class SignupComponent implements OnInit {
     private formBuilder : FormBuilder,
     private AuthService : AuthService,
     public router: Router,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
+  }
+
+  openSnackBar(value: string) {
+    this._snackBar.open(value, 'Done');
   }
 
   radioChange(value:any){
@@ -37,15 +44,16 @@ export class SignupComponent implements OnInit {
       this.adminPassShow = false;
       this.signupForm.controls['adminAccess'].reset();
     }
-    console.log(this.signupForm.value)
   }
 
   signup(): void{
-    console.log(this.signupForm.value)
     this.AuthService.signup(this.signupForm).then(
-      data=>{
-        
-        this.router.navigate(['/login/'])
+      (data:any)=>{
+        // this.openSnackBar(data['message']);
+        this.router.navigate(['/login/']);
+      },
+      err=>{
+        this.openSnackBar(err.error.msg);
       }
       
     )
