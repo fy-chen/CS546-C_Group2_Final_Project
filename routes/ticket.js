@@ -9,7 +9,7 @@ const xss = require('xss');
 router.get('/:id', async(req, res) => {
 
     try{
-        const ticket = await ticketsData.get(req.params.id);
+        const ticket = await ticketsData.get(xss(req.params.id));
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -188,7 +188,7 @@ router.post('/create', async(req, res) => {
     try{
         const ticket = await ticketsData.create(ticketData.title, ticketData.description, ticketData.priority, userId, ticketData.project, ticketData.errorType);
         const project = await projectsData.addTickets(ticketData.project, ticket._id);
-        const user = await userData.addcreatedTicket(req.session.user.userId, ticket._id);
+        const user = await userData.addcreatedTicket(xss(req.session.user.userId), ticket._id);
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -204,16 +204,16 @@ router.delete('/:id', async (req, res) => {
     // }
 
     try {
-        const ticket = await ticketsData.get(req.params.id);
+        const ticket = await ticketsData.get(xss(req.params.id));
         let assignedUsers = ticket.assignedUsers;
         let creator = ticket.creator;
-        let creatorbody = {userId: creator, ticketId: req.params.id};
+        let creatorbody = {userId: creator, ticketId: xss(req.params.id)};
         await userData.removecreatedTicket(creatorbody);
         for(let x of assignedUsers){
-            let body = {userId: x._id, ticketId: req.params.id};
+            let body = {userId: x._id, ticketId: xss(req.params.id)};
             await userData.removeTicket(body);
         }
-        const DeleteInfo = await ticketsData.remove(req.params.id);
+        const DeleteInfo = await ticketsData.remove(xss(req.params.id));
         res.status(200).json(DeleteInfo);
     }catch (e) {
         res.status(500).json({ error: e });
@@ -226,7 +226,7 @@ router.put('/edit/:id', async(req, res) => {
 
     console.log(modifiedData);
 
-    let ticket = await ticketsData.get(req.params.id);
+    let ticket = await ticketsData.get(xss(req.params.id));
 
     let isAssignedUser = false;
 
@@ -303,7 +303,7 @@ router.put('/edit/:id', async(req, res) => {
     let history_value = '';
 
     try {
-        const ticket = await ticketsData.get(req.params.id);
+        const ticket = await ticketsData.get(xss(req.params.id));
 
         console.log(ticket);
 
@@ -347,7 +347,7 @@ router.put('/edit/:id', async(req, res) => {
             return;
         }
 
-        await ticketsData.addHistory(req.params.id, history); 
+        await ticketsData.addHistory(xss(req.params.id), history); 
 
     }catch(e) {
         res.status(500).json({ error: e });
@@ -366,7 +366,7 @@ router.put('/edit/:id', async(req, res) => {
 router.get('/readyToClose/:id', async(req, res) => {
 
     try{
-        const result = await ticketsData.updateStatus(req.params.id, 'ready_to_close');
+        const result = await ticketsData.updateStatus(xss(req.params.id), 'ready_to_close');
         res.json(result);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -376,7 +376,7 @@ router.get('/readyToClose/:id', async(req, res) => {
 router.get('/close/:id', async(req, res) => {
 
     try{
-        const result = await ticketsData.updateStatus(req.params.id, 'closed');
+        const result = await ticketsData.updateStatus(xss(req.params.id), 'closed');
         res.json(result);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -386,7 +386,7 @@ router.get('/close/:id', async(req, res) => {
 router.get('/check/edit/:id', async(req, res) => {
 
     try{
-        let ticket = await ticketsData.get(req.params.id);
+        let ticket = await ticketsData.get(xss(req.params.id));
         
         let isAssignedUser = false;
         
