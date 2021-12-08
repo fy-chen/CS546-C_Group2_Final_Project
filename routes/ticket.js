@@ -4,6 +4,7 @@ const data = require('../data');
 const ticketsData = data.tickets;
 const projectsData = data.projects;
 const userData = data.users;
+const xss = require('xss');
 
 router.get('/:id', async(req, res) => {
 
@@ -80,8 +81,9 @@ router.get('/priority/get/', async(req, res) => {
 
 router.post('/search', async(req, res) => {
 
+    let cleanedPhrase = xss(req.body.phrase);
     try{
-        if(!req.body.phrase || req.body.phrase.trim().length === 0) {
+        if(!cleanedPhrase || cleanedPhrase.trim().length === 0) {
             throw 'Provided search phrase is empty';
         }
     }catch(e) {
@@ -90,7 +92,7 @@ router.post('/search', async(req, res) => {
     }
 
     try{
-        const ticketlist = await ticketsData.searchTicketsByTitle(req.body.phrase);
+        const ticketlist = await ticketsData.searchTicketsByTitle(cleanedPhrase);
         if(ticketlist.length === 0){
             res.json({notFound: true});
         }else{

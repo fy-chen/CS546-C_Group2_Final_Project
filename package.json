@@ -30,6 +30,7 @@
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^4.1.4"
+    "mongodb": "^4.1.4",
+    "xss": "^1.0.10"
   }
 }
