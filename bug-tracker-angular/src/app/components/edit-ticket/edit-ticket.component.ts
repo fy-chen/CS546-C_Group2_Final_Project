@@ -37,6 +37,16 @@ export class EditTicketComponent implements OnInit {
   ngOnInit(): void {
 
     this.id = this.route.snapshot.paramMap.get('id');
+
+    this.ticketService.checkedit(this.id).subscribe(
+      (data:any)=>{
+        if (data.Authorized === true){
+        }
+        else if(data.NotAuthorized === true){
+          this.router.navigate(['/home']);
+        }
+      }
+    );
     
     
     this.ticketService.getTicket(this.id)
