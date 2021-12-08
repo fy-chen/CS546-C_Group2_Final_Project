@@ -18,14 +18,14 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: DeveloperHomeComponent, data: {requiresLogin:true}, canActivate: [AccessGuard]},
   { path: 'signup', component: SignupComponent },
-  { path: 'ticket/create', component: CreateTicketComponent },
+  { path: 'ticket/create', component: CreateTicketComponent, data: {requiresLogin:true}, canActivate: [AccessGuard] },
   { path: 'ticket', component: TicketHomeComponent },
-  { path: 'ticket/:id', component: TicketComponent },
+  { path: 'ticket/:id', component: TicketComponent, data: {requiresLogin:true}, canActivate: [AccessGuard] },
   { path: 'projects', component: ProjectsHomeComponent },
   { path: 'projects/create', component: CreateProjectComponent },
   { path: 'dashboard', component : DashboardHomeComponent, data: {requiresLogin:true}, canActivate: [AccessGuard]},
-  { path: 'ticket/edit/:id', component: EditTicketComponent },
-  {path:'admin-home', component: AdminHomeComponent ,data: {requiresLogin:true, requiresAdmin:true}, canActivate: [AccessGuard]},
+  { path: 'ticket/edit/:id', component: EditTicketComponent, data: {requiresLogin:true}, canActivate: [AccessGuard] },
+  {path:'admin-home', component: AdminHomeComponent ,data: {requiresLogin:true}, canActivate: [AccessGuard]},
 ];
 
 @NgModule({
