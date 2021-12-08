@@ -45,21 +45,21 @@ const signup = async function signup (body) {
     
     //Valdiations
     if (typeof username != 'string' || /[^A-Z0-9]/ig.test(username)){
-        throw "Username is not a valid string."
+        throw {status:400, msg:"Username is not a valid string."}
     }
     if (username.length < 4){
-        throw "Username should be atleast 4 characters long"
+        throw  {status:400, msg: "Username should be atleast 4 characters long"}
     }
     if (typeof password != 'string'){
-        throw "Password is not a valid string."
+        throw  {status:400, msg:"Password is not a valid string."}
     }
     if (password.length < 6){
-        throw "Password should be atleast 6 characters long"
+        throw  {status:400, msg:"Password should be atleast 6 characters long"}
     }
     const strArr = password.split('');
     for (let i = 0; i<=password.length-1; i++){
         if (strArr[i]==' '){
-            throw "Password should not contain spaces"
+            throw  {status:400, msg:"Password should not contain spaces"}
         }
     }
     username = username.toLowerCase();
@@ -67,7 +67,7 @@ const signup = async function signup (body) {
     //Checking if user exists or not
     const userObj = await getByUsername(username);
     if (!("message" in userObj)){
-        throw "Error: User already exists"
+        throw  {status:400, msg:"Error: User already exists"}
     }
 
     //Hashing password
@@ -84,7 +84,7 @@ const signup = async function signup (body) {
             role = 1;
         }
         else{
-            throw "Error: Admin password incorrect";
+            throw  {status:401, msg:"Error: Admin password incorrect"};
         }
     }
     
@@ -129,39 +129,15 @@ const validPassword = async function(password,userProfile) {
 
 
 
-const login = async function login (body) { 
-    let username = body.username;
-    let password = body.password;
-    if (typeof username != 'string' || /[^A-Z0-9]/ig.test(username)){
-        throw "Username is not a valid string."
-    }
-    if (username.length < 4){
-        throw "Username should be atleast 4 characters long"
-    }
-    if (typeof password != 'string'){
-        throw "Password is not a valid string."
-    }
-    if (password.length < 6){
-        throw "Password should be atleast 6 characters long"
-    }
-    const strArr = password.split('');
-    for (let i = 0; i<=password.length-1; i++){
-        if (strArr[i]==' '){
-            throw "Password should not contain spaces"
-        }
-    }
+const login = async function login (username,password) { 
     username = username.toLowerCase();
     let usersCollection = await users();
-    const userProfile = await usersCollection.findOne({ "username":  body.username });
+    const userProfile = await usersCollection.findOne({ "username":  username });
     console.log(userProfile);
     if(userProfile == null){
         return {login : false, message:"Invalid Username or Password!"}
     }
-    else if (await validPassword(body.password,userProfile)){
-        // const expiresIn = 10 * 60 * 60;
-        // const accessToken = jwt.sign({ id: body.username , role: userProfile.role, uid: userProfile._id,secret: body.password }, SECRET_KEY, {
-        //     expiresIn: expiresIn
-        // });
+    else if (await validPassword(password,userProfile)){
         return {login : true, message: "LoggedIn Successfully!", username: userProfile.username, userId : userProfile._id, userRole : userProfile.role};
     }
     else{

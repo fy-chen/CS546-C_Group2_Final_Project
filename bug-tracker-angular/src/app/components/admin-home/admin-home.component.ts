@@ -6,6 +6,8 @@ import { DatePipe } from '@angular/common';
 import { TicketTable, searchResult } from '../tickets';
 import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
+import { AuthService } from 'src/app/shared/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-home',
@@ -65,9 +67,11 @@ export class AdminHomeComponent implements OnInit {
     phrase: ''
   });
 
+
   public displayedColumns = ['No', 'Title', 'Description', 'Creator', 'Status', 'Project', 'errorType', 'createdTime', 'deleteButton'];
 
   public ticketsOpeningDataSource = new MatTableDataSource<TicketTable>();
+  
 
   public ticketsClosedDataSource = new MatTableDataSource<TicketTable>();
 
@@ -85,7 +89,7 @@ export class AdminHomeComponent implements OnInit {
 
   public ticketsSearchResultDataSource = new MatTableDataSource<TicketTable>();
 
-  constructor(private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder) { }
+  constructor(private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder, private router: Router, private authService: AuthService ) { }
 
   ngOnInit(): void {
 
@@ -461,4 +465,16 @@ export class AdminHomeComponent implements OnInit {
 
   }
 
+  logout(){
+    this.authService.logout().then(
+      (data:any)=>{
+        if (data['loggedOut']=true){
+          this.router.navigate(['/login']);
+        }
+      },
+      error=>{
+        console.log(error);
+      }
+    );
+  }
 }

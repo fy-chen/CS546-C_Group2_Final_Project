@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     private formBuilder : FormBuilder,
     private AuthService : AuthService,
     private router : Router,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -40,16 +42,29 @@ export class LoginComponent implements OnInit {
       }
     //else nothing
   }
+
+  openSnackBar(value: string) {
+    this._snackBar.open(value, 'Done');
+  }
+
   login(): void{
     console.log("pressed")
     this.AuthService.login(this.loginForm).then(
       (data:any)=>{
         if (data['login'] === true ){
-          this.router.navigate(['/home'])
+          console.log(data)
+          if (data['userRole']===1){
+            this.router.navigate(['/admin-home'])
+          }
+          else{
+            this.router.navigate(['/home'])
+          }
+         
         }
       },
       err=>{
         console.log(err)
+        this.openSnackBar(err.error.message)
       }
       
       
