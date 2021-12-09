@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();    
 const users = require('../data').users;
 const tickets = require('../data').tickets;
+const projects = require('../data').projects;
 // const mongoCollections = require('../config/mongoCollections');
 // const userCollection = mongoCollections.users;
 var mongodb = require('mongodb');
@@ -55,12 +56,37 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.get("/getTickets", async (req, res) => {
+router.get("/tickets/get", async (req, res) => {
 
     
     try {
-      const tickets = await users.getAssignedTickets(req.session.user.userId);
-      res.status(200).json(tickets);
+      const user = await users.get(req.session.user.userId);
+      let ticketlist = {};
+      let assignedTickets = [];
+      let createdTickets = [];
+      for(let x of user.assignedTickets) {
+          let ticket = await tickets.get(x.toString());
+          let creator = await users.get(ticket.creator);
+          ticket.creator = creator.username;
+          let project = await projects.get(ticket.project);
+          ticket.project = project.projectName;
+          assignedTickets.push(ticket);
+      }
+
+      for(let x of user.createdTickets) {
+        let ticket = await tickets.get(x.toString());
+        let creator = await users.get(ticket.creator);
+        ticket.creator = creator.username;
+        let project = await projects.get(ticket.project);
+        ticket.project = project.projectName;
+        createdTickets.push(ticket);
+    }
+    ticketlist.createdTicket = createdTickets;
+    ticketlist.assignedTicket = assignedTickets;
+
+    console.log(ticketlist);
+
+      res.status(200).json(ticketlist);
     } catch (e) {
       res.status(404).json({ error: e });
     }
@@ -84,7 +110,7 @@ router.post('/removeTicket',async(req,res) =>{
     }
     
     try{
-        const userUpdated =  await users.removeTicket(xss(req.body));
+        const userUpdated =  await users.removeTicket(req.body);
         await tickets.removeAssignedUser(xss(req.body.ticketId), xss(req.body.userId));
         let history = {Property: 'RemoveAssignedUser', Value: userUpdated.username};
         await tickets.addHistory(xss(req.body.ticketId), history);

@@ -9,7 +9,13 @@ const xss = require('xss');
 router.get('/:id', async(req, res) => {
 
     try{
-        const ticket = await ticketsData.get(req.params.id);
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
+        const ticket = await ticketsData.get(xss(req.params.id));
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -119,7 +125,7 @@ router.post('/create', async(req, res) => {
 
     console.log(req.session.user.userId);
 
-    let userId = req.session.user.userId;
+    let userId = xss(req.session.user.userId);
 
     let errors = {};
 
@@ -159,6 +165,12 @@ router.post('/create', async(req, res) => {
     }catch(e) {
         errors.priority_error = e;
     }
+
+    if(ticketData.title.length < 4 || ticketData.title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
+
+    if(ticketData.description.length < 4 || ticketData.description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
+
+    if(ticketData.errorType.length < 4 || ticketData.errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
         
     //should check if creator exist  
     try{
@@ -182,7 +194,7 @@ router.post('/create', async(req, res) => {
     try{
         const ticket = await ticketsData.create(ticketData.title, ticketData.description, ticketData.priority, userId, ticketData.project, ticketData.errorType);
         const project = await projectsData.addTickets(ticketData.project, ticket._id);
-        const user = await userData.addcreatedTicket(req.session.user.userId, ticket._id);
+        const user = await userData.addcreatedTicket(xss(req.session.user.userId), ticket._id);
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -191,17 +203,25 @@ router.post('/create', async(req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
+
+    //Has to be admin
+    // if (req.session.user.role != 1){
+    //     res.status(401).json({"err": "Unauthorized!"})
+    // }
+
     try {
-        const ticket = await ticketsData.get(req.params.id);
+        ticketsData.toObjectId(xss(req.params.id));
+
+        const ticket = await ticketsData.get(xss(req.params.id));
         let assignedUsers = ticket.assignedUsers;
         let creator = ticket.creator;
-        let creatorbody = {userId: creator, ticketId: req.params.id};
+        let creatorbody = {userId: creator, ticketId: xss(req.params.id)};
         await userData.removecreatedTicket(creatorbody);
         for(let x of assignedUsers){
-            let body = {userId: x._id, ticketId: req.params.id};
+            let body = {userId: x._id, ticketId: xss(req.params.id)};
             await userData.removeTicket(body);
         }
-        const DeleteInfo = await ticketsData.remove(req.params.id);
+        const DeleteInfo = await ticketsData.remove(xss(req.params.id));
         res.status(200).json(DeleteInfo);
     }catch (e) {
         res.status(500).json({ error: e });
@@ -210,9 +230,31 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/edit/:id', async(req, res) => {
 
+    try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+    
+
     const modifiedData = req.body;
 
     console.log(modifiedData);
+
+    let ticket = await ticketsData.get(xss(req.params.id));
+
+    let isAssignedUser = false;
+
+    for(let x of ticket.assignedUsers){
+        if(x._id === req.session.user.userId){
+            isAssignedUser = true;
+            break;
+        }
+    }
+
+    if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+        res.status(500).json({ NotAuthorized: true });
+    }
 
     let errors = {}
 
@@ -246,9 +288,12 @@ router.put('/edit/:id', async(req, res) => {
     }catch(e) {
         errors.priority_error = e;
     }
-        
-    //should check if creator exist
-    //should check if project exist
+
+    if(modifiedData.title.length < 4 || modifiedData.title.length > 30) errors.title_length_error = 'Provided title should be at least 4 characters long and at most 30 characters long';
+
+    if(modifiedData.description.length < 4 || modifiedData.description.length > 100) errors.description_length_error = 'Provided description should be at least 4 characters long and at most 100 characters long';
+
+    if(modifiedData.errorType.length < 4 || modifiedData.errorType.length > 30) errors.errorType_length_errror =  'Provided errorType should be at least 4 characters long and at most 30 characters long';
         
     
     try{
@@ -273,7 +318,7 @@ router.put('/edit/:id', async(req, res) => {
     let history_value = '';
 
     try {
-        const ticket = await ticketsData.get(req.params.id);
+        const ticket = await ticketsData.get(xss(req.params.id));
 
         console.log(ticket);
 
@@ -317,7 +362,7 @@ router.put('/edit/:id', async(req, res) => {
             return;
         }
 
-        await ticketsData.addHistory(req.params.id, history); 
+        await ticketsData.addHistory(xss(req.params.id), history); 
 
     }catch(e) {
         res.status(500).json({ error: e });
@@ -331,6 +376,69 @@ router.put('/edit/:id', async(req, res) => {
         res.status(500).json({ error: e });
     }
     
+});
+
+router.get('/readyToClose/:id', async(req, res) => {
+
+    try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
+        const result = await ticketsData.updateStatus(xss(req.params.id), 'ready_to_close');
+        res.json(result);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
+router.get('/close/:id', async(req, res) => {
+
+    try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
+        const result = await ticketsData.updateStatus(xss(req.params.id), 'closed');
+        res.json(result);
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
+});
+
+router.get('/check/edit/:id', async(req, res) => {
+
+    try{
+        ticketsData.toObjectId(xss(req.params.id));
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+    try{
+        let ticket = await ticketsData.get(xss(req.params.id));
+        
+        let isAssignedUser = false;
+        
+        for(let x of ticket.assignedUsers){
+            if(x._id === req.session.user.userId){
+                isAssignedUser = true;
+                break;
+            }
+        }
+        
+        if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+            res.status(200).json({ NotAuthorized: true });
+        }else{
+            res.status(200).json({ Authorized: true });
+        }
+
+    }catch(e) {
+        res.status(500).json({ error: e });
+    }
 });
 
 

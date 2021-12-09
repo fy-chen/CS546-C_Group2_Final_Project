@@ -31,4 +31,8 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/user/removeTicket`, form.value);
   }
 
+  getTicketsFromUser() {
+    return this.http.get(`${this.apiUrl}/user/tickets/get`);
+  }
+
 }

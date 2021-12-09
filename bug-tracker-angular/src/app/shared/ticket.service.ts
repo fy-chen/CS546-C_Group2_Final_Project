@@ -49,4 +49,12 @@ export class TicketService{
         return this.http.delete(`${this.apiUrl}/ticket/` + id);
     }
 
+    ChangeTicketStatus(status: string, id: string){
+        return this.http.get(`${this.apiUrl}/ticket/`+ status + '/' + id);
+    }
+
+    checkedit(id: string){
+        return this.http.get(`${this.apiUrl}/ticket/check/edit/` + id);
+    }
+
 }

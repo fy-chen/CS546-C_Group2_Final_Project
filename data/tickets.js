@@ -31,6 +31,12 @@ async function areAppropriateParameters (title, description, priority, project, 
     toObjectId(project, 'project');
     isAppropriateString(errorType, 'errorType');
 
+    if(title.length < 4 || title.length > 30) throw 'Provided title should be at least 4 characters long and at most 30 characters long';
+
+    if(description.length < 4 || description.length > 100) throw 'Provided description should be at least 4 characters long and at most 100 characters long';
+
+    if(errorType.length < 4 || errorType.length > 30) throw 'Provided errorType should be at least 4 characters long and at most 30 characters long';
+
     if(isNaN(Number(priority))) throw 'Provided priority should not be NaN';
     else if(Number(priority) !== 1 && Number(priority) !== 2 && Number(priority) !== 3) throw 'Provided priority not valid';
 
@@ -264,7 +270,7 @@ async function updateStatus(id, status) {
         throw 'could not update ticket status successfully';
     }
 
-    return await get(id);
+    return {updated: true};
 
 }
 

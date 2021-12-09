@@ -4,6 +4,7 @@ const { tickets } = require("../data");
 const router = express.Router();
 const data = require("../data");
 const projectsData = data.projects;
+const xss = require("xss");
 
 let isAppropriateString = (string, name) => {
   if (!string) {
@@ -29,7 +30,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const project = await projectsData.get(req.params.id);
+    const project = await projectsData.get(xss(req.params.id));
     // res.render("/pages/projectPage", { project });
     return res.json(project);
   } catch (e) {
@@ -39,7 +40,9 @@ router.get("/:id", async (req, res) => {
 
 router.get("/users/:id", async (req, res) => {
   try {
-    const createdProjects = await projectsData.getProjectsByUser(req.params.id);
+    const createdProjects = await projectsData.getProjectsByUser(
+      xss(req.params.id)
+    );
     // res.render("pages/projectPage", { createdProjects: createdProjects });
     return res.json(createdProjects);
   } catch (e) {
@@ -76,7 +79,7 @@ router.post("/search", async (req, res) => {
   }
 
   try {
-    const projectList = await projectsData.searchProject(req.body.phrase);
+    const projectList = await projectsData.searchProject(xss(req.body.phrase));
     if (projectList.length === 0) {
       return res.status(200).send([]);
       // res.render("pages/projectPage", { notFound: true });
@@ -91,7 +94,7 @@ router.post("/search", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const deleteInfo = await projectsData.remove(req.params.id);
+    const deleteInfo = await projectsData.remove(xss(req.params.id));
     return res.status(200).json(deleteInfo);
   } catch (e) {
     return res.status(500).json({ error: e });
@@ -102,7 +105,7 @@ router.put("/update/:id", async (req, res) => {
   let projectData = req.body;
   projectData.role = req.session.user.userRole;
   try {
-    const project = await projectsData.get(req.params.id);
+    const project = await projectsData.get(xss(req.params.id));
   } catch (e) {
     return res.status(404).json({ error: "No projects found on this id." });
   }
