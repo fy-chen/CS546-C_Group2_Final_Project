@@ -2,6 +2,10 @@ table {
     width: 100%;
 }
 
+p{
+    font-size: 28px;
+}
+
 #head {
     margin-bottom: 20px;
     margin-left: 180px;

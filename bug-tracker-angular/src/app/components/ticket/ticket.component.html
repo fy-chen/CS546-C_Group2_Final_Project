@@ -10,7 +10,12 @@
   <a href="/ticket">Ticket</a>
 </div>
 
-<div class="main">
+<div class="main" *ngIf="showTicketNotFound">
+  <p>No Ticket Found</p>
+  <button mat-raised-button color="primary" (click)="back()">Back</button>
+</div>
+
+<div class="main" *ngIf="showTicketInfo">
   <div id="left_row">
     <div id="ticket">
       <h2 class="table_head">Ticket Details</h2>

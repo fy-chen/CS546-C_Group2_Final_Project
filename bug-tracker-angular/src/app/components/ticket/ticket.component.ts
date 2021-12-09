@@ -6,7 +6,7 @@ import { History } from '../history';
 import { Ticket } from '../tickets';
 import { DatePipe } from '@angular/common';
 import { ProjectService } from 'src/app/shared/project.service';
-
+import { Location } from '@angular/common';
 import {Comment} from '../comment';
 import { CommentService } from '../../shared/comment.service';
 import { UserService } from 'src/app/shared/user.service';
@@ -31,12 +31,18 @@ export class TicketComponent implements OnInit {
 
   showEditTicket: any;
 
+  errorMessage: any;
+
+  showTicketNotFound: any;
+
+  showTicketInfo: any;
+
   public displayedColumns = ['No', 'Property', 'Value', 'modifiedTime'];
 
   public dataSource = new MatTableDataSource<History>();
 
 
-  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService) { }
+  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService, private location: Location) { }
 
   getAllComment(): void{
     this.CommentService.getAllComment(this.id)
@@ -70,7 +76,13 @@ export class TicketComponent implements OnInit {
     
   }
 
+  back() {
+    this.location.back();
+  }
+
   ngOnInit(): void {
+
+    this.showTicketInfo = true;
 
     this.id = this.route.snapshot.paramMap.get('id');
 
@@ -116,6 +128,14 @@ export class TicketComponent implements OnInit {
 
           this.dataSource.data = this.ticket.history;
         
+        },
+        error => {
+          this.errorMessage = error;
+          console.log(this.errorMessage.error.error);
+          if(this.errorMessage.error.error = "No ticket with that id"){
+            this.showTicketNotFound = true;
+            this.showTicketInfo = false;
+          }
         });
 
     this.getAllComment();
