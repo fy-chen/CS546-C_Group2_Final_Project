@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import {Comment} from '../comment';
 import { CommentService } from '../../shared/comment.service';
 import { UserService } from 'src/app/shared/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-ticket',
@@ -42,7 +43,7 @@ export class TicketComponent implements OnInit {
   public dataSource = new MatTableDataSource<History>();
 
 
-  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService, private location: Location) { }
+  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService, private location: Location, private _snackBar: MatSnackBar) { }
 
   getAllComment(): void{
     this.CommentService.getAllComment(this.id)
@@ -135,12 +136,18 @@ export class TicketComponent implements OnInit {
           if(this.errorMessage.error.error = "No ticket with that id"){
             this.showTicketNotFound = true;
             this.showTicketInfo = false;
+          }else{
+            this.openSnackBar("Server Error");
           }
         });
 
     this.getAllComment();
     
 
+  }
+
+  openSnackBar(value: string) {
+    this._snackBar.open(value, 'Done');
   }
 
 }

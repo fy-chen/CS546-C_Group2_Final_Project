@@ -343,7 +343,7 @@ router.put('/edit/:id', async(req, res) => {
             history_value = history_value.concat(modify_content);
         }
 
-        if(ticket.priority !== modifiedData.priority){
+        if(Number(ticket.priority) !== Number(modifiedData.priority)){
             let modify_content = `priority: ${modifiedData.priority} \n`
             history_value = history_value.concat(modify_content);
         }
@@ -358,7 +358,7 @@ router.put('/edit/:id', async(req, res) => {
         console.log(history.Value);
 
         if(history.Value.trim().length === 0){
-            res.json({noChanges: true});
+            res.status(200).json({noChanges: true});
             return;
         }
 

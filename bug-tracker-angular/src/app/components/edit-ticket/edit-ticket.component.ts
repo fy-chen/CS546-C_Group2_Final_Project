@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-ticket',
@@ -32,7 +33,7 @@ export class EditTicketComponent implements OnInit {
     status: new FormControl('', Validators.required)
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService, private location: Location) { }
+  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService, private location: Location, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
 
@@ -76,6 +77,10 @@ export class EditTicketComponent implements OnInit {
 
   }
 
+  openSnackBar(value: string) {
+    this._snackBar.open(value, 'Done');
+  }
+
   updateTicket(): void{
 
     this.editTicketForm.value.title = this.editTicketForm.value.title.trim();
@@ -95,9 +100,11 @@ export class EditTicketComponent implements OnInit {
         }
         //this.router.navigate([`/ticket/${this.id}`]);
         this.location.back();
+      },
+      (error) => {
+        this.openSnackBar("Server Error");
       }
-      
-    )
+    );
  }
 
  public onlySpaceValidator(control: FormControl) {

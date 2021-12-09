@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-ticket',
@@ -29,7 +30,7 @@ export class CreateTicketComponent implements OnInit {
     project: new FormControl('', Validators.required),
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private projectService: ProjectService) { }
+  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private projectService: ProjectService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.projectService.getAllProjects().subscribe(
@@ -37,6 +38,11 @@ export class CreateTicketComponent implements OnInit {
         this.projectlist = data;
         console.log(this.projectlist);
     });
+  }
+
+
+  openSnackBar(value: string) {
+    this._snackBar.open(value, 'Done');
   }
 
   createTicket(): void{
@@ -55,6 +61,9 @@ export class CreateTicketComponent implements OnInit {
         this.ticket = data;
         this.id = this.ticket._id;
         this.router.navigate([`/ticket/${this.id}`]);
+      },
+      (error) => {
+        this.openSnackBar("Server Error");
       });
  }
 
