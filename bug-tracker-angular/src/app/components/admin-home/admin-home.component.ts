@@ -57,6 +57,8 @@ export class AdminHomeComponent implements OnInit {
 
   assignedusers: any;
 
+  closeResult: any;
+
   ticketstable: TicketTable[] = [] as TicketTable[];
 
   assignTicketForm = this.formbuilder.group({
@@ -101,7 +103,7 @@ export class AdminHomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.getAllTickets();
+    this.getAllTickets();
 
     this.userService.getAllUsers().subscribe((data) =>{
       this.users = data;
@@ -285,6 +287,7 @@ export class AdminHomeComponent implements OnInit {
   }
 
   getAssignedUsers() {
+    this.removeTicketForm.patchValue({userId: null});
     if(this.removeTicketForm.value.ticketId){
       this.ticketService.getTicket(this.removeTicketForm.value.ticketId).subscribe((data) => {
         this.assignedusers = data.assignedUsers;
@@ -510,6 +513,18 @@ export class AdminHomeComponent implements OnInit {
       this.showSearchresult = true;
     });
 
+  }
+
+  closeTicket(id: string) {
+    this.ticketService.ChangeTicketStatus("close", id).subscribe(
+      (data) => {
+        this.closeResult = data;
+        if(this.closeResult.updated === true){
+          this.openSnackBar("Close ticket succeed");
+          this.getAllTickets();
+        }
+      }
+    );
   }
 
   logout(){
