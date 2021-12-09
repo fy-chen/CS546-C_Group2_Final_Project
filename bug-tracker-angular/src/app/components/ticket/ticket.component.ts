@@ -33,6 +33,8 @@ export class TicketComponent implements OnInit {
 
   creator: any;
 
+  showEditTicket: any;
+
   public displayedColumns = ['No', 'Property', 'Value', 'modifiedTime'];
 
   public dataSource = new MatTableDataSource<History>();
@@ -70,6 +72,19 @@ export class TicketComponent implements OnInit {
   ngOnInit(): void {
 
     this.id = this.route.snapshot.paramMap.get('id');
+
+    this._ticketService.checkedit(this.id).subscribe(
+      (data:any)=>{
+
+        console.log(data);
+        if (data.Authorized === true){
+          this.showEditTicket = true;
+        }
+        else if(data.NotAuthorized === true){
+          this.showEditTicket = false;
+        }
+      }
+    );
     
     
     this._ticketService.getTicket(this.id)

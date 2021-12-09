@@ -388,6 +388,8 @@ router.get('/readyToClose/:id', async(req, res) => {
 
     try{
         const result = await ticketsData.updateStatus(xss(req.params.id), 'ready_to_close');
+        let history = {Property: 'Update', Value: 'status: ready_to_close'};
+        await ticketsData.addHistory(xss(req.params.id), history);
         res.json(result);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -404,6 +406,8 @@ router.get('/close/:id', async(req, res) => {
 
     try{
         const result = await ticketsData.updateStatus(xss(req.params.id), 'closed');
+        let history = {Property: 'Update', Value: 'status: closed'};
+        await ticketsData.addHistory(xss(req.params.id), history);
         res.json(result);
     }catch(e) {
         res.status(500).json({ error: e });

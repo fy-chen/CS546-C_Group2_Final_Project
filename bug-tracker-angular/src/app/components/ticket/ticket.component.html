@@ -1,7 +1,7 @@
 <div id="head">
   <h1>Ticket</h1>
 
-  <a mat-raised-button color="primary" href="/ticket/edit/{{id}}" id="gotoEdit">Edit Ticket</a>
+  <a mat-raised-button color="primary" href="/ticket/edit/{{id}}" id="gotoEdit" *ngIf="showEditTicket">Edit Ticket</a>
 </div>
 
 <div class="sidenav">
