@@ -48,8 +48,13 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  { path: 'ticket/edit/:id', component: EditTicketComponent },
-  {
+  { 
+    path: 'ticket/edit/:id', 
+    component: EditTicketComponent, 
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard] },
+  
+    {
     path: 'admin-home',
     component: AdminHomeComponent,
     data: { requiresLogin: true, requiresAdmin: true },

@@ -9,7 +9,7 @@ export interface Ticket {
     creator: string,
     project: string,
     status: string,
-    createdTime: number,
+    createdTime: string | null,
     errorType: string,
     assignedUsers: AssignedUsers[],
     comment: Array<Object>,

@@ -23,15 +23,11 @@ export class TicketComponent implements OnInit {
   
   id: any;
   
-  ticket: any;
+  ticket: Ticket = {} as Ticket;
 
   assignedUsers: any;
 
-  project: any;
-
   comments: any;
-
-  creator: any;
 
   showEditTicket: any;
 
@@ -93,18 +89,14 @@ export class TicketComponent implements OnInit {
 
           this.ticket = data;
 
-          this.project = this.ticket.project;
-
           this.projectService.getProject(this.ticket.project).subscribe(
-            (data) => {
-              this.project = data;
+            (data: any) => {
+              this.ticket.project = data.projectName;
           });
 
-          this.creator = this.ticket.creator;
-
-          this.userService.getUser(this.creator).subscribe(
-            (data) => {
-              this.creator = data;
+          this.userService.getUser(this.ticket.creator).subscribe(
+            (data: any) => {
+              this.ticket.creator = data.username;
             }
           )
           
