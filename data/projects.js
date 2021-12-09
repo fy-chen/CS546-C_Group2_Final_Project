@@ -30,10 +30,10 @@ let toObjectId = (id, name) => {
 async function create(projectName, description, role) {
   isAppropriateString(projectName, "Project Name");
   isAppropriateString(description, "Description");
-  // if (isNaN(Number(role))) {
-  //   throw new Error("Provided role should not be NaN");
-  // }
-  // if (Number(role) !== 1 || Number(role) !== 2 || Number(role) !== 3) {
+  if (isNaN(role)) {
+    throw new Error("Provided role should not be NaN");
+  }
+  // if (Number(role) !== 1 && Number(role) !== 2 && Number(role) !== 3) {
   //   throw new Error("Provided role not valid");
   // }
 
@@ -127,7 +127,11 @@ async function rename(id, newProjectName) {
 
 async function update(id, projectName, description, role) {
   let parsedId = toObjectId(id, "ProjectId");
-
+  isAppropriateString(projectName, "Project Name");
+  isAppropriateString(description, "Description");
+  if (isNaN(role)) {
+    throw new Error("Provided role should not be NaN");
+  }
   if (role == 1) {
     projectsCollection = await projects();
     let updatedProject = {
@@ -199,7 +203,7 @@ async function searchProject(phrase) {
       ],
     })
     .toArray();
-  console.log(await projectList)
+  console.log(await projectList);
   for (let i = 0; i < projectList.length; i++) {
     projectList[i]._id = projectList[i]._id.toString();
   }

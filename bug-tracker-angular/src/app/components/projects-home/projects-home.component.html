@@ -7,10 +7,8 @@
 <div class="main">
   <p>projects-home works!</p>
 
-  <a href="/projects/create" mat-raised-button color="primary"
-    >Create a Project</a
-  >&nbsp;
-  <button class="fa fa-search"></button>
+  <a href="/projects/create" mat-raised-button color="primary">Create a Project</a>&nbsp;
+
 
   <div>
     <table style="margin-top: 50px">
@@ -22,15 +20,19 @@
           <td style="border: none"></td>
         </tr>
         <tr>
-          <td colspan="4"><hr style="width: 1340px" /></td>
+          <td colspan="4">
+            <hr style="width: 1340px" />
+          </td>
         </tr>
       </thead>
       <tbody style="font-size: 14px">
         <tr mat-header-cell *ngFor="let item of projects">
           <td>{{ item.projectName }}</td>
           <td>{{ item.description }}</td>
-          <td><button>Manage Users</button></td>
-          <td><button>Details</button></td>
+          <td><a href="/projects/update/{{item._id}}"><button mat-raised-button color="primary">Edit
+                Project</button></a>
+          </td>
+          <td><a href="/projects/{{item._id}}"><button mat-raised-button color="primary">Details</button></a></td>
         </tr>
       </tbody>
     </table>

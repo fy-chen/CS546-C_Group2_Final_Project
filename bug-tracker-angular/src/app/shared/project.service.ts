@@ -43,4 +43,16 @@ export class ProjectService {
   createProject(form: FormGroup) {
     return this.http.post(`${this.apiUrl}/projects/create`, form.value);
   }
+
+  updateProject(id: string, form: FormGroup) {
+    return this.http.put(`${this.apiUrl}/projects/update/` + id, form.value);
+  }
+
+  searchProject(form: FormGroup) {
+    return this.http.post(`${this.apiUrl}/projects/search/`, form.value);
+  }
+
+  removeProject(id: string) {
+    return this.http.delete(`${this.apiUrl}/projects/` + id);
+  }
 }

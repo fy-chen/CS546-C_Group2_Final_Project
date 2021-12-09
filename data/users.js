@@ -6,6 +6,7 @@ var crypto = require('crypto');
 const admin = mongoCollections.admin; //admin password storage
 const tickets = mongoCollections.tickets;
 var mongodb = require('mongodb');
+const projects = mongoCollections.projects;
 
 
 //Sign up 
@@ -166,9 +167,22 @@ const get = async function get(id){
 
 const getAll = async function getAll(){
     const userCollection = await users();
-    const userlist = await userCollection.find({}).toArray();
+    const userlist = await userCollection.find({role:2}).toArray();
     if (userlist != null){
+        const projCollection = await projects();
+        const ticketCollection = await tickets();
         for(let user of userlist){
+            delete user.hashedPassword;
+            delete user.salt;
+            for (let  [index, value] of user.assignedProjects.entries()){
+                user.assignedProjects[index] = await projCollection.findOne({_id : value});
+            }
+            for (let  [index, value] of user.createdTickets.entries()){
+                user.createdTickets[index] = await ticketCollection.findOne({_id : value});
+            }
+            for (let  [index, value] of user.assignedTickets.entries()){
+                user.assignedTickets[index] = await ticketCollection.findOne({_id : value});
+            }
             user._id = String(user._id);
         }
         return userlist;
@@ -181,19 +195,19 @@ const getAll = async function getAll(){
 const remove = async function remove(id){
 
     if(typeof id != 'string'){
-        throw "Id is not a string"
+        throw {status:400, message:"Id is not a string"};
     }
     if(!mongodb.ObjectId.isValid(id)){
-        throw "Not a valid ObjectId";
+        throw {status:400, message:"Not a valid ObjectId"};
     }
     const usersCollection = await users();
     const user = await usersCollection.findOne({ _id: mongodb.ObjectId(id) });
     if(user == null){
-        throw "No entry exists for the ID:" +id;
+        throw {status:204, message:"No entry exists for the ID:" +id};
     }
     const deletionInfo = await usersCollection.deleteOne({ _id: mongodb.ObjectId(id)  });
     if (deletionInfo.deletedCount === 0) {
-        throw `Could not delete user with id of ${id}`;
+        throw {status:500, message:`Could not delete user with id of ${id}` };
     }
     return {'userId' : id, 'deleted': true };
 }
@@ -357,7 +371,8 @@ module.exports= {
     removeTicket,
     getAll,
     addcreatedTicket,
-    removecreatedTicket
+    removecreatedTicket,
+    remove,
     
 }
 

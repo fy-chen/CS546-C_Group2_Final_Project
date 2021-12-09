@@ -5,95 +5,52 @@
 </div>
 <div class="main">
   <h1>Create A New Project</h1>
-  <form
-    id="createProject-form"
-    [formGroup]="createProjectForm"
-    (ngSubmit)="createProject()"
-  >
+  <form id="createProject-form" [formGroup]="createProjectForm" (ngSubmit)="createProject()">
+
     <mat-form-field class="input-width" appearance="fill">
       <mat-label>Project Name</mat-label>
-      <input matInput formControlName="projectName" id="title" />
+      <input matInput formControlName="projectName" id="projectName">
     </mat-form-field>
 
     <div
-      *ngIf="
-        createProjectForm.controls['projectName'].invalid &&
-        (createProjectForm.controls['projectName'].dirty ||
-          createProjectForm.controls['projectName'].touched)
-      "
-      class="alert"
-    >
-      <div
-        *ngIf="createProjectForm.controls['projectName'].errors?.['required']"
-      >
-        Please enter Project name
+      *ngIf="createProjectForm.controls['projectName'].invalid && (createProjectForm.controls['projectName'].dirty || createProjectForm.controls['projectName'].touched)"
+      class="alert">
+      <div *ngIf="createProjectForm.controls['projectName'].errors?.['required']">
+        Please enter project Name
       </div>
-      <div
-        *ngIf="createProjectForm.controls['projectName'].errors?.['minlength']"
-      >
-        Project name must be at least 4 characters long
+      <div *ngIf="createProjectForm.controls['projectName'].errors?.['minlength']">
+        Project Name must be at least 4 characters long
       </div>
-      <div
-        *ngIf="createProjectForm.controls['projectName'].errors?.['maxlength']"
-      >
-        Project Name cannot be more than 20 characters long
-      </div>
-      <div
-        *ngIf="createProjectForm.controls['projectName'].errors?.['onlywhitespace']"
-      >
-        Title can not contain just spaces
+      <div *ngIf="createProjectForm.controls['projectName'].errors?.['maxlength']">
+        Project Name cannot be more than 30 characters long
       </div>
     </div>
-
-    <br /><br />
+    <br><br>
 
     <mat-form-field class="input-width" appearance="fill">
       <mat-label>Description</mat-label>
-      <input matInput formControlName="description" id="description" />
+      <input matInput formControlName="description" id="description">
     </mat-form-field>
 
     <div
-      *ngIf="
-        createProjectForm.controls['description'].invalid &&
-        (createProjectForm.controls['description'].dirty ||
-          createProjectForm.controls['description'].touched)
-      "
-      class="alert"
-    >
-      <div
-        *ngIf="createProjectForm.controls['description'].errors?.['required']"
-      >
-        Please enter project description
+      *ngIf="createProjectForm.controls['description'].invalid && (createProjectForm.controls['description'].dirty || createProjectForm.controls['description'].touched)"
+      class="alert">
+      <div *ngIf="createProjectForm.controls['description'].errors?.['required']">
+        Please enter ticket description
       </div>
-      <div
-        *ngIf="createProjectForm.controls['description'].errors?.['minlength']"
-      >
-        Project description must be at least 4 characters long
+      <div *ngIf="createProjectForm.controls['description'].errors?.['minlength']">
+        Ticket description must be at least 4 characters long
       </div>
-      <div
-        *ngIf="createProjectForm.controls['description'].errors?.['maxlength']"
-      >
-        Project description cannot be more than 100 characters long
-      </div>
-      <div
-        *ngIf="createProjectForm.controls['description'].errors?.['onlywhitespace']"
-      >
-        Description can not contain just spaces
+      <div *ngIf="createProjectForm.controls['description'].errors?.['maxlength']">
+        Ticket description cannot be more than 100 characters long
       </div>
     </div>
-    <br /><br />
 
+    <br><br>
     <div id="buttons">
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="!createProjectForm.valid"
-      >
-        Submit
-      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!createProjectForm.valid">Submit</button>
       &nbsp;&nbsp;&nbsp;
-      <button mat-raised-button color="primary" type="reset">Clear</button>
+      <button mat-raised-button color="primary" (click)="onClick()">Clear</button>
     </div>
   </form>
 </div>
