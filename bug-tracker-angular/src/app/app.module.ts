@@ -24,6 +24,7 @@ import { ChartsModule } from 'ng2-charts';
 import { AccessGuard } from './shared/access.guard';
 import { ProjectsDetailsComponent } from './components/projects-details/projects-details.component';
 import { EditProjectComponent } from './components/edit-project/edit-project.component';
+import {MatTabsModule} from '@angular/material/tabs';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -56,6 +57,7 @@ import { EditProjectComponent } from './components/edit-project/edit-project.com
     AppMaterialModule,
     MatRadioModule,
     ChartsModule,
+    MatTabsModule,
   ],
   providers: [
     TicketService,

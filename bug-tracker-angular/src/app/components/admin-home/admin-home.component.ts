@@ -10,6 +10,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 
 export interface DialogData {
   _id: string;
+  type: string;
 }
 import { AuthService } from 'src/app/shared/auth.service';
 import { Router } from '@angular/router';
@@ -75,6 +76,8 @@ export class AdminHomeComponent implements OnInit {
 
   public displayedColumns = ['No', 'Title', 'Description', 'Creator', 'Status', 'Project', 'errorType', 'createdTime', 'deleteButton'];
 
+  public userColumns = ['No', 'Username', 'Projects', 'Tickets', 'Created Tickets', 'deleteButton'];
+  
   public ticketsOpeningDataSource = new MatTableDataSource<TicketTable>();
   
 
@@ -98,10 +101,11 @@ export class AdminHomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getAllTickets();
+    // this.getAllTickets();
 
     this.userService.getAllUsers().subscribe((data) =>{
       this.users = data;
+      // console.log(this.users);
     });
     
   }
@@ -170,13 +174,16 @@ export class AdminHomeComponent implements OnInit {
     this.getTicketsByErrorType();
   }
 
-  openDialog(id: string) {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {data: {_id: id}});
-
+  openDialog(id: string,type: string) {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {data: {_id: id, type: type}});
+  
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if(result){
-        this.deleteTicket(id);
+      console.log(result)
+      if(result.type==="ticket"){
+        this.deleteTicket(result._id);
+      }
+      else if(result.type==="user"){
+        this.deleteUser(result._id)
       }
     });
   }
@@ -190,6 +197,21 @@ export class AdminHomeComponent implements OnInit {
         location.reload();
         this.openSnackBar("Ticket has been succesfully deleted");
       }
+    });
+  }
+
+  deleteUser(id: string) {
+    this.userService.deleteUser(id).subscribe((data:any) =>{
+      console.log(data) 
+      if(data.deleted === true){
+        this.openSnackBar("Ticket has been succesfully deleted");
+      }
+      else{
+        this.openSnackBar("Something went wrong");
+      }
+    },
+    err=>{
+      this.openSnackBar(err.error.message);
     });
   }
 
@@ -516,9 +538,10 @@ export class ConfirmDeleteDialog {
     private ticketService: TicketService
   ) {}
 
-  public id = this.data;
+  public id = this.data._id;
+  public type = this.data.type;
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('Cancelled');
   }
 }

@@ -1,7 +1,7 @@
 <mat-dialog-content>
-   Are you sure to delete this ticket?
+   Are you sure to delete this {{type}}?
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-raised-button color="warn" [mat-dialog-close]="true">Confirm</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="data">Confirm</button>
     <button mat-raised-button color="primary" (click)="onNoClick()">Might Not</button>
 </mat-dialog-actions>

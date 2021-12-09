@@ -104,9 +104,11 @@ router.post('/removeTicket',async(req,res) =>{
     //Validations
     if (!mongodb.ObjectId.isValid(userId)){
         res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
     }
     if (!mongodb.ObjectId.isValid(ticketId)){
         res.status(400).json({message:"ticketId is not a valid ObjectId"});
+        return;
     }
     
     try{
@@ -126,6 +128,32 @@ router.post('/removeTicket',async(req,res) =>{
     
     
     
+});
+
+router.delete("/:id", async (req, res) => {
+    let userId = req.params.id;
+    console.log(userId);
+    if (!req.session.user  || req.session.user.role !== 1){
+        res.status(401).json({message:"Unauthorized request"});
+        return;
+    }
+    if (!mongodb.ObjectId.isValid(userId)){
+        res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
+    } 
+    try {
+      console.log("got into try")
+      const info = await users.remove(userId);
+      res.status(200).json(info);
+    } catch (e) {
+        console.log(e)
+        if (e.status){
+            res.status(e.status).json(e)
+        }
+        else{ 
+            res.status(500).json({message:"Something went wrong"})
+        }
+    }
 });
 
 /*
