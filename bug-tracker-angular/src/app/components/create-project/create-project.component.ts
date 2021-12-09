@@ -13,12 +13,6 @@ export class CreateProjectComponent implements OnInit {
   project: any;
   projectlist: any;
 
-  public onlySpaceValidator(control: FormControl) {
-    const onlyWhitespace = control.value.trim().length === 0 && control.value;
-    const isValid = !onlyWhitespace;
-    return isValid ? null : { onlywhitespace: true };
-  }
-
   createProjectForm = this.formbuilder.group({
     projectName: new FormControl(
       '',
@@ -26,7 +20,6 @@ export class CreateProjectComponent implements OnInit {
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(20),
-        this.onlySpaceValidator,
       ])
     ),
     description: new FormControl(
@@ -35,7 +28,6 @@ export class CreateProjectComponent implements OnInit {
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(100),
-        this.onlySpaceValidator,
       ])
     ),
   });
@@ -49,6 +41,17 @@ export class CreateProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onSubmit() {
+    if (this.createProjectForm.valid) {
+      console.log('Form Submitted!');
+      this.createProjectForm.reset();
+    }
+  }
+
+  onClick() {
+    this.createProjectForm.reset();
+  }
 
   createProject() {
     this.createProjectForm.value.projectName =
@@ -64,7 +67,7 @@ export class CreateProjectComponent implements OnInit {
         console.log(data);
         this.project = data;
         this.id = this.project._id;
-        this.router.navigate([`/projects/${this.id}`]);
+        // this.router.navigate([`/projects/${this.id}`]);
       }
     );
   }

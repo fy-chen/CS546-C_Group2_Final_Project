@@ -1,0 +1,58 @@
+<p>edit-project works!</p>
+<div class="sidenav">
+  <a href="/dashboard">dashboard</a>
+  <a href="/projects">Project</a>
+  <a href="/ticket">Ticket</a>
+</div>
+<div class="main">
+  <h1>Edit Project</h1>
+  <form id="editProject-form" [formGroup]="editProjectForm" (ngSubmit)="updateProject()">
+
+    <mat-form-field class="input-width" appearance="fill">
+      <mat-label>Update Project Name</mat-label>
+      <input matInput formControlName="projectName" id="projectName">
+    </mat-form-field>
+
+    <div
+      *ngIf="editProjectForm.controls['projectName'].invalid && (editProjectForm.controls['projectName'].dirty || editProjectForm.controls['projectName'].touched)"
+      class="alert">
+      <div *ngIf="editProjectForm.controls['projectName'].errors?.['required']">
+        Please enter project Name
+      </div>
+      <div *ngIf="editProjectForm.controls['projectName'].errors?.['minlength']">
+        Project Name must be at least 4 characters long
+      </div>
+      <div *ngIf="editProjectForm.controls['projectName'].errors?.['maxlength']">
+        Project Name cannot be more than 30 characters long
+      </div>
+    </div>
+    <br><br>
+
+    <mat-form-field class="input-width" appearance="fill">
+      <mat-label>Update Description</mat-label>
+      <input matInput formControlName="description" id="description">
+    </mat-form-field>
+
+    <div
+      *ngIf="editProjectForm.controls['description'].invalid && (editProjectForm.controls['description'].dirty || editProjectForm.controls['description'].touched)"
+      class="alert">
+      <div *ngIf="editProjectForm.controls['description'].errors?.['required']">
+        Please enter project description
+      </div>
+      <div *ngIf="editProjectForm.controls['description'].errors?.['minlength']">
+        Project description must be at least 4 characters long
+      </div>
+      <div *ngIf="editProjectForm.controls['description'].errors?.['maxlength']">
+        Project description cannot be more than 100 characters long
+      </div>
+    </div>
+
+    <br><br>
+    <div id="buttons">
+      <a href="/ticket" VALUE=”Refresh”><button mat-raised-button color="primary" type="submit"
+          [disabled]="!editProjectForm.valid">Confirm</button></a>
+      &nbsp;&nbsp;&nbsp;
+      <button mat-raised-button color="primary" (click)="onClick()">Clear</button>
+    </div>
+  </form>
+</div>

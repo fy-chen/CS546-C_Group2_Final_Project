@@ -21,9 +21,9 @@ router.get("/", async (req, res) => {
   // res.render("pages/projectPage");
   try {
     const projectList = await projectsData.getAll();
-    res.status(200).json(projectList);
+    return res.status(200).json(projectList);
   } catch (e) {
-    res.status(404).json({ error: e });
+    return res.status(404).json({ error: e });
   }
 });
 
@@ -31,9 +31,9 @@ router.get("/:id", async (req, res) => {
   try {
     const project = await projectsData.get(req.params.id);
     // res.render("/pages/projectPage", { project });
-    res.json(project);
+    return res.json(project);
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 });
 
@@ -41,15 +41,16 @@ router.get("/users/:id", async (req, res) => {
   try {
     const createdProjects = await projectsData.getProjectsByUser(req.params.id);
     // res.render("pages/projectPage", { createdProjects: createdProjects });
-    res.json(createdProjects);
+    return res.json(createdProjects);
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 });
 
 router.post("/create", async (req, res) => {
   let projectData = req.body;
-  projectData.role = 1;
+  // projectData.role = 1;
+  projectData.role = req.session.user.userRole;
   try {
     isAppropriateString(projectData.projectName, "Project Name");
     isAppropriateString(projectData.description, "description");
@@ -59,9 +60,9 @@ router.post("/create", async (req, res) => {
       projectData.role
     );
     // res.render("pages/projectPage", { project: project });
-    res.json(newProject);
+    return res.json(newProject);
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 });
 
@@ -71,39 +72,39 @@ router.post("/search", async (req, res) => {
       throw new Error(`Provided search phrase is empty`);
     }
   } catch (e) {
-    res.status(403).json({ error: e });
+    return res.status(403).json({ error: e });
   }
 
   try {
     const projectList = await projectsData.searchProject(req.body.phrase);
     if (projectList.length === 0) {
-      res.status(200).send([]);
+      return res.status(200).send([]);
       // res.render("pages/projectPage", { notFound: true });
     } else {
-      res.status(200).send(projectList);
+      return res.status(200).send(projectList);
       // res.render("pages/projectPage", { projects: projectList });
     }
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 });
 
 router.delete("/:id", async (req, res) => {
   try {
     const deleteInfo = await projectsData.remove(req.params.id);
-    res.status(200).json(deleteInfo);
+    return res.status(200).json(deleteInfo);
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 });
 
 router.put("/update/:id", async (req, res) => {
   let projectData = req.body;
+  projectData.role = req.session.user.userRole;
   try {
     const project = await projectsData.get(req.params.id);
-    res.status(200).json(project);
   } catch (e) {
-    res.status(404).json({ error: "No projects found on this id." });
+    return res.status(404).json({ error: "No projects found on this id." });
   }
   try {
     const updatedProject = await projectsData.update(
@@ -112,9 +113,9 @@ router.put("/update/:id", async (req, res) => {
       projectData.description,
       projectData.role
     );
-    res.status(200).json(updatedProject);
+    return res.status(200).json(updatedProject);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 });
 

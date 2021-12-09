@@ -22,6 +22,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import { EditTicketComponent } from './components/edit-ticket/edit-ticket.component';
 import { ChartsModule } from 'ng2-charts';
 import { AccessGuard } from './shared/access.guard';
+import { ProjectsDetailsComponent } from './components/projects-details/projects-details.component';
+import { EditProjectComponent } from './components/edit-project/edit-project.component';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -39,7 +41,9 @@ import { AccessGuard } from './shared/access.guard';
     CreateProjectComponent,
     DashboardHomeComponent,
     EditTicketComponent,
-    ConfirmDeleteDialog
+    ConfirmDeleteDialog,
+    ProjectsDetailsComponent,
+    EditProjectComponent
 
   ],
   imports: [

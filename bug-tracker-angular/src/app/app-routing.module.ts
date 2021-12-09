@@ -10,22 +10,41 @@ import { TicketHomeComponent } from './components/ticket-home/ticket-home.compon
 import { TicketComponent } from './components/ticket/ticket.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
-import { DashboardHomeComponent} from './components/dashboard-home/dashboard-home.component';
+import { DashboardHomeComponent } from './components/dashboard-home/dashboard-home.component';
 import { EditTicketComponent } from './components/edit-ticket/edit-ticket.component';
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
+import { ProjectsDetailsComponent } from './components/projects-details/projects-details.component';
 import { AccessGuard } from './shared/access.guard';
+import { EditProjectComponent } from './components/edit-project/edit-project.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: DeveloperHomeComponent, data: {requiresLogin:true}, canActivate: [AccessGuard]},
+  {
+    path: 'home',
+    component: DeveloperHomeComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
   { path: 'signup', component: SignupComponent },
   { path: 'ticket/create', component: CreateTicketComponent },
   { path: 'ticket', component: TicketHomeComponent },
   { path: 'ticket/:id', component: TicketComponent },
   { path: 'projects', component: ProjectsHomeComponent },
   { path: 'projects/create', component: CreateProjectComponent },
-  { path: 'dashboard', component : DashboardHomeComponent, data: {requiresLogin:true}, canActivate: [AccessGuard]},
+  { path: 'projects/:id', component: ProjectsDetailsComponent },
+  { path: 'projects/update/:id', component: EditProjectComponent },
+  {
+    path: 'dashboard',
+    component: DashboardHomeComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
   { path: 'ticket/edit/:id', component: EditTicketComponent },
-  {path:'admin-home', component: AdminHomeComponent ,data: {requiresLogin:true, requiresAdmin:true}, canActivate: [AccessGuard]},
+  {
+    path: 'admin-home',
+    component: AdminHomeComponent,
+    data: { requiresLogin: true, requiresAdmin: true },
+    canActivate: [AccessGuard],
+  },
 ];
 
 @NgModule({
