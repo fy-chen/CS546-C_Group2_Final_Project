@@ -65,6 +65,7 @@ export class TicketComponent implements OnInit {
     this.CommentService
     .deleteComment(comment._id)
     .subscribe();
+    window.location.reload();
   }
 
   ngOnInit(): void {

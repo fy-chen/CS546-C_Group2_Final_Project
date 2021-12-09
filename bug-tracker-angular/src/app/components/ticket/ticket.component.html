@@ -94,7 +94,11 @@
 
   <ul class="comments">
     <mat-list-item *ngFor="let item of comments">
-      <div mat-line class = "badge">{{item.username}}  :  {{item.text}}</div>
+      <div mat-line class = "badge">{{item.username}}  :  {{item.text}}
+        <button  class="delete" title="delete comment" 
+        (click)="delete(item)">x</button>
+
+      </div>
       <!-- <div mat-line> {{item.text}} </div> -->
       <br>
     </mat-list-item>

@@ -69,3 +69,11 @@ table {
     margin-right: .8em;
     border-radius: 4px 0 0 4px;
   }
+
+  
+button.delete {
+    background-color: gray;
+    color: white;
+    padding: 5px 8px;
+    width: 2em;
+  }
