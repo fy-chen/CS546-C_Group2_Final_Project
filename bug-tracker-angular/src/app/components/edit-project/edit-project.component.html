@@ -13,9 +13,8 @@
       <input matInput formControlName="projectName" id="projectName">
     </mat-form-field>
 
-    <div
-      *ngIf="editProjectForm.controls['projectName'].invalid && (editProjectForm.controls['projectName'].dirty || editProjectForm.controls['projectName'].touched)"
-      class="alert">
+    <div *ngIf=" editProjectForm.controls['projectName'].invalid && (editProjectForm.controls['projectName'].dirty ||
+        editProjectForm.controls['projectName'].touched)" class="alert">
       <div *ngIf="editProjectForm.controls['projectName'].errors?.['required']">
         Please enter project Name
       </div>
@@ -49,8 +48,7 @@
 
     <br><br>
     <div id="buttons">
-      <a href="/ticket" VALUE=”Refresh”><button mat-raised-button color="primary" type="submit"
-          [disabled]="!editProjectForm.valid">Confirm</button></a>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!editProjectForm.valid">Confirm</button>
       &nbsp;&nbsp;&nbsp;
       <button mat-raised-button color="primary" (click)="onClick()">Clear</button>
     </div>

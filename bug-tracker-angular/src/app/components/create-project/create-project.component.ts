@@ -54,11 +54,11 @@ export class CreateProjectComponent implements OnInit {
   }
 
   createProject() {
-    this.createProjectForm.value.projectName =
-      this.createProjectForm.value.projectName.trim();
+    // this.createProjectForm.value.projectName =
+    //   this.createProjectForm.value.projectName.trim();
 
-    this.createProjectForm.value.description =
-      this.createProjectForm.value.description.trim();
+    // this.createProjectForm.value.description =
+    //   this.createProjectForm.value.description.trim();
 
     console.log('pressed');
     console.log(this.createProjectForm.value);

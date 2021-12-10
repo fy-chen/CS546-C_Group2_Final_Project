@@ -1,7 +1,8 @@
 const mongoCollections = require("../config/mongoCollections");
 const projects = mongoCollections.projects;
 let { ObjectId } = require("mongodb");
-const { parse } = require("handlebars");
+let usersData = require("./users");
+let ticketsData = require("./tickets");
 
 let isAppropriateString = (string, name) => {
   if (!string) {
@@ -158,10 +159,16 @@ async function addUser(projectId, userId) {
   projectsCollection = await projects();
 
   await get(projectId);
+  const user = await usersData.get(userId);
+
+  let userInfo = {
+    _id: userId,
+    userName: user.userName,
+  };
 
   const updatedInfo = await projectsCollection.updateOne(
     { _id: parsedProjectId },
-    { $addToSet: { users: parsedUserId } }
+    { $addToSet: { users: userInfo } }
   );
 
   if (updatedInfo.modifiedCount === 0) {
@@ -177,6 +184,13 @@ async function addTickets(projectId, ticketId) {
   projectsCollection = await projects();
 
   await get(projectId);
+
+  const ticket = await ticketsData.get(ticketId);
+
+  let ticketInfo = {
+    _id: ticketId,
+    title: ticket.title,
+  };
 
   const updatedInfo = await projectsCollection.updateOne(
     { _id: parsedProjectId },
@@ -222,6 +236,37 @@ async function getProjectsByUser(userId) {
   }
 }
 
+async function getProjectsByTicket(ticketId) {
+  let parsedId = toObjectId(ticketId, "ticketId");
+  projectsCollection = await projects();
+  let projectList = [];
+
+  projectList = await projectsCollection.find({ tickets: ticketId }).toArray();
+  for (let i = 0; i < projectList.length; i++) {
+    projectList[i]._id = projectList[i]._id.toString();
+  }
+}
+
+async function removeUser(projectId, userId) {
+  let parsedProjectId = toObjectId(projectId, "projectId");
+  let parsedUserId = toObjectId(userId, "userId");
+
+  projectsCollection = await projects();
+  await get(projectId);
+
+  const user = await usersData.get(userId);
+  const updatedInfo = await projectsCollection.updateOne(
+    { _id: parsedProjectId },
+    { $pull: { users: { _id: userId } } }
+  );
+
+  if (updatedInfo.modifiedCount === 0) {
+    throw new Error(`Could not remove user successfully.`);
+  }
+
+  return await get(projectId);
+}
+
 module.exports = {
   isAppropriateString,
   toObjectId,
@@ -235,4 +280,6 @@ module.exports = {
   addTickets,
   searchProject,
   getProjectsByUser,
+  getProjectsByTicket,
+  removeUser,
 };

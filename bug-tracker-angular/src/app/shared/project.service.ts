@@ -40,12 +40,12 @@ export class ProjectService {
     return this.http.get(`${this.apiUrl}/projects/` + id);
   }
 
-  createProject(form: FormGroup) {
-    return this.http.post(`${this.apiUrl}/projects/create`, form.value);
+  getProjectByUser(id: string) {
+    return this.http.get(`${this.apiUrl}/projects/users` + id);
   }
 
-  updateProject(id: string, form: FormGroup) {
-    return this.http.put(`${this.apiUrl}/projects/update/` + id, form.value);
+  createProject(form: FormGroup) {
+    return this.http.post(`${this.apiUrl}/projects/create`, form.value);
   }
 
   searchProject(form: FormGroup) {
@@ -54,5 +54,9 @@ export class ProjectService {
 
   removeProject(id: string) {
     return this.http.delete(`${this.apiUrl}/projects/` + id);
+  }
+
+  updateProject(id: string, form: FormGroup) {
+    return this.http.put(`${this.apiUrl}/projects/update/` + id, form.value);
   }
 }

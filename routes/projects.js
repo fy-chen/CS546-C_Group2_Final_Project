@@ -1,6 +1,4 @@
-const { response } = require("express");
 const express = require("express");
-const { tickets } = require("../data");
 const router = express.Router();
 const data = require("../data");
 const projectsData = data.projects;
@@ -121,5 +119,7 @@ router.put("/update/:id", async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
+// router.get()
 
 module.exports = router;

@@ -36,7 +36,6 @@ export class EditProjectComponent implements OnInit {
 
   constructor(
     private formbuilder: FormBuilder,
-    private Service: ProjectService,
     private router: Router,
     private route: ActivatedRoute,
     private projectService: ProjectService,
@@ -45,9 +44,15 @@ export class EditProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
-
-    this.projectService.getProject(this.id).subscribe((data) => {
+    this.projectService.getProject(this.project).subscribe((data) => {
       this.project = data;
+      // this.editProjectForm.setValue(
+      //   {
+      //     projectName: this.project.projectName,
+      //     description: this.project.description,
+      //   },
+      //   { onlySelf: true }
+      // );
     });
   }
 
@@ -77,7 +82,8 @@ export class EditProjectComponent implements OnInit {
         if (this.project.nochanged === true) {
           console.log('nochanges');
         }
-        this.location.back();
+        this.router.navigate(['/projects']);
+        // this.location.back();
       });
   }
 

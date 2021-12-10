@@ -8,6 +8,15 @@
   <p>projects-home works!</p>
 
   <a href="/projects/create" mat-raised-button color="primary">Create a Project</a>&nbsp;
+  <input type='text' id='serchProj' [(ngModel)]='searchTerm'>
+  <button (click)='search()' type="checkbox">Search!</button>
+  <div *ngIf="isShown">
+    <ul>
+      <li *ngFor="let project of searchRes ;let i=index;">
+        {{project}}
+      </li>
+    </ul>
+  </div>
 
 
   <div>
@@ -21,7 +30,7 @@
         </tr>
         <tr>
           <td colspan="4">
-            <hr style="width: 1340px" />
+            <hr style="width: 1000px" />
           </td>
         </tr>
       </thead>

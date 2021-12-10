@@ -8,6 +8,8 @@ import { ProjectService } from 'src/app/shared/project.service';
 })
 export class ProjectsHomeComponent implements OnInit {
   projects: any;
+  searchRes: any;
+  searchTerm: any;
 
   constructor(private projectService: ProjectService) {}
 
@@ -25,5 +27,19 @@ export class ProjectsHomeComponent implements OnInit {
     });
   }
 
-  createProject() {}
+  isShown: boolean = false;
+
+  search() {
+    this.searchRes = [];
+    this.isShown = !this.isShown;
+    this.projectService.search(this.searchTerm).then((data: any) => {
+      for (let i = 0; i <= data.length - 1; i++) {
+        this.searchRes.push(JSON.stringify(data[i]));
+        console.log(this.searchRes[i]);
+        if (i == data.length) {
+          this.searchRes = data;
+        }
+      }
+    });
+  }
 }

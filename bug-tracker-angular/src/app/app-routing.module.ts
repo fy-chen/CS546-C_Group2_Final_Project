@@ -39,22 +39,38 @@ const routes: Routes = [
     canActivate: [AccessGuard],
   },
   { path: 'projects', component: ProjectsHomeComponent },
-  { path: 'projects/create', component: CreateProjectComponent },
-  { path: 'projects/:id', component: ProjectsDetailsComponent },
-  { path: 'projects/update/:id', component: EditProjectComponent },
+  {
+    path: 'projects/create',
+    component: CreateProjectComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
+  {
+    path: 'projects/:id',
+    component: ProjectsDetailsComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
+  {
+    path: 'projects/update/:id',
+    component: EditProjectComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
   {
     path: 'dashboard',
     component: DashboardHomeComponent,
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  { 
-    path: 'ticket/edit/:id', 
-    component: EditTicketComponent, 
+  {
+    path: 'ticket/edit/:id',
+    component: EditTicketComponent,
     data: { requiresLogin: true },
-    canActivate: [AccessGuard] },
-  
-    {
+    canActivate: [AccessGuard],
+  },
+
+  {
     path: 'admin-home',
     component: AdminHomeComponent,
     data: { requiresLogin: true, requiresAdmin: true },
