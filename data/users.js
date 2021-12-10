@@ -167,7 +167,7 @@ const get = async function get(id){
 
 const getAll = async function getAll(){
     const userCollection = await users();
-    const userlist = await userCollection.find({role:2}).toArray();
+    const userlist = await userCollection.find().toArray();
     if (userlist != null){
         const projCollection = await projects();
         const ticketCollection = await tickets();

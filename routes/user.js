@@ -39,6 +39,10 @@ router.post('/assignTicket',async(req,res) =>{
 });
 
 router.get("/", async (req, res) => {
+    if (!req.session.user  || req.session.user.userRole !== 1){
+        res.status(401).json({message:"Unauthorized request"});
+        return;
+    }
     try {
       const userList = await users.getAll();
       res.status(200).json(userList);
@@ -48,6 +52,10 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+    if (!req.session.user  || req.session.user.userRole !== 1){
+        res.status(401).json({message:"Unauthorized request"});
+        return;
+    }
     try {
       const user = await users.get(xss(req.params.id));
       res.status(200).json(user);
@@ -133,7 +141,7 @@ router.post('/removeTicket',async(req,res) =>{
 router.delete("/:id", async (req, res) => {
     let userId = req.params.id;
     console.log(userId);
-    if (!req.session.user  || req.session.user.role !== 1){
+    if (!req.session.user  || req.session.user.userRole !== 1){
         res.status(401).json({message:"Unauthorized request"});
         return;
     }
@@ -159,8 +167,9 @@ router.delete("/:id", async (req, res) => {
 /*
 router.post('/removeTicket',async(req,res) =>{
     //Has to be admin
-    // if (req.session.user.role != 1){
-    //     res.status(401).json({"err": "Unauthorized!"})
+    // if (!req.session.user  || req.session.user.userRole !== 1){
+    //     res.status(401).json({message:"Unauthorized request"});
+    //     return;
     // }
 
     let ticketId = req.body.ticketId;

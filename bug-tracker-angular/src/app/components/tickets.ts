@@ -1,4 +1,5 @@
 
+import { ObjectId } from "bson";
 import { History } from "./history";
 
 export interface Ticket {
@@ -26,6 +27,22 @@ export interface TicketTable {
   project: any,
   errorType: any,
   createdTime: any,
+}
+
+export interface user{
+  _id : String,
+  username : String,
+  role : number,
+  assignedProjects : Array<Project>,
+  createdTickets: Array<Ticket>,
+  assignedTickets: Array<Ticket>
+}
+
+export interface Project {
+  _id: string,
+  projectName: string,
+  description: string,
+  tickets: Array<string>,
 }
 
 export interface AssignedUsers {

@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TicketService } from 'src/app/shared/ticket.service';
 import { MatTableDataSource } from "@angular/material/table";
 import { DatePipe } from '@angular/common';
-import { TicketTable, searchResult, deletResult } from '../tickets';
+import { TicketTable, searchResult, deletResult,user, Project, Ticket} from '../tickets';
 import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -53,7 +53,9 @@ export class AdminHomeComponent implements OnInit {
 
   ticketsByPriority: any;
 
-  users: any;
+  userSearch: any;
+
+  users:any;
 
   assignedusers: any;
 
@@ -79,6 +81,11 @@ export class AdminHomeComponent implements OnInit {
   public displayedColumns = ['No', 'Title', 'Description', 'Creator', 'Status', 'Project', 'errorType', 'createdTime', 'deleteButton'];
 
   public userColumns = ['No', 'Username', 'Projects', 'Tickets', 'Created Tickets', 'deleteButton'];
+
+  
+  public adminUsers =new  MatTableDataSource<user>() ;
+  
+  public developerUsers =new  MatTableDataSource<user>();
   
   public ticketsOpeningDataSource = new MatTableDataSource<TicketTable>();
   
@@ -102,14 +109,79 @@ export class AdminHomeComponent implements OnInit {
   constructor(private router: Router, public dialog: MatDialog, private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder, private authService: AuthService) { }
 
   ngOnInit(): void {
+    
 
     this.getAllTickets();
 
-    this.userService.getAllUsers().subscribe((data) =>{
-      this.users = data;
-      // console.log(this.users);
+    this.userService.getAllUsers().subscribe((data: any) =>{
+      console.log()
+      this.developerUsers = new MatTableDataSource( 
+        data.filter((element:any)=>{
+          if (element['role'] == 2){
+            return true
+          }
+          return false
+        })
+      );
+      console.log(this.developerUsers);
+      this.developerUsers.filterPredicate = (data: any, filterValue: string): boolean =>{
+        if(data.username.trim().toLowerCase().indexOf(filterValue) !== -1 || this.arrayTurnerProj(data.assignedProjects,filterValue) || this.arrayTurnerTick(data.assignedTickets,filterValue))
+        {
+          return true
+        }
+        return false
+      }
+      this.adminUsers = new MatTableDataSource( 
+        data.filter((element:any)=>{
+          if (element['role'] == 1){
+            return true
+          }
+          return false
+        })
+      );
+      this.adminUsers.filterPredicate = (data: any, filterValue: string): boolean =>{
+        if(data.username.trim().toLowerCase().indexOf(filterValue) !== -1 || this.arrayTurnerProj(data.assignedProjects,filterValue) || this.arrayTurnerTick(data.assignedTickets,filterValue) || this.arrayTurnerTick(data.createdTickets,filterValue))
+        {
+          return true
+        }
+        return false
+      }
+      this.users= data.filter((element:any)=>{
+        if (element['role'] == 2){
+          return true
+        }
+        return false
+      })
     });
     
+  }
+
+  arrayTurnerProj(array:Array<Project>,filterValue: string): boolean{
+    for (let i=0; i<=array.length-1; i++){
+      if (array[i].projectName.trim().toLowerCase().indexOf(filterValue) !== -1){
+        // console.log("true")
+        return true
+      }
+    }
+    return false
+  }
+
+  arrayTurnerTick(array:Array<Ticket>,filterValue: string): boolean{
+    for (let i=0; i<=array.length-1; i++){
+      if (array[i].title.trim().toLowerCase().indexOf(filterValue) !== -1){
+        return true
+      }
+    }
+    return false
+  }
+  
+
+  applyFilter(target:any){
+    let value = target.value;
+    value = value.trim();
+    value = value.toLowerCase();
+    this.adminUsers.filter = value;
+    this.developerUsers.filter = value;
   }
 
   openSnackBar(value: string) {
