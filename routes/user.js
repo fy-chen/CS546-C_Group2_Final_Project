@@ -20,9 +20,11 @@ router.post('/assignTicket',async(req,res) =>{
     //Validations
     if (!mongodb.ObjectId.isValid(userId)){
         res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
     }
     if (!mongodb.ObjectId.isValid(ticketId)){
         res.status(400).json({message:"ticketId is not a valid ObjectId"});
+        return;
     }
     try{
         const userUpdated =  await users.addTicket(req.body);
@@ -162,6 +164,68 @@ router.delete("/:id", async (req, res) => {
             res.status(500).json({message:"Something went wrong"})
         }
     }
+});
+
+router.post('/assignProject',async(req,res) =>{
+    //Has to be admin
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
+    let projectId = xss(req.body.projectId);
+    let userId = xss(req.body.userId);
+
+    //Validations
+    if (!mongodb.ObjectId.isValid(userId)){
+        res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
+    }
+    if (!mongodb.ObjectId.isValid(projectId)){
+        res.status(400).json({message:"projectId is not a valid ObjectId"});
+        return;
+    }
+    try{
+        const userUpdated =  await users.addProject(userId,projectId);
+        await projects.addUser(projectId,userId);
+        res.status(200).json(userUpdated);
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).json({error: e})
+    }
+    
+});
+
+router.post('/unassignProject',async(req,res) =>{
+    //Has to be admin
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
+    let projectId = xss(req.body.projectId);
+    let userId = xss(req.body.userId);
+
+    //Validations
+    if (!mongodb.ObjectId.isValid(userId)){
+        res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
+    }
+    if (!mongodb.ObjectId.isValid(projectId)){
+        res.status(400).json({message:"projectId is not a valid ObjectId"});
+        return;
+    }
+    try{
+        const userUpdated =  await users.removeProject(req.body);
+        await projects.removeUser(projectId, userId);
+        const projectDetail = await projects.get(projectId);
+        for(let projectTicketId of projectDetail.tickets){ // projectDetail.tickets is array of  IDs of tickets
+            await users.removeTicket({ticketId: projectTicketId, userId: userId})
+        }
+        res.status(200).json(userUpdated);
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).json({error: e})
+    }
+    
 });
 
 /*

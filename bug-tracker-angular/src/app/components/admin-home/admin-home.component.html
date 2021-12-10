@@ -405,7 +405,7 @@
     <form id="removeTicket-form" [formGroup]= "removeTicketForm" (ngSubmit)="removeTicket()">
       <mat-form-field appearance="fill" class="input-width" class="tickets">
           <mat-label>Tickets</mat-label>
-          <mat-select formControlName="ticketId" id="ticketId" (selectionChange)="getAssignedUsers()">
+          <mat-select formControlName="ticketId" id="ticketId" (selectionChange)="getAssignedProjects()">
             <mat-option *ngFor="let ticket of tickets" value="{{ticket._id}}">
               {{ticket.title}}
             </mat-option>
@@ -444,6 +444,92 @@
 
   </form>
   </mat-tab>
+  <mat-tab label="Assign Projects">
+    <form id="assignProject-form" [formGroup]= "assignProjectForm" (ngSubmit)="assignProject()">
+      <mat-form-field appearance="fill" class="input-width" class="tickets">
+          <mat-label>Projects</mat-label>
+          <mat-select formControlName="projectId" id="projectId">
+            <mat-option *ngFor="let project of projects" value="{{project._id}}">
+              {{project.projectName}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="assignProjectForm.controls['projectId'].invalid && (assignProjectForm.controls['projectId'].dirty || assignProjectForm.controls['projectId'].touched)" class="alert">
+          <div *ngIf="assignProjectForm.controls['projectId'].errors?.['required']">
+            Please choose a Project
+          </div>
+      </div>
+
+      <br><br>
+
+      <mat-form-field appearance="fill" class="input-width" class="users">
+          <mat-label>Users</mat-label>
+          <mat-select formControlName="userId" id="userId">
+            <mat-option *ngFor="let user of users" value="{{user._id}}">
+              {{user.username }}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="assignProjectForm.controls['userId'].invalid && (assignProjectForm.controls['userId'].dirty || assignProjectForm.controls['userId'].touched)" class="alert">
+          <div *ngIf="assignProjectForm.controls['userId'].errors?.['required']">
+            Please choose a user
+          </div>
+      </div>
+      
+      <br><br>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!assignProjectForm.valid">Confirm</button>
+
+      <div *ngIf="haveBeenAssigned" class="alert">
+          User has been Assigned
+      </div>
+
+  </form>
+  </mat-tab>
+  <mat-tab label="Unassign Projects">
+    <form id="removeProject-form" [formGroup]= "removeProjectForm" (ngSubmit)="removeProject()">
+      <mat-form-field appearance="fill" class="input-width" class="tickets">
+          <mat-label>Users</mat-label>
+          <mat-select formControlName="userId" id="userId" (selectionChange)="getAssignedProjects()">
+            <mat-option *ngFor="let developer of users" value="{{developer._id}}">
+              {{developer.username}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="removeProjectForm.controls['userId'].invalid && (removeProjectForm.controls['userId'].dirty || removeProjectForm.controls['userId'].touched)" class="alert">
+          <div *ngIf="removeProjectForm.controls['userId'].errors?.['required']">
+            Please choose a User
+          </div>
+      </div>
+
+      <br><br>
+
+      <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignedProjects">
+          <mat-label>Projects</mat-label>
+          <mat-select formControlName="projectId" id="projectId">
+            <mat-option *ngFor="let project of assignedProjects" value="{{project._id}}">
+              {{project.projectName}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="removeTicketForm.controls['userId'].invalid && (removeTicketForm.controls['userId'].dirty || removeTicketForm.controls['userId'].touched)" class="alert">
+          <div *ngIf="removeTicketForm.controls['userId'].errors?.['required']">
+            Please choose a Project
+          </div>
+      </div>
+      
+      <br><br>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!removeProjectForm.valid">Confirm</button>
+
+      <div *ngIf="noAssignedProjects" class="alert">
+          This user have no assigned projects
+      </div>
+
+  </form>
+  </mat-tab>  
 </mat-tab-group> 
 
 <!-- <div id="all_tickets" *ngIf = "showTickets">

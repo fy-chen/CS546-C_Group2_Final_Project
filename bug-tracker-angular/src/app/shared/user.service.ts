@@ -39,4 +39,12 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/tickets/get`);
   }
 
+  assignProjecttoUser(form: FormGroup) {
+    return this.http.post(`${this.apiUrl}/user/assignProject`, form.value);
+  }
+
+  removeProjectFromUser(form: FormGroup){
+    return this.http.post(`${this.apiUrl}/user/unassignProject`, form.value);
+  }
+
 }
