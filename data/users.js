@@ -199,9 +199,22 @@ const get = async function get(id){
         throw "Not a valid ObjectId";
     }
     const userCollection = await users();
+    const projCollection = await projects();
+    const ticketCollection = await tickets();
     const user = await userCollection.findOne({ _id: mongodb.ObjectId(id) });
     if (user != null){
         user._id = String(user._id);
+        delete user.hashedPassword;
+        delete user.salt;
+        for (let  [index, value] of user.assignedProjects.entries()){
+            user.assignedProjects[index] = await projCollection.findOne({_id : value});
+        }
+        for (let  [index, value] of user.createdTickets.entries()){
+            user.createdTickets[index] = await ticketCollection.findOne({_id : value});
+        }
+        for (let  [index, value] of user.assignedTickets.entries()){
+            user.assignedTickets[index] = await ticketCollection.findOne({_id : value});
+        }
         return user;
     }
     else{
@@ -294,7 +307,9 @@ const removeTicket = async function removeTicket (body){
 
     let ticketId = body.ticketId;
     let userId = body.userId;
+    console.log(userId)
     if (!mongodb.ObjectId.isValid(userId)){
+        console.log("yes");
         throw "userId is not a valid ObjectId";
     }
     if (!mongodb.ObjectId.isValid(ticketId)){
@@ -373,6 +388,71 @@ const removecreatedTicket = async function removecreatedTicket (body){
     
 }
 
+const addProject = async function addProject(userId,projectId){
+
+    if (!mongodb.ObjectId.isValid(userId)){
+        throw "userId is not a valid ObjectId";
+    }
+    if (!mongodb.ObjectId.isValid(projectId)){
+        throw "Project ID is not a valid ObjectId";
+    }
+    
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+    if(userProfile == null){
+        throw "User does not exist"
+    }
+
+    //find if ticket exists
+    let projectsCollection = await projects();
+    const projectProfile = await projectsCollection.findOne({ _id:  mongodb.ObjectId(projectId)});
+    if(projectProfile == null){
+        throw "Project does not exist"
+    }
+    console.log("got here")
+    const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(userId)},{$addToSet: { assignedProjects: mongodb.ObjectId(projectId) }});
+    console.log(updatedInfo)
+    if (updatedInfo == null){
+        throw "Could not add project to user"
+    }
+    
+    return await get(String(userId)); 
+
+    
+}
+
+const removeProject = async function removeProject(body){   
+    let userId = body.userId;
+    let projectId = body.projectId;
+
+    if (!mongodb.ObjectId.isValid(userId)){
+        throw "userId is not a valid ObjectId";
+    }
+    if (!mongodb.ObjectId.isValid(projectId)){
+        throw "Project ID is not a valid ObjectId";
+    }
+    
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ _id:  mongodb.ObjectId(userId)});
+    if(userProfile == null){
+        throw "User does not exist"
+    }
+
+    //find if ticket exists
+    let projectsCollection = await projects();
+    const projectProfile = await projectsCollection.findOne({ _id:  mongodb.ObjectId(projectId)});
+    if(projectProfile == null){
+        throw "Project does not exist"
+    }
+    const updatedInfo = await usersCollection.updateOne({_id: mongodb.ObjectId(userId)},{$pull: { assignedProjects: mongodb.ObjectId(projectId) }});
+    if (updatedInfo == null){
+        throw "Could not remove project from user"
+    }
+    return await get(String(userId)); 
+
+    
+}
+
 // const addProject = async function addProject (body){
 
 //     let projectId = body.projectId;
@@ -417,8 +497,9 @@ module.exports= {
     addcreatedTicket,
     removecreatedTicket,
     remove,
-    changePwd
-    
+    changePwd,
+    addProject,
+    removeProject,
 }
 
 

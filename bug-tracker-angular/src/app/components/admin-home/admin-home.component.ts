@@ -7,6 +7,7 @@ import { TicketTable, searchResult, deletResult,user, Project, Ticket} from '../
 import { FormBuilder, FormControl, Validators }  from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ProjectService } from 'src/app/shared/project.service';
 
 export interface DialogData {
   _id: string;
@@ -22,6 +23,7 @@ import { Router } from '@angular/router';
 })
 
 export class AdminHomeComponent implements OnInit {
+  projects: any;
 
   showTickets: any;
 
@@ -45,7 +47,13 @@ export class AdminHomeComponent implements OnInit {
 
   showNotFound: any;
 
+  showAssignedProjects= false;
+
+  assignedProjects:any;
+
   haveBeenAssigned: any;
+
+  noAssignedProjects:any;
 
   noAssignedUsers: any;
   
@@ -66,7 +74,7 @@ export class AdminHomeComponent implements OnInit {
   assignTicketForm = this.formbuilder.group({
     ticketId: new FormControl('', Validators.required),
     userId: new FormControl('', Validators.required),
-  });
+  })
 
   removeTicketForm = this.formbuilder.group({
     ticketId: new FormControl('', Validators.required),
@@ -75,6 +83,16 @@ export class AdminHomeComponent implements OnInit {
 
   searchTicketForm = this.formbuilder.group({
     phrase: ''
+  });
+
+  assignProjectForm = this.formbuilder.group({
+    projectId: new FormControl('', Validators.required),
+    userId: new FormControl('', Validators.required),
+  });
+
+  removeProjectForm = this.formbuilder.group({
+    projectId: new FormControl('', Validators.required),
+    userId: new FormControl('', Validators.required),
   });
 
 
@@ -106,15 +124,22 @@ export class AdminHomeComponent implements OnInit {
 
   public ticketsSearchResultDataSource = new MatTableDataSource<TicketTable>();
 
-  constructor(private router: Router, public dialog: MatDialog, private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder, private authService: AuthService) { }
+  constructor(private router: Router, public dialog: MatDialog, private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder, private authService: AuthService,private projectService: ProjectService) { }
 
   ngOnInit(): void {
     
+    this.getAllProjects();
 
     this.getAllTickets();
 
+    this.getAllUsers();
+    
+    
+  }
+
+
+  getAllUsers(){
     this.userService.getAllUsers().subscribe((data: any) =>{
-      console.log()
       this.developerUsers = new MatTableDataSource( 
         data.filter((element:any)=>{
           if (element['role'] == 2){
@@ -125,7 +150,7 @@ export class AdminHomeComponent implements OnInit {
       );
       console.log(this.developerUsers);
       this.developerUsers.filterPredicate = (data: any, filterValue: string): boolean =>{
-        if(data.username.trim().toLowerCase().indexOf(filterValue) !== -1 || this.arrayTurnerProj(data.assignedProjects,filterValue) || this.arrayTurnerTick(data.assignedTickets,filterValue))
+        if(data.username.trim().toLowerCase().indexOf(filterValue) !== -1 || this.arrayTurnerProj(data.assignedProjects,filterValue) || this.arrayTurnerTick(data.assignedTickets,filterValue) || this.arrayTurnerTick(data.createdTickets,filterValue))
         {
           return true
         }
@@ -153,14 +178,16 @@ export class AdminHomeComponent implements OnInit {
         return false
       })
     });
-    
   }
+
 
   arrayTurnerProj(array:Array<Project>,filterValue: string): boolean{
     for (let i=0; i<=array.length-1; i++){
-      if (array[i].projectName.trim().toLowerCase().indexOf(filterValue) !== -1){
-        // console.log("true")
-        return true
+      if (array[i]){
+        if (array[i].projectName.trim().toLowerCase().indexOf(filterValue) !== -1){
+          // console.log("true")
+          return true
+        }
       }
     }
     return false
@@ -168,9 +195,11 @@ export class AdminHomeComponent implements OnInit {
 
   arrayTurnerTick(array:Array<Ticket>,filterValue: string): boolean{
     for (let i=0; i<=array.length-1; i++){
-      if (array[i].title.trim().toLowerCase().indexOf(filterValue) !== -1){
-        return true
-      }
+      if(array[i]){
+        if (array[i].title.trim().toLowerCase().indexOf(filterValue) !== -1){
+          return true
+        }
+      } 
     }
     return false
   }
@@ -289,6 +318,56 @@ export class AdminHomeComponent implements OnInit {
     });
   }
 
+  getAllProjects(){
+    this.projectService.getAllProjects().subscribe((data) => {
+      this.projects = data;
+      console.log(this.projects);
+      for (let i = 0; i < this.projects.length; i++) {
+        this.projects.No = i + 1;
+        this.projects._id = this.projects[i]._id;
+        this.projects.projectName = this.projects[i].projectName;
+        this.projects.description = this.projects[i].description;
+      }
+
+    });
+  }
+
+  assignProject(){
+    // let projectId = this.assignProjectForm.value.projectId;
+    this.userService.assignProjecttoUser(this.assignProjectForm).subscribe((data)=>{
+      this.openSnackBar("User successfully assgined")
+    })
+  }
+
+  getAssignedProjects() {
+    // this.removeTicketForm.patchValue({userId: null});
+    console.log(this.removeProjectForm.value)
+    if(this.removeProjectForm.value.userId){
+      this.userService.getUser(this.removeProjectForm.value.userId).subscribe((data:any) => {
+      
+        this.assignedProjects = data.assignedProjects;
+
+        if(this.assignedProjects.length === 0){
+          this.noAssignedProjects = true;
+          this.showAssignedProjects = false;
+        }else{
+          this.showAssignedProjects = true;
+          this.noAssignedProjects = false;
+        }
+      });
+    }
+  }
+
+  removeProject(){
+    this.userService.removeProjectFromUser(this.removeProjectForm).subscribe((data:any) =>{
+      let result= data;
+      console.log(result);
+      // if(result.deleted === true){
+        //  
+        this.openSnackBar("Project has been succesfully deleted");
+      // }
+    });
+  }
   getAllTickets() {
 
     this.ticketService.getAllTickets().subscribe((data) => {

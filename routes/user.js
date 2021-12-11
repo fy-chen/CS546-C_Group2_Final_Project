@@ -18,11 +18,13 @@ router.post('/assignTicket', async (req, res) => {
     console.log(req.body)
 
     //Validations
-    if (!mongodb.ObjectId.isValid(userId)) {
-        res.status(400).json({ message: "userId is not a valid ObjectId" });
+    if (!mongodb.ObjectId.isValid(userId)){
+        res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
     }
-    if (!mongodb.ObjectId.isValid(ticketId)) {
-        res.status(400).json({ message: "ticketId is not a valid ObjectId" });
+    if (!mongodb.ObjectId.isValid(ticketId)){
+        res.status(400).json({message:"ticketId is not a valid ObjectId"});
+        return;
     }
     try {
         const userUpdated = await users.addTicket(req.body);
@@ -68,33 +70,34 @@ router.get("/tickets/get", async (req, res) => {
 
 
     try {
-        const user = await users.get(req.session.user.userId);
-        let ticketlist = {};
-        let assignedTickets = [];
-        let createdTickets = [];
-        for (let x of user.assignedTickets) {
-            let ticket = await tickets.get(x.toString());
-            let creator = await users.get(ticket.creator);
-            ticket.creator = creator.username;
-            let project = await projects.get(ticket.project);
-            ticket.project = project.projectName;
-            assignedTickets.push(ticket);
-        }
+      const user = await users.get(req.session.user.userId);
+      let ticketlist = {};
+      let assignedTickets = [];
+      let createdTickets = [];
+      console.log(user);
+      for(let x of user.assignedTickets) {
+          let ticket = await tickets.get(x._id.toString());
+          let creator = await users.get(ticket.creator);
+          ticket.creator = creator.username;
+          let project = await projects.get(ticket.project);
+          ticket.project = project.projectName;
+          assignedTickets.push(ticket);
+      }
 
-        for (let x of user.createdTickets) {
-            let ticket = await tickets.get(x.toString());
-            let creator = await users.get(ticket.creator);
-            ticket.creator = creator.username;
-            let project = await projects.get(ticket.project);
-            ticket.project = project.projectName;
-            createdTickets.push(ticket);
-        }
-        ticketlist.createdTicket = createdTickets;
-        ticketlist.assignedTicket = assignedTickets;
+      for(let x of user.createdTickets) {
+        let ticket = await tickets.get(x._id.toString());
+        let creator = await users.get(ticket.creator);
+        ticket.creator = creator.username;
+        let project = await projects.get(ticket.project);
+        ticket.project = project.projectName;
+        createdTickets.push(ticket);
+    }
+    ticketlist.createdTicket = createdTickets;
+    ticketlist.assignedTicket = assignedTickets;
 
-        console.log(ticketlist);
+    console.log(ticketlist);
 
-        res.status(200).json(ticketlist);
+      res.status(200).json(ticketlist);
     } catch (e) {
         res.status(404).json({ error: e });
     }
@@ -217,6 +220,68 @@ router.put("/changePassword", async (req, res) => {
     }
 
 });
+router.post('/assignProject',async(req,res) =>{
+    //Has to be admin
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
+    let projectId = xss(req.body.projectId);
+    let userId = xss(req.body.userId);
+
+    //Validations
+    if (!mongodb.ObjectId.isValid(userId)){
+        res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
+    }
+    if (!mongodb.ObjectId.isValid(projectId)){
+        res.status(400).json({message:"projectId is not a valid ObjectId"});
+        return;
+    }
+    try{
+        const userUpdated =  await users.addProject(userId,projectId);
+        await projects.addUser(projectId,userId);
+        res.status(200).json(userUpdated);
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).json({error: e})
+    }
+    
+});
+
+router.post('/unassignProject',async(req,res) =>{
+    //Has to be admin
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
+    let projectId = xss(req.body.projectId);
+    let userId = xss(req.body.userId);
+
+    //Validations
+    if (!mongodb.ObjectId.isValid(userId)){
+        res.status(400).json({message:"userId is not a valid ObjectId"});
+        return;
+    }
+    if (!mongodb.ObjectId.isValid(projectId)){
+        res.status(400).json({message:"projectId is not a valid ObjectId"});
+        return;
+    }
+    try{
+        const userUpdated =  await users.removeProject(req.body);
+        await projects.removeUser(projectId, userId);
+        const projectDetail = await projects.get(projectId);
+        for(let projectTicketId of projectDetail.tickets){ // projectDetail.tickets is array of  IDs of tickets
+            await users.removeTicket({ticketId: projectTicketId, userId: userId})
+        }
+        res.status(200).json(userUpdated);
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).json({error: e})
+    }
+    
+});
+
 /*
 router.post('/removeTicket',async(req,res) =>{
     //Has to be admin

@@ -42,4 +42,12 @@ export class UserService {
   updatePassword(form: FormGroup){
     return this.http.put(`${this.apiUrl}/user/changePassword`, form.value);
   }
+  assignProjecttoUser(form: FormGroup) {
+    return this.http.post(`${this.apiUrl}/user/assignProject`, form.value);
+  }
+
+  removeProjectFromUser(form: FormGroup){
+    return this.http.post(`${this.apiUrl}/user/unassignProject`, form.value);
+  }
+
 }

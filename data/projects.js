@@ -171,7 +171,7 @@ async function addUser(projectId, userId) {
     { $addToSet: { users: userInfo } }
   );
 
-  if (updatedInfo.modifiedCount === 0) {
+  if (updatedInfo == null) {
     throw "could not add user successfully";
   }
 
