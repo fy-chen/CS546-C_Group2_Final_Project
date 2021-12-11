@@ -205,9 +205,9 @@ router.post('/create', async(req, res) => {
 router.delete('/:id', async (req, res) => {
 
     //Has to be admin
-    // if (req.session.user.role != 1){
-    //     res.status(401).json({"err": "Unauthorized!"})
-    // }
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
 
     try {
         ticketsData.toObjectId(xss(req.params.id));
@@ -252,7 +252,7 @@ router.put('/edit/:id', async(req, res) => {
         }
     }
 
-    if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+    if(ticket.creator !== req.session.user.userId && req.session.user.userRole !== 1 && !isAssignedUser) {
         res.status(500).json({ NotAuthorized: true });
     }
 
@@ -434,7 +434,7 @@ router.get('/check/edit/:id', async(req, res) => {
             }
         }
         
-        if(ticket.creator !== req.session.user.userId && req.session.user.role !== 1 && !isAssignedUser) {
+        if(ticket.creator !== req.session.user.userId && req.session.user.userRole !== 1 && !isAssignedUser) {
             res.status(200).json({ NotAuthorized: true });
         }else{
             res.status(200).json({ Authorized: true });
