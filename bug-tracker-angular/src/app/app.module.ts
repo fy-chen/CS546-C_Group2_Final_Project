@@ -25,6 +25,7 @@ import { AccessGuard } from './shared/access.guard';
 import { ProjectsDetailsComponent } from './components/projects-details/projects-details.component';
 import { EditProjectComponent } from './components/edit-project/edit-project.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -44,7 +45,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     EditTicketComponent,
     ConfirmDeleteDialog,
     ProjectsDetailsComponent,
-    EditProjectComponent
+    EditProjectComponent,
+    ChangePasswordComponent
 
   ],
   imports: [

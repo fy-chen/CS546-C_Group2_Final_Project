@@ -39,4 +39,7 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/tickets/get`);
   }
 
+  updatePassword(form: FormGroup){
+    return this.http.put(`${this.apiUrl}/user/changePassword`, form.value);
+  }
 }

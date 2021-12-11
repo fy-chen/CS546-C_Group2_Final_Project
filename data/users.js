@@ -6,8 +6,8 @@ var crypto = require('crypto');
 const admin = mongoCollections.admin; //admin password storage
 const tickets = mongoCollections.tickets;
 var mongodb = require('mongodb');
+const { toObjectId } = require('./projects');
 const projects = mongoCollections.projects;
-
 
 //Sign up 
 const adminPsGetter = async function adminPsGetter(userInput){
@@ -146,6 +146,50 @@ const login = async function login (username,password) {
     }
 }
 
+const changePwd = async function(username, oldPwd, newPwd){
+    username = username.toLowerCase();
+    let usersCollection = await users();
+    const userProfile = await usersCollection.findOne({ "username":  username });
+    // console.log("change password "+username);
+    
+    //error handling
+    if(typeof newPwd !== 'string') throw  {status:400, msg:" New password is not a valid string."}
+
+    for(let char of newPwd){
+        if(char ==" ") throw {status:400, msg:"Password should not contain spaces"};
+    }
+    if (newPwd.length < 6) throw  {status:400, msg:"New password should be at least 6 characters long"}
+
+    if(userProfile == null) return {message:"Invalid Username or Password!"}
+
+    console.log("oldpwd(changepwd)")
+    console.log("validpwd:"+await validPassword(oldPwd,userProfile))
+
+    if(!(await validPassword(oldPwd,userProfile))){
+        throw "Invalid Old Password"
+    } 
+    //function
+    const newSalt = crypto.randomBytes(16).toString('hex'); 
+    const hashedNewPwd = crypto.pbkdf2Sync(newPwd, newSalt,  
+    1000, 64, `sha512`).toString(`hex`);
+    console.log(hashedNewPwd)
+    let newPassword = {
+        hashedPassword: hashedNewPwd,
+        salt: newSalt
+    }
+    
+    const updateInfo = await usersCollection.updateOne(
+        {username: username},
+        {$set: newPassword}
+    );
+
+    if(updateInfo.modifiedCount === 0) throw 'could not update password successfully';
+
+
+    
+    return {update: true};
+
+}
 
 const get = async function get(id){
     if(typeof id != 'string'){
@@ -373,6 +417,7 @@ module.exports= {
     addcreatedTicket,
     removecreatedTicket,
     remove,
+    changePwd
     
 }
 
