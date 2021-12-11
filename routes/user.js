@@ -74,8 +74,9 @@ router.get("/tickets/get", async (req, res) => {
       let ticketlist = {};
       let assignedTickets = [];
       let createdTickets = [];
+      console.log(user);
       for(let x of user.assignedTickets) {
-          let ticket = await tickets.get(x.toString());
+          let ticket = await tickets.get(x._id.toString());
           let creator = await users.get(ticket.creator);
           ticket.creator = creator.username;
           let project = await projects.get(ticket.project);
@@ -84,7 +85,7 @@ router.get("/tickets/get", async (req, res) => {
       }
 
       for(let x of user.createdTickets) {
-        let ticket = await tickets.get(x.toString());
+        let ticket = await tickets.get(x._id.toString());
         let creator = await users.get(ticket.creator);
         ticket.creator = creator.username;
         let project = await projects.get(ticket.project);
