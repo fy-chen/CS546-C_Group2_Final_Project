@@ -473,7 +473,7 @@
 
       <br><br>
 
-      <mat-checkbox (change)="assignAdmin($event.checked)">Assign Myself</mat-checkbox>
+      <mat-checkbox (change)="assignAdmin($event.checked, 'ticket')">Assign Myself</mat-checkbox>
 
       <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
           <div *ngIf="assignTicketForm.controls['userId'].errors?.['required']">
@@ -550,9 +550,19 @@
           </div>
       </div>
 
+      <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
+          <div *ngIf="assignTicketForm.controls['userId'].errors?.['required']">
+            Please choose a user
+          </div>
+      </div>
+
       <br><br>
 
-      <mat-form-field appearance="fill" class="input-width" class="users">
+      <mat-checkbox (change)="assignAdmin($event.checked, 'project')">Assign Myself</mat-checkbox>
+
+      <br><br>
+
+      <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignDevstoProject">
           <mat-label>Users</mat-label>
           <mat-select formControlName="userId" id="userId">
             <mat-option *ngFor="let user of users" value="{{user._id}}">
@@ -568,7 +578,7 @@
       </div>
       
       <br><br>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!assignProjectForm.valid">Confirm</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="!assignProjectForm.valid">Confirm</button>
 
       <div *ngIf="haveBeenAssigned" class="alert">
           User has been Assigned

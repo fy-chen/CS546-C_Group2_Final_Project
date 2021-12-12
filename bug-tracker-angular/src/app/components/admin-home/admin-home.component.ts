@@ -53,6 +53,8 @@ export class AdminHomeComponent implements OnInit {
 
   showAssignDevs = true;
 
+  showAssignDevstoProject = true;
+
   assignedProjects:any;
 
   haveBeenAssigned: any;
@@ -157,13 +159,21 @@ export class AdminHomeComponent implements OnInit {
     });
   }
 
-  assignAdmin(checked: boolean) {
-    if(checked) {
+  assignAdmin(checked: boolean, type: string) {
+    if(checked && type === 'ticket') {
       this.assignTicketForm.patchValue({userId: this.admin._id});
       this.showAssignDevs = false;
-    }if(!checked) {
+    }if(!checked && type === 'ticket') {
       this.assignTicketForm.patchValue({userId: ''});
       this.showAssignDevs = true;
+    }
+
+    if(checked && type === 'project') {
+      this.assignProjectForm.patchValue({userId: this.admin._id});
+      this.showAssignDevstoProject = false;
+    }if(!checked && type === 'project') {
+      this.assignProjectForm.patchValue({userId: ''});
+      this.showAssignDevstoProject = true;
     }
   }
 

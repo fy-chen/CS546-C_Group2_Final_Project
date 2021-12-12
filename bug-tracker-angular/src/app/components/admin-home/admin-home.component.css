@@ -42,11 +42,15 @@
     margin-left: 30px;
 }
 
-#search_results {
-    margin-top: 20px;
-    margin-left: 30px;
+table {
+    margin-left: 20px;
 }
 
 .alert {
     color: red;
 }
+
+.mat-raised-button:disabled{
+    background-color: black;
+    color: white;
+ }
