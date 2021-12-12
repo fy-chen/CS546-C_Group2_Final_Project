@@ -4,6 +4,8 @@ import { ChartType, ChartOptions, ChartConfiguration } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 import { TicketService } from 'src/app/shared/ticket.service';
 import { Ticket } from '../tickets';
+import { AuthService } from 'src/app/shared/auth.service';
+
 @Component({
   selector: 'app-dashboard-home',
   templateUrl: './dashboard-home.component.html',
@@ -18,6 +20,7 @@ export class DashboardHomeComponent implements OnInit {
 
   p3: any
 
+  admin:any;
 
   // Pie
   public pieChartOptions: ChartOptions = {
@@ -51,12 +54,26 @@ export class DashboardHomeComponent implements OnInit {
   public barChartPlugins = [];
 
 
-  constructor(private _ticketService: TicketService) {
+  constructor(private _ticketService: TicketService,private AuthService :AuthService) {
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
   }
 
+  async checkRole(){
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
+
   ngOnInit(): void {
+    this.checkRole(); 
     this._ticketService.getTicketsByPriority()
       .subscribe((data) => {
         this.ticket = data;

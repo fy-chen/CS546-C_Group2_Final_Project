@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
-
+import { AuthService } from 'src/app/shared/auth.service';
 @Component({
   selector: 'app-create-project',
   templateUrl: './create-project.component.html',
@@ -12,7 +12,8 @@ export class CreateProjectComponent implements OnInit {
   id: any;
   project: any;
   projectlist: any;
-
+  admin:any;
+  
   createProjectForm = this.formbuilder.group({
     projectName: new FormControl(
       '',
@@ -35,12 +36,26 @@ export class CreateProjectComponent implements OnInit {
   constructor(
     private formbuilder: FormBuilder,
     private ProjectService: ProjectService,
-    private router: Router
+    private router: Router,
+    private AuthService :AuthService
   ) {
     console.log('click');
   }
+  async checkRole(){
 
-  ngOnInit(): void {}
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
+  ngOnInit(): void {
+    this.checkRole(); 
+  }
 
   onSubmit() {
     if (this.createProjectForm.valid) {

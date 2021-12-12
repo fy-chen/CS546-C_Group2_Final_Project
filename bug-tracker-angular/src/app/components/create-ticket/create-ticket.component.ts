@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -15,6 +16,7 @@ export class CreateTicketComponent implements OnInit {
   id: any;
   ticket: any;
   projectlist:any;
+  admin:any;
 
   createTicketForm = this.formbuilder.group({
     title: new FormControl('', Validators.compose([
@@ -30,9 +32,23 @@ export class CreateTicketComponent implements OnInit {
     project: new FormControl('', Validators.required),
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private projectService: ProjectService, private _snackBar: MatSnackBar) { }
+  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private projectService: ProjectService, private _snackBar: MatSnackBar,private AuthService :AuthService) { }
+  
+  async checkRole(){
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
 
   ngOnInit(): void {
+    this.checkRole(); 
     this.projectService.getAllProjects().subscribe(
       (data) => {
         this.projectlist = data;

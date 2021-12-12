@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
 import { Location } from '@angular/common';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-edit-project',
@@ -12,6 +13,7 @@ import { Location } from '@angular/common';
 export class EditProjectComponent implements OnInit {
   id: any;
   project: any;
+  admin:any;
 
   editProjectForm = this.formbuilder.group({
     projectName: new FormControl(
@@ -39,10 +41,24 @@ export class EditProjectComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private projectService: ProjectService,
-    private location: Location
+    private location: Location,
+    private AuthService :AuthService
   ) {}
 
+  async checkRole(){
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
   ngOnInit(): void {
+    this.checkRole(); 
     this.id = this.route.snapshot.paramMap.get('id');
     this.projectService.getProject(this.project).subscribe((data) => {
       this.project = data;

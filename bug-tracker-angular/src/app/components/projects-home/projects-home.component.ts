@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/shared/project.service';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-projects-home',
@@ -10,10 +11,25 @@ export class ProjectsHomeComponent implements OnInit {
   projects: any;
   searchRes: any;
   searchTerm: any;
+  admin:any;
 
-  constructor(private projectService: ProjectService) {}
+  constructor(
+    private AuthService :AuthService,
+    private projectService: ProjectService) {}
+    async checkRole(){
 
+      const loggedIn: any = await this.AuthService.isLoggedIn();
+      if (loggedIn.loggedIn === true){
+        if (loggedIn.role  == 1){
+           this.admin = true;
+        }
+        else{
+          this.admin = false;
+        }
+      }
+    }
   ngOnInit(): void {
+    this.checkRole(); 
     this.projectService.getAllProjects().subscribe((data) => {
       this.projects = data;
       console.log(this.projects);

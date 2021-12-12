@@ -2,7 +2,10 @@
 <div class="sidenav">
   <a href="/dashboard">dashboard</a>
   <a href="/projects">Project</a>
-  <a href="/ticket">Ticket</a>
+  <a href="/home">Home</a>
+  <div *ngIf="admin">
+    <a href="/admin-home">Admin</a>
+</div>
 </div>
 <div class="main">
   <h1>Edit Project</h1>

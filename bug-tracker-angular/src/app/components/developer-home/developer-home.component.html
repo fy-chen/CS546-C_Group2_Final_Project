@@ -1,6 +1,9 @@
-<p>developer {{ createproject }}</p>
-<a href="/changePassword">Change Password</a>
-<div>
+
+<div class="main">
+ <p>developer {{ createproject }}</p>
+<a href="/changePassword">Change Password</a> 
+<br>
+<br>
 <label>Search:</label>
 <input type='text' id='serchProj' [(ngModel)]='searchTerm'>
 <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>
@@ -12,8 +15,18 @@
     <li *ngFor="let project of searchRes">{{project}}</li>
 </ul>
 
-<div id="user_tickets">
+<div class="sidenav">
+  <a href="/dashboard">dashboard</a>
+  <a href="/projects">Project</a>
+  <a href="/home">Home</a>
+  <div *ngIf="admin">
+    <a href="/admin-home">Admin</a>
+</div>
+</div>
+
+<div id="user_tickets" class = "main">
     <h2 class="table_head">Created Tickets</h2>
+    <a href="/ticket/create">Create Ticket</a>
       <table mat-table [dataSource]="ticketsCreatedDataSource" id="ticket_table">
         <ng-container matColumnDef="No">
           <th mat-header-cell *matHeaderCellDef> No. </th>

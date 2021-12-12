@@ -25,6 +25,7 @@ export class DeveloperHomeComponent implements OnInit {
 
   ticketstable: TicketTable[] = [] as TicketTable[];
   applyResult: any;
+  admin:any;
 
   constructor(
     private projectService : ProjectService,
@@ -33,7 +34,8 @@ export class DeveloperHomeComponent implements OnInit {
     private userService: UserService,
     private datepipe: DatePipe,
     private ticketService: TicketService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    
   ) {}
 
   createproject = '';
@@ -50,9 +52,22 @@ export class DeveloperHomeComponent implements OnInit {
     //     }
     //   }
     // );
-    
+    this.checkRole(); 
     this.getTicketFromUser();
 
+  }
+  
+  async checkRole(){
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
   }
 
   getTicketFromUser() {
