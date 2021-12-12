@@ -114,7 +114,7 @@
        <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element"> 
-              <button mat-raised-button color="warn" (click)="openDialog(element._id,'user')">Delete</button> 
+              <button mat-raised-button color="red" (click)="openDialog(element._id,'user')">Delete</button> 
           </td>
       </ng-container> 
 
@@ -187,7 +187,7 @@
        <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element"> 
-              <button mat-raised-button color="warn" (click)="openDialog(element._id,'user')">Delete</button> 
+              <button mat-raised-button color="red" (click)="openDialog(element._id,'user')">Delete</button> 
           </td>
       </ng-container> 
 
@@ -266,7 +266,7 @@
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element"> 
             <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-            <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+            <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
           </td>
       </ng-container>
 
@@ -319,9 +319,9 @@
       <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element"> 
-            <button mat-raised-button color="warn" (click)="closeTicket(element._id)">Close</button> 
+            <button mat-raised-button color="red" (click)="closeTicket(element._id)">Close</button> 
               <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-              <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+              <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
           </td>
       </ng-container>
 
@@ -375,7 +375,7 @@
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td mat-cell *matCellDef="let element"> 
               <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-              <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+              <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
           </td>
       </ng-container>
 
@@ -433,7 +433,7 @@
               <th mat-header-cell *matHeaderCellDef>  </th>
               <td mat-cell *matCellDef="let element"> 
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
               </td>
           </ng-container>
     
@@ -566,7 +566,7 @@
             </mat-option>
           </mat-select>
       </mat-form-field>
-      
+
       <br><br>
 
       <mat-checkbox (change)="assignAdmin($event.checked, 'project')">Assign Myself</mat-checkbox>
@@ -691,7 +691,7 @@
               <th mat-header-cell *matHeaderCellDef>  </th>
               <td mat-cell *matCellDef="let element"> 
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
               </td>
           </ng-container>
     
@@ -745,7 +745,7 @@
               <th mat-header-cell *matHeaderCellDef>  </th>
               <td mat-cell *matCellDef="let element"> 
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
               </td>
           </ng-container>
     
@@ -799,7 +799,7 @@
               <th mat-header-cell *matHeaderCellDef>  </th>
               <td mat-cell *matCellDef="let element"> 
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
               </td>
           </ng-container>
     
@@ -856,7 +856,7 @@
               <th mat-header-cell *matHeaderCellDef>  </th>
               <td mat-cell *matCellDef="let element"> 
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
               </td>
           </ng-container>
     
@@ -912,7 +912,7 @@
               <th mat-header-cell *matHeaderCellDef>  </th>
               <td mat-cell *matCellDef="let element"> 
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" class="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id,'ticket')">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button> 
               </td>
           </ng-container>
     
