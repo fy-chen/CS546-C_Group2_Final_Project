@@ -168,7 +168,7 @@ async function addUser(projectId, userId) {
 
   const updatedInfo = await projectsCollection.updateOne(
     { _id: parsedProjectId },
-    { $addToSet: { users: userInfo } }
+    { $addToSet: { users: userId } }
   );
 
   if (updatedInfo == null) {
@@ -194,7 +194,7 @@ async function addTickets(projectId, ticketId) {
 
   const updatedInfo = await projectsCollection.updateOne(
     { _id: parsedProjectId },
-    { $addToSet: { tickets: parsedTicketId } }
+    { $addToSet: { tickets: ticketId } }
   );
 
   if (updatedInfo.modifiedCount === 0) {
@@ -234,6 +234,8 @@ async function getProjectsByUser(userId) {
   for (let i = 0; i < projectList.length; i++) {
     projectList[i]._id = projectList[i]._id.toString();
   }
+
+  return projectList;
 }
 
 async function getProjectsByTicket(ticketId) {
