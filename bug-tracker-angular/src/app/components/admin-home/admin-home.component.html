@@ -1,9 +1,41 @@
-<h1> Welcome {{admin.username}}</h1>
+<!-- <h1>Welcome {{currentUser.username}}, you have admin priviledges</h1> -->
 <a href="/changePassword">Change Password</a>
 <div id="bar">
   <button mat-raised-button color="primary"(click)="logout()" >Logout</button>
+  <!-- <button mat-raised-button color="primary" >All Projects</button> -->
+  <!-- <button mat-raised-button color="primary" >All Developers</button> -->
 
   <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>
+
+  <!-- <button mat-raised-button color="primary" (click)="showTicketsButtonClicked()">All tickets</button> -->
+
+  <!-- <button mat-raised-button color="primary" (click)="showAssigntoUserButtonClicked()">Assign tickets</button> -->
+
+  <!-- <button mat-raised-button color="primary" (click)="showRemoveUserButtonClicked()">Remove tickets</button> -->
+
+  <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Sorted Tickets</button>
+  <mat-menu #menu="matMenu">
+    <button (click)="showTicketsSortedByPriority()" mat-menu-item>Priority</button>
+    <button (click)="showTicketsSortedbyProject()" mat-menu-item>Project</button>
+    <button (click)="showTicketsSortedbyErrorType()" mat-menu-item>Error Type</button>
+  </mat-menu> -->
+
+
+  <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
+    <mat-form-field class="input-width" appearance="fill" >
+      <mat-label>Search</mat-label>
+      <input matInput formControlName="phrase" id="phrase">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
+
+  <div *ngIf="showNoInput" class="alert">
+    Search Phrase not provided
+  </div>
+
+  <div *ngIf="showEmptySpace" class="alert">
+    Search Phrase cannot be empty spaces
+  </div>
 
   <ol id="pending-tickets">
       <li>pending tickets</li>

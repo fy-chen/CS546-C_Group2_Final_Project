@@ -29,6 +29,8 @@ import { Router } from '@angular/router';
 })
 
 export class AdminHomeComponent implements OnInit {
+  currentUser: any;
+
   projects: any;
 
   showTicketsbyPriority: any;
@@ -144,6 +146,7 @@ export class AdminHomeComponent implements OnInit {
 
     this.getAdmin();
     
+    // this.getCurrentUser();
     
   }
 
