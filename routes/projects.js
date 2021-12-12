@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const projectsData = data.projects;
+const ticketsData = data.tickets;
+const users = data.users;
 const xss = require("xss");
+const { projects } = require("../config/mongoCollections");
 
 let isAppropriateString = (string, name) => {
   if (!string) {
@@ -28,6 +31,12 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    projectsData.toObjectId(xss(req.params.id));
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+
+  try {
     const project = await projectsData.get(xss(req.params.id));
     // res.render("/pages/projectPage", { project });
     return res.json(project);
@@ -43,6 +52,12 @@ router.get("/users/", async (req, res) => {
     return;
   }
   try {
+    projectsData.toObjectId(xss(req.params.id));
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+
+  try {
     const createdProjects = await projectsData.getProjectsByUser(
       xss(req.session.id)
     );
@@ -57,9 +72,27 @@ router.post("/create", async (req, res) => {
   let projectData = req.body;
   // projectData.role = 1;
   projectData.role = req.session.user.userRole;
+
   try {
     isAppropriateString(projectData.projectName, "Project Name");
     isAppropriateString(projectData.description, "description");
+
+    if (
+      projectsData.projectName.length < 4 ||
+      projectsData.projectName.length > 30
+    ) {
+      throw new Error(
+        `Provided project name should be at least 4 characters long and at most 30 characters long`
+      );
+    }
+
+    if (
+      projectsData.description.length < 4 ||
+      projectsData.description.length > 100
+    ) {
+      `Provided description should be at least 4 characters long and at most 100 characters long`;
+    }
+
     const newProject = await projectsData.create(
       projectData.projectName,
       projectData.description,
@@ -96,6 +129,17 @@ router.post("/search", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
+  if (!req.session.user) {
+    res.status(401).json({ err: "Unauthorized!" });
+    return;
+  }
+
+  try {
+    projectsData.toObjectId(xss(req.params.id));
+  } catch (e) {
+    res.status(500).json({ error: e });
+    return;
+  }
   try {
     const deleteInfo = await projectsData.remove(xss(req.params.id));
     return res.status(200).json(deleteInfo);
@@ -107,6 +151,13 @@ router.delete("/:id", async (req, res) => {
 router.put("/update/:id", async (req, res) => {
   let projectData = req.body;
   projectData.role = req.session.user.userRole;
+
+  try {
+    projectsData.toObjectId(xss(req.params.id));
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+
   try {
     const project = await projectsData.get(xss(req.params.id));
   } catch (e) {
