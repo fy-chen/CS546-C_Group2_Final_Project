@@ -3,6 +3,7 @@ const projects = mongoCollections.projects;
 let { ObjectId } = require("mongodb");
 let usersData = require("./users");
 let ticketsData = require("./tickets");
+const tickets = mongoCollections.tickets;
 
 let isAppropriateString = (string, name) => {
   if (!string) {
@@ -185,7 +186,12 @@ async function addTickets(projectId, ticketId) {
 
   await get(projectId);
 
-  const ticket = await ticketsData.get(ticketId);
+  TicketsCollection = await tickets();
+
+  let ticket = await TicketsCollection.findOne({ _id: parsedTicketId });
+  if (ticket === null) throw 'No ticket with that id';
+
+  ticket._id = ticket._id.toString();
 
   let ticketInfo = {
     _id: ticketId,
