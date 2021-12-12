@@ -11,9 +11,9 @@ const xss = require('xss');
 
 router.post('/assignTicket', async (req, res) => {
     //Has to be admin
-    // if (req.session.user.role != 1){
-    //     res.status(401).json({"err": "Unauthorized!"})
-    // }
+    if (req.session.user.role != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
     let ticketId = xss(req.body.ticketId);
     let userId = xss(req.body.userId);
     console.log(req.body)
@@ -139,9 +139,9 @@ router.get("/tickets/get", async (req, res) => {
 
 router.post('/removeTicket', async (req, res) => {
     //Has to be admin
-    // if (req.session.user.role != 1){
-    //     res.status(401).json({"err": "Unauthorized!"})
-    // }
+    if (req.session.user.role != 1){
+        res.status(401).json({"err": "Unauthorized!"})
+    }
 
     let ticketId = xss(req.body.ticketId);
     let userId = xss(req.body.userId);

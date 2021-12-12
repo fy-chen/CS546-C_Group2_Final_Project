@@ -558,10 +558,6 @@
 
       <br><br>
 
-      <mat-checkbox (change)="assignAdmin($event.checked, 'project')">Assign Myself</mat-checkbox>
-
-      <br><br>
-
       <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignDevstoProject">
           <mat-label>Users</mat-label>
           <mat-select formControlName="userId" id="userId">
@@ -570,6 +566,10 @@
             </mat-option>
           </mat-select>
       </mat-form-field>
+      
+      <br><br>
+
+      <mat-checkbox (change)="assignAdmin($event.checked, 'project')">Assign Myself</mat-checkbox>
 
       <div *ngIf="assignProjectForm.controls['userId'].invalid && (assignProjectForm.controls['userId'].dirty || assignProjectForm.controls['userId'].touched)" class="alert">
           <div *ngIf="assignProjectForm.controls['userId'].errors?.['required']">
