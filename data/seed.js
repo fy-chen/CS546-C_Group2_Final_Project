@@ -15,14 +15,14 @@ async function main(){
 
     try {
         let Developer2 = await users.signup({username:'developer2',password:'password2'});
-        var newDeveloper2 = await users.getByUsername('developer1');
+        var newDeveloper2 = await users.getByUsername('developer2');
     } catch (e) {
         console.log(e);
     }
 
     try {
         let Developer3 = await users.signup({username:'developer3',password:'password3'})
-        var newDeveloper3 = await users.getByUsername('developer1');
+        var newDeveloper3 = await users.getByUsername('developer3');
     } catch (e) {
         console.log(e);
     }
