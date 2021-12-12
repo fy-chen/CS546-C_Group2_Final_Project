@@ -26,6 +26,8 @@ import { ProjectsDetailsComponent } from './components/projects-details/projects
 import { EditProjectComponent } from './components/edit-project/edit-project.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 // import {MatRadioDefaultOptions} from '@angular/material/radio';
 
 
@@ -47,7 +49,9 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     ProjectsDetailsComponent,
     EditProjectComponent,
     ChangePasswordComponent,
-    ConfirmDeleteDialogDev
+    ConfirmDeleteDialogDev,
+    LandingPageComponent,
+    NotFoundPageComponent
 
   ],
   imports: [

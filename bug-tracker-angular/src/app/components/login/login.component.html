@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
 
-</style>
-</head>
-<body>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
 
-<div class="sidenav">
-  <!-- <a href="/src/app/components/login/login.component.html">Login</a> -->
+    </style>
+  </head>
 
-</div>
+  <body>
 
-<div class="main">
-    <h1>Login</h1>
-    <form [formGroup]= "loginForm" (ngSubmit)="login()" id="signup-form">
-      <label for="username">
+    <div class="sidenav">
+      <!-- <a href="/src/app/components/login/login.component.html">Login</a> -->
+
+    </div>
+
+    <div class="main" id="log-in-form">
+      <h1 style="color: white; padding-top: 1vw; padding-bottom: 1vw;">Login</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="login()" id="signup-form">
+        <label for="username">
           Username:
-          </label>
-          <input type="text" id="username" name="username" formControlName="username">
-          <br><br>
-          <label for="password">
+        </label>
+        <input type="text" id="username" name="username" formControlName="username">
+        <br><br>
+        <label for="password">
           Password:
-          </label>
-          <input type="password" id="password"  name="password" formControlName="password">
-          <br><br>
+        </label>
+        <input type="password" id="password" name="password" formControlName="password">
+        <br><br>
         <div id="errorU" class="error" hidden>I'm an error</div>
         <br><br>
         <button type="submit">Login</button>
-      
-    </form>
-    <br><br>
-  <p>Not A User Yet? Sign up here</p>
-  <!-- <a href="/src/app/components/signup/signup.component.html">Sign Up</a>   -->
-  <a href="/signup">Sign Up</a>  
-    
-  </div>
-   
-</body>
+
+      </form>
+      <br><br>
+      <p>Not A User Yet? Sign up here</p>
+      <!-- <a href="/src/app/components/signup/signup.component.html">Sign Up</a>   -->
+      <a href="/signup">Sign Up</a>
+
+    </div>
+
+  </body>
+
 </html>
