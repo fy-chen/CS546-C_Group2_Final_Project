@@ -24,6 +24,20 @@ const adminPsGetter = async function adminPsGetter(userInput){
     }
 }
 
+const adminPsCreator = async function adminPsCreator(userInput){
+    const salt = crypto.randomBytes(16).toString('hex'); 
+    const hash = crypto.pbkdf2Sync(userInput, salt,  
+    1000, 64, `sha512`).toString(`hex`);
+    let adminPassColl = await admin();
+    let adminPass = await adminPassColl.insertOne({name:'user0',hashedPassword: hash, salt: salt});
+    if(adminPass.modifiedCount == 1){
+        return "Admin Password created successfully! \n \nFor the sake of project, plaintext is:"+userInput ;
+    }
+    else{
+        return "Error in creating admin password!";
+    }
+}
+
 const adminPsSetter = async function adminPsSetter(userInput){
     const salt = crypto.randomBytes(16).toString('hex'); 
     const hash = crypto.pbkdf2Sync(userInput, salt,  
@@ -500,6 +514,7 @@ module.exports= {
     changePwd,
     addProject,
     removeProject,
+    adminPsCreator
 }
 
 
