@@ -74,6 +74,19 @@ router.get("/admin/get", async (req, res) => {
     }
 });
 
+router.get("/dev/get", async (req, res) => {
+    if (!req.session.user) {
+        res.status(401).json({ message: "Unauthorized request" });
+        return;
+    }
+    try {
+        const user = await users.get(req.session.user.userId);
+        res.status(200).json(user);
+    } catch (e) {
+        res.status(404).json({ error: e });
+    }
+});
+
 router.get("/:id", async (req, res) => {
     if (!req.session.user || req.session.user.userRole !== 1) {
         res.status(401).json({ message: "Unauthorized request" });

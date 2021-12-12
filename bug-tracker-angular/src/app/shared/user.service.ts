@@ -54,4 +54,8 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/admin/get`);
   }
 
+  getDev(){
+    return this.http.get(`${this.apiUrl}/user/dev/get`);
+  }
+
 }

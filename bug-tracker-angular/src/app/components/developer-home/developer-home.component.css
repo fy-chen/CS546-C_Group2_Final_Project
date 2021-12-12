@@ -40,3 +40,10 @@ body {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+.alert {
+    color: red;
+}
+#ticket_table {
+    width: 80%;
+    margin-bottom: 30px;
+}

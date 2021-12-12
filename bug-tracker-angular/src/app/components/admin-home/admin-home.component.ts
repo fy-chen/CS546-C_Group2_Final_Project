@@ -29,6 +29,8 @@ import { Router } from '@angular/router';
 })
 
 export class AdminHomeComponent implements OnInit {
+  currentUser: any;
+
   projects: any;
 
   showTicketsbyPriority: any;
@@ -113,12 +115,12 @@ export class AdminHomeComponent implements OnInit {
   
   public developerUsers =new  MatTableDataSource<user>();
   
-  public ticketsOpeningDataSource = new MatTableDataSource<TicketTable>();
+  public ticketsOpeningDataSource = new MatTableDataSource<Ticket>();
   
 
-  public ticketsClosedDataSource = new MatTableDataSource<TicketTable>();
+  public ticketsClosedDataSource = new MatTableDataSource<Ticket>();
 
-  public ticketsReadytoCloseDataSource = new MatTableDataSource<TicketTable>();
+  public ticketsReadytoCloseDataSource = new MatTableDataSource<Ticket>();
 
   public Priority1DataSource = new MatTableDataSource<TicketTable>();
 
@@ -144,6 +146,7 @@ export class AdminHomeComponent implements OnInit {
 
     this.getAdmin();
     
+    // this.getCurrentUser();
     
   }
 
@@ -240,6 +243,15 @@ export class AdminHomeComponent implements OnInit {
     this.developerUsers.filter = value;
   }
 
+  applyTicketFilter(target: any) {
+    let value = target.value;
+    value = value.trim()
+    value = value.toLowerCase();
+    this.ticketsOpeningDataSource.filter = value;
+    this.ticketsReadytoCloseDataSource.filter = value;
+    this.ticketsClosedDataSource.filter = value;
+  }
+
   openSnackBar(value: string) {
     this._snackBar.open(value, 'Done');
   }
@@ -267,6 +279,9 @@ export class AdminHomeComponent implements OnInit {
         location.reload();
         this.openSnackBar("Ticket has been succesfully deleted");
       }
+    },
+    (error) =>{
+      this.openSnackBar(error.error.err);
     });
   }
 
@@ -338,39 +353,88 @@ export class AdminHomeComponent implements OnInit {
   getAllTickets() {
 
     this.ticketService.getAllTickets().subscribe((data) => {
+      
       this.tickets = data;
 
-      this.ticketstable = [] as TicketTable[];
+      // this.ticketstable = [] as TicketTable[];
 
-      let closedtickets = [] as TicketTable[];
+      // let closedtickets = [] as TicketTable[];
 
-      let ticketsReadytoClose = [] as TicketTable[];
+      // let ticketsReadytoClose = [] as TicketTable[];
 
-      for(let i = 0; i < this.tickets.length; i++) {
-        let ticketobj: TicketTable = {} as TicketTable;
-        ticketobj.No = i + 1;
-        ticketobj._id = this.tickets[i]._id;
-        ticketobj.title = this.tickets[i].title;
-        ticketobj.description = this.tickets[i].description;
-        ticketobj.creator = this.tickets[i].creator;
-        ticketobj.status = this.tickets[i].status;
-        ticketobj.project = this.tickets[i].project;
-        ticketobj.errorType = this.tickets[i].errorType;
-        ticketobj.createdTime = this.datepipe.transform(this.tickets[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+      // for(let i = 0; i < this.tickets.length; i++) {
+      //   let ticketobj: TicketTable = {} as TicketTable;
+      //   ticketobj.No = i + 1;
+      //   ticketobj._id = this.tickets[i]._id;
+      //   ticketobj.title = this.tickets[i].title;
+      //   ticketobj.description = this.tickets[i].description;
+      //   ticketobj.creator = this.tickets[i].creator;
+      //   ticketobj.status = this.tickets[i].status;
+      //   ticketobj.project = this.tickets[i].project;
+      //   ticketobj.errorType = this.tickets[i].errorType;
+      //   ticketobj.createdTime = this.datepipe.transform(this.tickets[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
 
-        if(ticketobj.status === 'open'){
-          this.ticketstable.push(ticketobj);
-        }else if(ticketobj.status === 'ready_to_close') {
-          ticketsReadytoClose.push(ticketobj);
-        }else if(ticketobj.status === 'closed') {
-          closedtickets.push(ticketobj);
-        }
+      //   if(ticketobj.status === 'open'){
+      //     this.ticketstable.push(ticketobj);
+      //   }else if(ticketobj.status === 'ready_to_close') {
+      //     ticketsReadytoClose.push(ticketobj);
+      //   }else if(ticketobj.status === 'closed') {
+      //     closedtickets.push(ticketobj);
+      //   }
         
-      }
+      // }
 
-      this.ticketsOpeningDataSource.data = this.ticketstable;
-      this.ticketsReadytoCloseDataSource.data = ticketsReadytoClose;
-      this.ticketsClosedDataSource.data = closedtickets
+      this.ticketsOpeningDataSource = new MatTableDataSource( 
+        data.filter((element:any)=>{
+          if (element['status'] == 'open'){
+            element.createdTime = this.datepipe.transform(element.createdTime, 'yyyy-MM-dd hh:mm:ss');
+            return true
+          }
+          return false
+        })
+      );
+      this.ticketsOpeningDataSource.filterPredicate = (data: any, filterValue: string): boolean =>{
+        if(data.title.trim().toLowerCase().indexOf(filterValue) !== -1 || data.description.trim().toLowerCase().indexOf(filterValue) !== -1 || data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1)
+        {
+          return true
+        }
+        return false
+      }
+      this.ticketsReadytoCloseDataSource = new MatTableDataSource( 
+        data.filter((element:any)=>{
+          if (element['status'] == 'ready_to_close'){
+            element.createdTime = this.datepipe.transform(element.createdTime, 'yyyy-MM-dd hh:mm:ss');
+            return true
+          }
+          return false
+        })
+      );
+      this.ticketsReadytoCloseDataSource.filterPredicate = (data: any, filterValue: string): boolean =>{
+        if(data.title.trim().toLowerCase().indexOf(filterValue) !== -1 || data.description.trim().toLowerCase().indexOf(filterValue) !== -1 || data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1)
+        {
+          return true
+        }
+        return false
+      }
+      this.ticketsClosedDataSource = new MatTableDataSource( 
+        data.filter((element:any)=>{
+          if (element['status'] == 'closed'){
+            element.createdTime = this.datepipe.transform(element.createdTime, 'yyyy-MM-dd hh:mm:ss');
+            return true
+          }
+          return false
+        })
+      );
+      this.ticketsClosedDataSource.filterPredicate = (data: any, filterValue: string): boolean =>{
+        if(data.title.trim().toLowerCase().indexOf(filterValue) !== -1 || data.description.trim().toLowerCase().indexOf(filterValue) !== -1 || data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1)
+        {
+          return true
+        }
+        return false
+      }
+      // this.ticketsOpeningDataSource.data = this.ticketstable;
+      // this.ticketsReadytoCloseDataSource.data = ticketsReadytoClose;
+      // this.ticketsClosedDataSource.data = closedtickets
     });
 
   }
@@ -600,53 +664,53 @@ export class AdminHomeComponent implements OnInit {
 }
 
 
-  searchTicket() {
+  // searchTicket() {
 
-    this.showNoInput = false;
-    this.showEmptySpace = false;
-    this.showNotFound = false;
+  //   this.showNoInput = false;
+  //   this.showEmptySpace = false;
+  //   this.showNotFound = false;
 
-    if(!this.searchTicketForm.value.phrase){
-      this.showNoInput = true;
-      return;
-    }else if(!this.searchTicketForm.value.phrase.trim()){
-      this.showEmptySpace = true;
-      return;
-    }
+  //   if(!this.searchTicketForm.value.phrase){
+  //     this.showNoInput = true;
+  //     return;
+  //   }else if(!this.searchTicketForm.value.phrase.trim()){
+  //     this.showEmptySpace = true;
+  //     return;
+  //   }
 
-    this.ticketService.searchTickets(this.searchTicketForm).subscribe((data) => {
-      let searchResult: searchResult = data;
+  //   this.ticketService.searchTickets(this.searchTicketForm).subscribe((data) => {
+  //     let searchResult: searchResult = data;
 
-      this.ticketstable = [] as TicketTable[];
+  //     this.ticketstable = [] as TicketTable[];
 
-      if(searchResult.notFound === true){
-        this.showNotFound = true;
-        this.showSearchresult = false;
-        return;
-      }else if(searchResult.tickets){
+  //     if(searchResult.notFound === true){
+  //       this.showNotFound = true;
+  //       this.showSearchresult = false;
+  //       return;
+  //     }else if(searchResult.tickets){
 
-        for(let i = 0; i < searchResult.tickets.length; i++) {
-          let ticketobj: TicketTable = {} as TicketTable;
-          ticketobj.No = i + 1;
-          ticketobj._id = searchResult.tickets[i]._id;
-          ticketobj.title = searchResult.tickets[i].title;
-          ticketobj.description = searchResult.tickets[i].description;
-          ticketobj.creator = searchResult.tickets[i].creator;
-          ticketobj.status = searchResult.tickets[i].status;
-          ticketobj.project = searchResult.tickets[i].project;
-          ticketobj.errorType = searchResult.tickets[i].errorType;
-          ticketobj.createdTime = this.datepipe.transform(searchResult.tickets[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+  //       for(let i = 0; i < searchResult.tickets.length; i++) {
+  //         let ticketobj: TicketTable = {} as TicketTable;
+  //         ticketobj.No = i + 1;
+  //         ticketobj._id = searchResult.tickets[i]._id;
+  //         ticketobj.title = searchResult.tickets[i].title;
+  //         ticketobj.description = searchResult.tickets[i].description;
+  //         ticketobj.creator = searchResult.tickets[i].creator;
+  //         ticketobj.status = searchResult.tickets[i].status;
+  //         ticketobj.project = searchResult.tickets[i].project;
+  //         ticketobj.errorType = searchResult.tickets[i].errorType;
+  //         ticketobj.createdTime = this.datepipe.transform(searchResult.tickets[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
   
-          this.ticketstable.push(ticketobj);
-        }
-      }
+  //         this.ticketstable.push(ticketobj);
+  //       }
+  //     }
 
-      this.ticketsSearchResultDataSource.data = this.ticketstable;
+  //     this.ticketsSearchResultDataSource.data = this.ticketstable;
 
-      this.showSearchresult = true;
-    });
+  //     this.showSearchresult = true;
+  //   });
 
-  }
+  // }
 
   closeTicket(id: string) {
     this.ticketService.ChangeTicketStatus("close", id).subscribe(
@@ -656,6 +720,9 @@ export class AdminHomeComponent implements OnInit {
           this.openSnackBar("Close ticket succeed");
           this.getAllTickets();
         }
+      },
+      (error) =>{
+        this.openSnackBar(error.error.err);
       }
     );
   }

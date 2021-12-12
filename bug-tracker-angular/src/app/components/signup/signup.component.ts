@@ -18,7 +18,9 @@ export class SignupComponent implements OnInit {
   signupForm = this.formBuilder.group({
     username: '',
     password:'',
+    confirmPassword:'',
     adminAccess: null,
+    
   });
   
 
@@ -47,15 +49,21 @@ export class SignupComponent implements OnInit {
   }
 
   signup(): void{
-    this.AuthService.signup(this.signupForm).then(
-      (data:any)=>{
-        // this.openSnackBar(data['message']);
-        this.router.navigate(['/login/']);
-      },
-      err=>{
-        this.openSnackBar(err.error.msg);
-      }
-      
-    )
+    if (this.signupForm.value.confirmPassword !== this.signupForm.value.password){
+      this.openSnackBar("Passwords dont match");
+    }
+    else{
+      this.AuthService.signup(this.signupForm).then(
+        (data:any)=>{
+          // this.openSnackBar(data['message']);
+          this.router.navigate(['/login/']);
+        },
+        err=>{
+          this.openSnackBar(err.error.msg);
+        }
+        
+      )
+    }
+    
  }
 }

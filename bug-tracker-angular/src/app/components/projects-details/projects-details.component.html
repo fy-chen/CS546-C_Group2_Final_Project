@@ -1,1 +1,94 @@
-<p>projects-details works!</p>
+<div class="sidenav">
+  <a href="/dashboard">dashboard</a>
+  <a href="/projects">Project</a>
+  <a href="/ticket">Ticket</a>
+</div>
+
+
+
+<div class="main">
+  <table>
+    <tr>
+      <td style="font-size: 60px; padding-top: 30px; font-weight: 500">This is {{projectName}} Project
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td style="font-size: 30px; padding-top: 30px; font-weight: 100; padding-left: 20px;">
+        Description: {{description}}
+      </td>
+    </tr>
+  </table>
+
+
+
+
+  {{userName}}
+
+  {{role}}
+
+  <br>
+
+  <br>
+
+  {{ticketUser}}
+
+  {{ticketTitle}}
+
+  {{ticketDescription}}
+
+  {{ticketStatus}}
+
+  {{ticketErrorType}}
+
+</div>
+
+<div class="main">
+  <table style="margin-top: 50px">
+    <thead style="font-size: 14px">
+      <tr mat-header-cell>
+        <th style="padding: 30px;">Username</th>
+        <th style="padding: 30px;">Role</th>
+        <!-- <td style="border: none"></td>
+        <td style="border: none"></td> -->
+      </tr>
+      <tr>
+        <td colspan="2">
+          <hr style="width: 400px" />
+        </td>
+      </tr>
+    </thead>
+    <tbody style="font-size: 14px">
+      <tr mat-header-cell *ngFor="let item of arrOfUser">
+        <td style="padding: 30px;">{{ item.username}}</td>
+        <td style="padding: 30px;">{{ item.role }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="main">
+  <table style="margin-top: 50px">
+    <thead style="font-size: 14px">
+      <tr mat-header-cell>
+        <th style="padding: 30px;">Title</th>
+        <th style="padding: 30px;">Description</th>
+        <th style="padding: 30px;">Status</th>
+        <th style="padding: 30px;">Error Type</th>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <hr style="width: 800px" />
+        </td>
+      </tr>
+    </thead>
+    <tbody style="font-size: 14px">
+      <tr mat-header-cell *ngFor="let item of arrOfTicket">
+        <td style="padding: 30px;">{{ item.title}}</td>
+        <td style="padding: 30px;">{{ item.description }}</td>
+        <td style="padding: 30px;">{{ item.status }}</td>
+        <td style="padding: 30px;">{{ item.errortype }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

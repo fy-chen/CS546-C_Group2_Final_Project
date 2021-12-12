@@ -14,7 +14,7 @@
 </div>
 
 <div class="main">
-  <h2>Sign Up</h2>
+  <h1>Sign Up</h1>
   <form [formGroup]= "signupForm" (ngSubmit)="signup()" id="signup-form">
     
       <label for="username">
@@ -22,10 +22,15 @@
       </label>
       <input type="text" id="username" name="username"  autocomplete="username" formControlName="username">
       <br><br>
-      <label for="username">
+      <label for="password">
         Password:
       </label>
       <input type="password" id="password"  autocomplete="new-password" formControlName="password" >
+      <br><br>
+      <label>
+        Confirm Password:
+      </label>
+      <input type="password" id="cf-password"  name="cf-password" formControlName="confirmPassword">
       <br><br>
       <label>
         Role:

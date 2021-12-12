@@ -13,12 +13,35 @@
   <a href="/projects/create" mat-raised-button color="primary">Create a Project</a>&nbsp;
   <input type='text' id='serchProj' [(ngModel)]='searchTerm'>
   <button (click)='search()' type="checkbox">Search!</button>
+
+
   <div *ngIf="isShown">
-    <ul>
-      <li *ngFor="let project of searchRes ;let i=index;">
-        {{project}}
-      </li>
-    </ul>
+    <table style="margin-top: 50px">
+      <thead style="font-size: 14px">
+        <tr mat-header-cell>
+          <td>Project Name</td>
+          <td>Description</td>
+          <td style="border: none"></td>
+          <td style="border: none"></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <hr style="width: 1000px" />
+          </td>
+        </tr>
+      </thead>
+      <tbody style="font-size: 14px">
+        <tr mat-header-cell *ngFor="let item of arrOfSearch">
+          <td>{{ item.projectname }}</td>
+          <td>{{ item.description }}</td>
+          <td><a href="/projects/update/{{item._id}}"><button mat-raised-button color="primary">Edit
+                Project</button></a>
+          </td>
+          <td><button mat-raised-button color="primary" (click)="detailsClick(item._id)">Details</button></td>
+          <td><button mat-raised-button color="warn" (click)="removeProject(item._id)">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 
@@ -44,7 +67,8 @@
           <td><a href="/projects/update/{{item._id}}"><button mat-raised-button color="primary">Edit
                 Project</button></a>
           </td>
-          <td><a href="/projects/{{item._id}}"><button mat-raised-button color="primary">Details</button></a></td>
+          <td><button mat-raised-button color="primary" (click)="detailsClick(item._id)">Details</button></td>
+          <td><button mat-raised-button color="warn" (click)="removeProject(item._id)">Delete</button></td>
         </tr>
       </tbody>
     </table>

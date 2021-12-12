@@ -40,8 +40,8 @@ export class ProjectService {
     return this.http.get(`${this.apiUrl}/projects/` + id);
   }
 
-  getProjectByUser(id: string) {
-    return this.http.get(`${this.apiUrl}/projects/users` + id);
+  getProjectByUser() {
+    return this.http.get(`${this.apiUrl}/projects/users`);
   }
 
   createProject(form: FormGroup) {

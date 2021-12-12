@@ -36,10 +36,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
+router.get("/users/", async (req, res) => {
+  //reuqires login
+  if (!req.session.user) {
+    res.status(401).json({ message: "Unauthorized request" });
+    return;
+  }
   try {
     const createdProjects = await projectsData.getProjectsByUser(
-      xss(req.params.id)
+      xss(req.session.id)
     );
     // res.render("pages/projectPage", { createdProjects: createdProjects });
     return res.json(createdProjects);

@@ -1,26 +1,41 @@
-<div class="sidenav">
-  <a href="/dashboard">dashboard</a>
-  <a href="/projects">Project</a>
-  <a href="/home">Home</a>
-  <a href="/admin-home">Admin</a>
-</div>
-<div class="main">
-  <h1> Welcome {{admin.username}}</h1>
-  <a href="/changePassword">Change Password</a>
-  <br>
-  <br>
+<!-- <h1>Welcome {{currentUser.username}}, you have admin priviledges</h1> -->
+<a href="/changePassword">Change Password</a>
 <div id="bar">
   <button mat-raised-button color="primary"(click)="logout()" >Logout</button>
+  <!-- <button mat-raised-button color="primary" >All Projects</button> -->
+  <!-- <button mat-raised-button color="primary" >All Developers</button> -->
 
   <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>
 
+  <!-- <button mat-raised-button color="primary" (click)="showTicketsButtonClicked()">All tickets</button> -->
+
+  <!-- <button mat-raised-button color="primary" (click)="showAssigntoUserButtonClicked()">Assign tickets</button> -->
+
+  <!-- <button mat-raised-button color="primary" (click)="showRemoveUserButtonClicked()">Remove tickets</button> -->
+
+  <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Sorted Tickets</button>
+  <mat-menu #menu="matMenu">
+    <button (click)="showTicketsSortedByPriority()" mat-menu-item>Priority</button>
+    <button (click)="showTicketsSortedbyProject()" mat-menu-item>Project</button>
+    <button (click)="showTicketsSortedbyErrorType()" mat-menu-item>Error Type</button>
+  </mat-menu> -->
+
+
+  <!-- <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
+    <mat-form-field class="input-width" appearance="fill" >
+      <mat-label>Search</mat-label>
+      <input matInput formControlName="phrase" id="phrase">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
+
   <div *ngIf="showNoInput" class="alert">
     Search Phrase not provided
-  </div>
+  </div> -->
 
-  <div *ngIf="showEmptySpace" class="alert">
+  <!-- <div *ngIf="showEmptySpace" class="alert">
     Search Phrase cannot be empty spaces
-  </div>
+  </div> -->
 
   <ol id="pending-tickets">
       <li>pending tickets</li>
@@ -182,20 +197,34 @@
   </mat-tab>
   <mat-tab label="All tickets">
 
-    <h2>Search for Tickets</h2>
+    <mat-form-field class="input-width" appearance="fill" >
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyTicketFilter($event.target)" placeholder="Search from titles, descriptions, errorTypes">
+    </mat-form-field>
+
+    <!-- <h2>Search for Tickets</h2>
     <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
       <mat-form-field class="input-width" appearance="fill" >
         <mat-label>Search</mat-label>
         <input matInput formControlName="phrase" id="phrase">
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Submit</button>
-    </form>
+    </form> -->
+
+    <!-- <div *ngIf="showNoInput" class="alert">
+      Search Phrase not provided
+    </div>
+  
+    <div *ngIf="showEmptySpace" class="alert">
+      Search Phrase cannot be empty spaces
+    </div> -->
 
     <h2 class="table_head">Opening Tickets</h2>
     <table mat-table [dataSource]="ticketsOpeningDataSource" id="ticket_table">
+
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Title">
@@ -249,7 +278,7 @@
     <table mat-table [dataSource]="ticketsReadytoCloseDataSource" id="ticket_table">
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Title">
@@ -304,7 +333,7 @@
     <table mat-table [dataSource]="ticketsClosedDataSource" id="ticket_table">
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Title">
@@ -354,7 +383,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <div *ngIf="showNotFound" class="alert">
+    <!-- <div *ngIf="showNotFound" class="alert">
       NoTicketsFound
     </div>
     <div id="search_results" *ngIf = "showSearchresult">
@@ -411,7 +440,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-      </div>
+      </div> -->
 
   </mat-tab>
   <mat-tab label="Assign Tickets">
@@ -443,7 +472,7 @@
       </mat-form-field>
 
       <br><br>
-      
+
       <mat-checkbox (change)="assignAdmin($event.checked)">Assign Myself</mat-checkbox>
 
       <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
@@ -461,7 +490,7 @@
 
   </form>
   </mat-tab>
-  <mat-tab label="Remove Tickets">
+  <mat-tab label="Unassign Tickets">
     <form id="removeTicket-form" [formGroup]= "removeTicketForm" (ngSubmit)="removeTicket()">
       <mat-form-field appearance="fill" class="input-width" class="tickets">
           <mat-label>Tickets</mat-label>
@@ -884,8 +913,3 @@
 
   </mat-tab>
 </mat-tab-group> 
-
-
-
-</div>
-
