@@ -15,6 +15,11 @@ export interface DialogData {
   _id: string;
 }
 
+export interface dev {
+  _id: string;
+  username: string;
+}
+
 
 @Component({
   selector: 'app-developer-home',
@@ -27,6 +32,8 @@ export class DeveloperHomeComponent implements OnInit {
 
   public ticketsCreatedDataSource = new MatTableDataSource<TicketTable>();
   public ticketsAssignedDataSource = new MatTableDataSource<TicketTable>();
+
+  dev: dev = {} as dev;
 
   tickets: any;
 
@@ -77,6 +84,15 @@ export class DeveloperHomeComponent implements OnInit {
     
     this.getTicketFromUser();
 
+    this.getDev();
+
+  }
+
+  getDev() {
+    this.userService.getDev().subscribe((data: any) => {
+      this.dev.username = data.username;
+      this.dev._id = data._id;
+    });
   }
 
   openDialog(id: string) {
