@@ -21,7 +21,7 @@
   </mat-menu> -->
 
 
-  <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
+  <!-- <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
     <mat-form-field class="input-width" appearance="fill" >
       <mat-label>Search</mat-label>
       <input matInput formControlName="phrase" id="phrase">
@@ -31,11 +31,11 @@
 
   <div *ngIf="showNoInput" class="alert">
     Search Phrase not provided
-  </div>
+  </div> -->
 
-  <div *ngIf="showEmptySpace" class="alert">
+  <!-- <div *ngIf="showEmptySpace" class="alert">
     Search Phrase cannot be empty spaces
-  </div>
+  </div> -->
 
   <ol id="pending-tickets">
       <li>pending tickets</li>
@@ -197,28 +197,34 @@
   </mat-tab>
   <mat-tab label="All tickets">
 
-    <h2>Search for Tickets</h2>
+    <mat-form-field class="input-width" appearance="fill" >
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyTicketFilter($event.target)" placeholder="Search from titles, descriptions, errorTypes">
+    </mat-form-field>
+
+    <!-- <h2>Search for Tickets</h2>
     <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
       <mat-form-field class="input-width" appearance="fill" >
         <mat-label>Search</mat-label>
         <input matInput formControlName="phrase" id="phrase">
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Submit</button>
-    </form>
+    </form> -->
 
-    <div *ngIf="showNoInput" class="alert">
+    <!-- <div *ngIf="showNoInput" class="alert">
       Search Phrase not provided
     </div>
   
     <div *ngIf="showEmptySpace" class="alert">
       Search Phrase cannot be empty spaces
-    </div>
+    </div> -->
 
     <h2 class="table_head">Opening Tickets</h2>
     <table mat-table [dataSource]="ticketsOpeningDataSource" id="ticket_table">
+
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Title">
@@ -272,7 +278,7 @@
     <table mat-table [dataSource]="ticketsReadytoCloseDataSource" id="ticket_table">
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Title">
@@ -327,7 +333,7 @@
     <table mat-table [dataSource]="ticketsClosedDataSource" id="ticket_table">
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.No}} </td>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Title">
@@ -377,7 +383,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <div *ngIf="showNotFound" class="alert">
+    <!-- <div *ngIf="showNotFound" class="alert">
       NoTicketsFound
     </div>
     <div id="search_results" *ngIf = "showSearchresult">
@@ -434,7 +440,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-      </div>
+      </div> -->
 
   </mat-tab>
   <mat-tab label="Assign Tickets">
