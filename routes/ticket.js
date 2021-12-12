@@ -110,6 +110,12 @@ router.post('/search', async(req, res) => {
         if(ticketlist.length === 0){
             res.json({notFound: true});
         }else{
+            for(let x of ticketlist){
+                let user = await userData.get(x.creator);
+                x.creator = user.username;
+                let project = await projectsData.get(x.project);
+                x.project = project.projectName;
+            }
             res.json({tickets: ticketlist});
         }
     }catch(e) {
@@ -256,6 +262,10 @@ router.put('/edit/:id', async(req, res) => {
         res.status(500).json({ NotAuthorized: true });
     }
 
+    if(req.session.user.userRole !== 1 && modifiedData.status === 'closed'){
+        res.status(500).json({ NotAuthorized: true });
+    }
+
     let errors = {}
 
     try{
@@ -397,6 +407,10 @@ router.get('/readyToClose/:id', async(req, res) => {
 });
 
 router.get('/close/:id', async(req, res) => {
+
+    if(req.session.user.userRole !== 1){
+        res.status(500).json({ NotAuthorized: true });
+    }
 
     try{
         ticketsData.toObjectId(xss(req.params.id));

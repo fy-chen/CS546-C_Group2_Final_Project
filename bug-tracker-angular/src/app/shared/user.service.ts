@@ -50,4 +50,8 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/user/unassignProject`, form.value);
   }
 
+  getAdmin(){
+    return this.http.get(`${this.apiUrl}/user/admin/get`);
+  }
+
 }

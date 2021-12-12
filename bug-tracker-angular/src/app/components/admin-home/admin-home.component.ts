@@ -13,6 +13,12 @@ export interface DialogData {
   _id: string;
   type: string;
 }
+
+export interface admin {
+  _id: string;
+  username: string;
+}
+
 import { AuthService } from 'src/app/shared/auth.service';
 import { Router } from '@angular/router';
 
@@ -25,19 +31,13 @@ import { Router } from '@angular/router';
 export class AdminHomeComponent implements OnInit {
   projects: any;
 
-  showTickets: any;
-
-  showAssigntoUser: any;
-
-  showRemoveTicket: any;
-
-  showAssignedUsers: any;
-
   showTicketsbyPriority: any;
 
   showTicketsbyProject: any;
 
   showTicketsbyErrorType: any;
+
+  showAssignedUsers: any;
 
   showSearchresult: any;
 
@@ -48,6 +48,8 @@ export class AdminHomeComponent implements OnInit {
   showNotFound: any;
 
   showAssignedProjects= false;
+
+  showAssignDevs = true;
 
   assignedProjects:any;
 
@@ -68,6 +70,8 @@ export class AdminHomeComponent implements OnInit {
   assignedusers: any;
 
   closeResult: any;
+
+  admin: admin = {} as admin;
 
   ticketstable: TicketTable[] = [] as TicketTable[];
 
@@ -94,6 +98,10 @@ export class AdminHomeComponent implements OnInit {
     projectId: new FormControl('', Validators.required),
     userId: new FormControl('', Validators.required),
   });
+
+  selectSortTypeForm = this.formbuilder.group({
+    type: new FormControl('', Validators.required)
+  })
 
 
   public displayedColumns = ['No', 'Title', 'Description', 'Creator', 'Status', 'Project', 'errorType', 'createdTime', 'deleteButton'];
@@ -133,8 +141,27 @@ export class AdminHomeComponent implements OnInit {
     this.getAllTickets();
 
     this.getAllUsers();
+
+    this.getAdmin();
     
     
+  }
+
+  getAdmin() {
+    this.userService.getAdmin().subscribe((data: any) => {
+      this.admin.username = data.username;
+      this.admin._id = data._id;
+    });
+  }
+
+  assignAdmin(checked: boolean) {
+    if(checked) {
+      this.assignTicketForm.patchValue({userId: this.admin._id});
+      this.showAssignDevs = false;
+    }if(!checked) {
+      this.assignTicketForm.patchValue({userId: ''});
+      this.showAssignDevs = true;
+    }
   }
 
 
@@ -215,66 +242,6 @@ export class AdminHomeComponent implements OnInit {
 
   openSnackBar(value: string) {
     this._snackBar.open(value, 'Done');
-  }
-
-  showTicketsButtonClicked() {
-    this.showAssigntoUser = false;
-    this.showTickets = true;
-    this.showRemoveTicket = false;
-    this.showTicketsbyPriority = false;
-    this.showTicketsbyProject = false;
-    this.showTicketsbyErrorType = false;
-    this.getAllTickets();
-  }
-
-  showAssigntoUserButtonClicked() {
-    this.haveBeenAssigned = false;
-    this.showAssigntoUser = true;
-    this.showTickets = false;
-    this.showRemoveTicket = false;
-    this.showTicketsbyPriority = false;
-    this.showTicketsbyProject = false;
-    this.showTicketsbyErrorType = false;
-  }
-
-  showRemoveUserButtonClicked() {
-    this.noAssignedUsers = false;
-    this.showAssigntoUser = false;
-    this.showTickets = false;
-    this.showRemoveTicket = true;
-    this.showTicketsbyPriority = false;
-    this.showTicketsbyProject = false;
-    this.showTicketsbyErrorType = false;
-  }
-
-  showTicketsSortedByPriority() {
-    this.showAssigntoUser = false;
-    this.showTickets = false;
-    this.showRemoveTicket = false;
-    this.showTicketsbyPriority = true;
-    this.showTicketsbyProject = false;
-    this.showTicketsbyErrorType = false;
-    this.getTicketsByPriority();
-  }
-
-  showTicketsSortedbyProject() {
-    this.showAssigntoUser = false;
-    this.showTickets = false;
-    this.showRemoveTicket = false;
-    this.showTicketsbyPriority = false;
-    this.showTicketsbyProject = true;
-    this.showTicketsbyErrorType = false;
-    this.getTicketsByProject();
-  }
-
-  showTicketsSortedbyErrorType() {
-    this.showAssigntoUser = false;
-    this.showTickets = false;
-    this.showRemoveTicket = false;
-    this.showTicketsbyPriority = false;
-    this.showTicketsbyProject = false;
-    this.showTicketsbyErrorType = true;
-    this.getTicketsByErrorType();
   }
 
   openDialog(id: string,type: string) {
@@ -612,18 +579,32 @@ export class AdminHomeComponent implements OnInit {
     });
   }
 
+  showSortedTickets() {
+    let type = this.selectSortTypeForm.value.type;
+    if(type === 'priority') {
+      this.getTicketsByPriority();
+      this.showTicketsbyPriority = true;
+      this.showTicketsbyProject = false;
+      this.showTicketsbyErrorType = false;
+    }else if(type === 'errorType') {
+      this.getTicketsByErrorType();
+      this.showTicketsbyErrorType = true;
+      this.showTicketsbyProject = false;
+      this.showTicketsbyPriority = false;
+    }else if(type === 'project') {
+      this.getTicketsByProject();
+      this.showTicketsbyPriority = false;
+      this.showTicketsbyProject = true;
+      this.showTicketsbyErrorType = false;
+    }
+}
+
+
   searchTicket() {
 
     this.showNoInput = false;
     this.showEmptySpace = false;
     this.showNotFound = false;
-
-    this.showAssigntoUser = false;
-    this.showTickets = false;
-    this.showRemoveTicket = false;
-    this.showTicketsbyPriority = false;
-    this.showTicketsbyProject = false;
-    this.showTicketsbyErrorType = false;
 
     if(!this.searchTicketForm.value.phrase){
       this.showNoInput = true;
@@ -640,6 +621,7 @@ export class AdminHomeComponent implements OnInit {
 
       if(searchResult.notFound === true){
         this.showNotFound = true;
+        this.showSearchresult = false;
         return;
       }else if(searchResult.tickets){
 
