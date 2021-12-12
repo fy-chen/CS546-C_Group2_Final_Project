@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-projects-home',
@@ -10,13 +13,21 @@ export class ProjectsHomeComponent implements OnInit {
   projects: any;
   searchRes: any;
   searchTerm: any;
+  id: any;
+  apiUrl = environment.apiUrl;
 
-  constructor(private projectService: ProjectService) {}
+  constructor(
+    private projectService: ProjectService,
+    private router: Router,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.projectService.getAllProjects().subscribe((data) => {
       this.projects = data;
       console.log(this.projects);
+      this.id = this.projects._id;
+      console.log(this.id);
 
       for (let i = 0; i < this.projects.length; i++) {
         this.projects.No = i + 1;
@@ -41,5 +52,14 @@ export class ProjectsHomeComponent implements OnInit {
         }
       }
     });
+  }
+
+  detailsClick(id: String) {
+    this.router.navigate(['/projects/details'], { state: { id: id } });
+  }
+
+  removeProject(id: string) {
+    console.log(id);
+    return this.http.delete(`${this.apiUrl}/projects/` + id);
   }
 }

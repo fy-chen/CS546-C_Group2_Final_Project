@@ -67,7 +67,7 @@ export class CreateProjectComponent implements OnInit {
         console.log(data);
         this.project = data;
         this.id = this.project._id;
-        // this.router.navigate([`/projects/${this.id}`]);
+        this.router.navigate(['/projects']);
       }
     );
   }

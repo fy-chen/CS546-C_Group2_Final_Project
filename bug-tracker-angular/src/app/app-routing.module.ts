@@ -16,7 +16,7 @@ import { AdminHomeComponent } from './components/admin-home/admin-home.component
 import { ProjectsDetailsComponent } from './components/projects-details/projects-details.component';
 import { AccessGuard } from './shared/access.guard';
 import { EditProjectComponent } from './components/edit-project/edit-project.component';
-import { ChangePasswordComponent} from './components/change-password/change-password.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
@@ -47,7 +47,7 @@ const routes: Routes = [
     canActivate: [AccessGuard],
   },
   {
-    path: 'projects/:id',
+    path: 'projects/details',
     component: ProjectsDetailsComponent,
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
@@ -81,9 +81,9 @@ const routes: Routes = [
   {
     path: 'changePassword',
     component: ChangePasswordComponent,
-    data: { requiresLogin: true},
+    data: { requiresLogin: true },
     canActivate: [AccessGuard],
-  }
+  },
 ];
 
 @NgModule({

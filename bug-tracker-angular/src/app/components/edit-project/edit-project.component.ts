@@ -46,6 +46,7 @@ export class EditProjectComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.projectService.getProject(this.project).subscribe((data) => {
       this.project = data;
+      console.log(this.project.projectName);
       // this.editProjectForm.setValue(
       //   {
       //     projectName: this.project.projectName,

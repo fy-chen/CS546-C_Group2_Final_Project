@@ -41,7 +41,8 @@
           <td><a href="/projects/update/{{item._id}}"><button mat-raised-button color="primary">Edit
                 Project</button></a>
           </td>
-          <td><a href="/projects/{{item._id}}"><button mat-raised-button color="primary">Details</button></a></td>
+          <td><button mat-raised-button color="primary" (click)="detailsClick(item._id)">Details</button></td>
+          <td><button mat-raised-button color="warn" (click)="removeProject(item._id)">Delete</button></td>
         </tr>
       </tbody>
     </table>

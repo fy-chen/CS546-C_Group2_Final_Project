@@ -44,7 +44,7 @@ async function create(projectName, description, role) {
     let newProject = {
       projectName: projectName,
       description: description,
-      user: [],
+      users: [],
       tickets: [],
     };
 
