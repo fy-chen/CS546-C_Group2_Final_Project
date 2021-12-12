@@ -5,6 +5,7 @@ import { ProjectService } from 'src/app/shared/project.service';
 import { TicketService } from 'src/app/shared/ticket.service';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-edit-ticket',
@@ -17,6 +18,7 @@ export class EditTicketComponent implements OnInit {
   ticket: any;
   project: any;
   projectlist: any;
+  admin:any;
 
   editTicketForm = this.formbuilder.group({
     title: new FormControl('', Validators.compose([
@@ -33,9 +35,24 @@ export class EditTicketComponent implements OnInit {
     status: new FormControl('', Validators.required)
   });
 
-  constructor(private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService, private location: Location, private _snackBar: MatSnackBar) { }
+  constructor(private AuthService :AuthService, private formbuilder: FormBuilder, private ticketService: TicketService, private router: Router, private route: ActivatedRoute, private projectService: ProjectService, private location: Location, private _snackBar: MatSnackBar) { }
 
+  async checkRole(){
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
+  
   ngOnInit(): void {
+    
+    this.checkRole(); 
 
     this.id = this.route.snapshot.paramMap.get('id');
 

@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void{
-    console.log("pressed")
     this.AuthService.login(this.loginForm).then(
       (data:any)=>{
         if (data['login'] === true ){

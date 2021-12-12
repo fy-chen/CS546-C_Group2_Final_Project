@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/shared/auth.service';
 })
 export class ChangePasswordComponent implements OnInit {
 
-
+  admin:any;
   
 
 
@@ -44,7 +44,19 @@ export class ChangePasswordComponent implements OnInit {
     this._snackBar.open(value, 'Done');
   }
 
+  async checkRole(){
 
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+      console.log(this.admin)
+    }
+  }
   changePassword():void{
 
     //this.changePasswordFrom.value.username = this.changePasswordFrom.value.username.trim();
@@ -70,6 +82,7 @@ export class ChangePasswordComponent implements OnInit {
     );
   }
   ngOnInit(): void {
-  }
+    this.checkRole(); 
+   }
 
 }

@@ -11,6 +11,7 @@ import {Comment} from '../comment';
 import { CommentService } from '../../shared/comment.service';
 import { UserService } from 'src/app/shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-ticket',
@@ -21,6 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class TicketComponent implements OnInit {
 
+  admin:any;
   
   id: any;
   
@@ -43,7 +45,7 @@ export class TicketComponent implements OnInit {
   public dataSource = new MatTableDataSource<History>();
 
 
-  constructor(private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService, private location: Location, private _snackBar: MatSnackBar) { }
+  constructor( private AuthService :AuthService,private CommentService: CommentService,private _ticketService: TicketService, private route: ActivatedRoute, private datepipe: DatePipe, private projectService: ProjectService, private userService: UserService, private location: Location, private _snackBar: MatSnackBar) { }
 
   getAllComment(): void{
     this.CommentService.getAllComment(this.id)
@@ -81,8 +83,23 @@ export class TicketComponent implements OnInit {
     this.location.back();
   }
 
+  async checkRole(){
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
+
   ngOnInit(): void {
 
+    this.checkRole(); 
+    
     this.showTicketInfo = true;
 
     this.id = this.route.snapshot.paramMap.get('id');

@@ -39,11 +39,16 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  { path: 'projects', component: ProjectsHomeComponent },
+  {
+    path: 'projects',
+    component: ProjectsHomeComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
   {
     path: 'projects/create',
     component: CreateProjectComponent,
-    data: { requiresLogin: true },
+    data: { requiresLogin: true, requiresAdmin: true },
     canActivate: [AccessGuard],
   },
   {
@@ -55,7 +60,7 @@ const routes: Routes = [
   {
     path: 'projects/update/:id',
     component: EditProjectComponent,
-    data: { requiresLogin: true },
+    data: { requiresLogin: true, requiresAdmin: true },
     canActivate: [AccessGuard],
   },
   {

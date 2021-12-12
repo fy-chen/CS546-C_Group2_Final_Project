@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ProjectService } from 'src/app/shared/project.service';
+import { AuthService } from 'src/app/shared/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -13,6 +14,8 @@ export class ProjectsHomeComponent implements OnInit {
   projects: any;
   searchRes: any;
   searchTerm: any;
+  admin:any;
+
   id: any;
   projectName: any;
   description: any;
@@ -21,12 +24,25 @@ export class ProjectsHomeComponent implements OnInit {
   apiUrl = environment.apiUrl;
 
   constructor(
+    private AuthService :AuthService,
     private projectService: ProjectService,
     private router: Router,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient) {}
+    async checkRole(){
 
+
+      const loggedIn: any = await this.AuthService.isLoggedIn();
+      if (loggedIn.loggedIn === true){
+        if (loggedIn.role  == 1){
+           this.admin = true;
+        }
+        else{
+          this.admin = false;
+        }
+      }
+    }
   ngOnInit(): void {
+    this.checkRole(); 
     this.arrOfSearch = [];
     this.objOfSearch = {};
     this.projectService.getAllProjects().subscribe((data) => {
