@@ -15,12 +15,16 @@ h1 {
 }
 
 .alert {
-    color: red;
+    color: rgb(192, 13, 13);
 }
 
 .mat-raised-button:disabled{
     background-color: black;
     color: white;
 }
+
+.mat-form-field.mat-form-field-invalid mat-label {
+    color: rgb(192, 13, 13)!important;
+  }
 
   

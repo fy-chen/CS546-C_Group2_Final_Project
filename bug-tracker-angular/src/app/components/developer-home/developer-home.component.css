@@ -2,6 +2,10 @@
     width: 100%;
 }
 
+.mat-form-field.mat-form-field-invalid mat-label {
+  color: rgb(192, 13, 13)!important;
+}
+
 body {
     font-family: "Lato", sans-serif;
   }
@@ -41,8 +45,14 @@ body {
     .sidenav a {font-size: 18px;}
   }
 .alert {
-    color: red;
+    color: rgb(192, 13, 13);
 }
+
+.mat-raised-button.mat-red {
+  background-color: rgb(192, 13, 13);
+  color: white;
+}
+
 #ticket_table {
     width: 100%;
     margin-bottom: 30px;

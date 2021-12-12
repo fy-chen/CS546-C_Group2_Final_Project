@@ -2,6 +2,7 @@
 <div class="main">
 <h1>Welcome, {{dev.username}}</h1>
 <button mat-raised-button color="primary" [routerLink]="['/changePassword']">Change Password</button>
+<button (click)="logout()">Logout</button>
 <div>
 <!-- <label>Search:</label>
 <input type='text' id='serchProj' [(ngModel)]='searchTerm'>
@@ -91,7 +92,7 @@
               <td mat-cell *matCellDef="let element"> 
                   <button *ngIf="isopen(element.status)" mat-raised-button color="primary" (click)="ApplytoClose(element._id)">Apply to Close</button>
                   <a mat-raised-button color="primary" href="/ticket/edit/{{element._id}}" id="gotoEdit">Edit</a>
-                  <button mat-raised-button color="warn" (click)="openDialog(element._id)">Delete</button> 
+                  <button mat-raised-button color="red" (click)="openDialog(element._id)">Delete</button> 
               </td>
           </ng-container>
     
