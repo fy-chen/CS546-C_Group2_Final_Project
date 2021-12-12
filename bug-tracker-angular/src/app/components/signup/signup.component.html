@@ -33,7 +33,7 @@
           Confirm Password:
         </label>
         <input style="margin-left: 11px; padding-right: 30px;" type="password" id="cf-password" name="cf-password"
-          formControlName="confirmPassword">
+          (keyup)="checkPass()" formControlName="confirmPassword">
         <br><br><br>
 
         <label style="margin-right: 3vw;">
@@ -89,11 +89,10 @@
           <div *ngIf="signupForm.controls['confirmPassword'].errors?.['required']">
             Please confirm password
           </div>
-          <div *ngIf="signupForm.controls['confirmPassword'].errors?.['sameAsPass']">
-            Passwords dont match
-          </div>
         </div>
-        [3:23 PM]
+        <div *ngIf="both()" class="alert">
+          Passwords dont match
+        </div>
 
         <div id="errorU" class="error" hidden>I'm an error</div>
         <br><br>

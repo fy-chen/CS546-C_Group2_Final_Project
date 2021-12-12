@@ -22,6 +22,10 @@ let isAppropriateString = (string, name) => {
 router.get("/", async (req, res) => {
   // res.render("pages/projectPage");
   try {
+    if (!req.session.user || req.session.user.userRole !== 1) {
+      res.status(401).json({ message: "Unauthorized request" });
+      return;
+    }
     const projectList = await projectsData.getAll();
     return res.status(200).json(projectList);
   } catch (e) {
@@ -31,6 +35,10 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    if (!req.session.user || req.session.user.userRole !== 1) {
+      res.status(401).json({ message: "Unauthorized request" });
+      return;
+    }
     projectsData.toObjectId(xss(req.params.id));
   } catch (e) {
     res.status(500).json({ error: e });
@@ -47,7 +55,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/users/", async (req, res) => {
   //reuqires login
-  if (!req.session.user) {
+  if (!xss(req.session.user)) {
     res.status(401).json({ message: "Unauthorized request" });
     return;
   }
@@ -69,17 +77,17 @@ router.get("/users/", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-  let projectData = req.body;
+  let projectData = xss(req.body);
   // projectData.role = 1;
-  projectData.role = req.session.user.userRole;
+  projectData.role = xss(req.session.user.userRole);
 
   try {
-    isAppropriateString(projectData.projectName, "Project Name");
-    isAppropriateString(projectData.description, "description");
+    isAppropriateString(xss(projectData.projectName), "Project Name");
+    isAppropriateString(xss(projectData.description), "description");
 
     if (
-      projectsData.projectName.length < 4 ||
-      projectsData.projectName.length > 30
+      xss(xss(projectsData.projectName.length)) < 4 ||
+      xss(xss(projectsData.projectName.length)) > 30
     ) {
       throw new Error(
         `Provided project name should be at least 4 characters long and at most 30 characters long`
@@ -87,16 +95,16 @@ router.post("/create", async (req, res) => {
     }
 
     if (
-      projectsData.description.length < 4 ||
-      projectsData.description.length > 100
+      xss(projectsData.description.length) < 4 ||
+      xss(projectsData.description.length) > 100
     ) {
       `Provided description should be at least 4 characters long and at most 100 characters long`;
     }
 
     const newProject = await projectsData.create(
-      projectData.projectName,
-      projectData.description,
-      projectData.role
+      xss(projectData.projectName),
+      xss(projectData.description),
+      xss(projectData.role)
     );
     // res.render("pages/projectPage", { project: project });
     return res.json(newProject);
@@ -107,7 +115,7 @@ router.post("/create", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   try {
-    if (!req.body.phrase || req.body.phrase.trim().length === 0) {
+    if (!xss(req.body.phrase) || xss(req.body.phrase.trim().length) === 0) {
       throw new Error(`Provided search phrase is empty`);
     }
   } catch (e) {
@@ -129,7 +137,7 @@ router.post("/search", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  if (!req.session.user) {
+  if (!xss(req.session.user)) {
     res.status(401).json({ err: "Unauthorized!" });
     return;
   }
@@ -149,8 +157,8 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/update/:id", async (req, res) => {
-  let projectData = req.body;
-  projectData.role = req.session.user.userRole;
+  let projectData = xss(req.body);
+  projectData.role = xss(req.session.user.userRole);
 
   try {
     projectsData.toObjectId(xss(req.params.id));
@@ -165,10 +173,10 @@ router.put("/update/:id", async (req, res) => {
   }
   try {
     const updatedProject = await projectsData.update(
-      req.params.id,
-      projectData.projectName,
-      projectData.description,
-      projectData.role
+      xss(req.params.id),
+      xss(projectData.projectName),
+      xss(projectData.description),
+      xss(projectData.role)
     );
     return res.status(200).json(updatedProject);
   } catch (e) {

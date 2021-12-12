@@ -1,5 +1,13 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,6 +22,9 @@ export class SignupComponent implements OnInit {
 
   adminPassShow = false;
 
+  passMatch = false;
+
+  touched = false;
   signupForm = this.formBuilder.group({
     username: new FormControl(
       '',
@@ -93,4 +104,43 @@ export class SignupComponent implements OnInit {
       );
     }
   }
+
+  checkPass() {
+    this.touched = true;
+    if (
+      this.signupForm.value.confirmPassword === this.signupForm.value.password
+    ) {
+      this.passMatch = true;
+    } else {
+      this.passMatch = false;
+    }
+    console.log('touched: ' + this.touched);
+    console.log('passMatch: ' + this.passMatch);
+  }
+
+  both() {
+    console.log('result: ' + !(this.touched && !this.passMatch));
+    return this.touched && !this.passMatch;
+  }
+  // public confirmPass(control: FormControl) {
+  //   if (control.value) {
+  //     const notSame = control.value.password != control.value.confirmPassword;
+  //     const isValid = !notSame;
+  //     return isValid ? null : { notSame: false };
+  //   } else {
+  //     return { notSame: true };
+  //   }
+  // }
+  // checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => {
+  //   let pass = this.signupForm.get('password').value;
+  //   let confirmPass: = group.get('confirmPassword').value
+  //   return pass === confirmPass ? null : { notSame: true }
+  // }
+  // checkPasswords(): ValidatorFn {
+  //   return (group: FormGroup): ValidationErrors | null => {
+  //     let password = this.form.value['password'];
+  //     let confirmPassword = this.form.value['confirmPassword']
+  //     return password === confirmPassword ? null : { notSame: true };
+  //   };
+  // }
 }
