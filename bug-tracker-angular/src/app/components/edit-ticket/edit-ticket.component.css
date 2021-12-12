@@ -18,4 +18,9 @@ h1 {
     color: red;
 }
 
+.mat-raised-button:disabled{
+    background-color: black;
+    color: white;
+}
+
   

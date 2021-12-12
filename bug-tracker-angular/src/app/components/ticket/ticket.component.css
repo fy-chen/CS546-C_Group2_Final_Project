@@ -6,6 +6,11 @@ p{
     font-size: 28px;
 }
 
+.mat-raised-button:disabled{
+    background-color: black;
+    color: white;
+}
+
 #head {
     margin-bottom: 20px;
     margin-left: 180px;

@@ -47,3 +47,8 @@ body {
     width: 100%;
     margin-bottom: 30px;
 }
+
+.mat-raised-button:disabled{
+  background-color: black;
+  color: white;
+}
