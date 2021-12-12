@@ -1,61 +1,114 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
 
-</style>
-</head>
-<body>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
 
-<div class="sidenav">
-  <a href="/login">Login</a>
+    </style>
+  </head>
 
-</div>
+  <body>
 
-<div class="main">
-  <h1>Sign Up</h1>
-  <form [formGroup]= "signupForm" (ngSubmit)="signup()" id="signup-form">
-    
-      <label for="username">
-        Username:
-      </label>
-      <input type="text" id="username" name="username"  autocomplete="username" formControlName="username">
-      <br><br>
-      <label for="password">
-        Password:
-      </label>
-      <input type="password" id="password"  autocomplete="new-password" formControlName="password" >
-      <br><br>
-      <label>
-        Confirm Password:
-      </label>
-      <input type="password" id="cf-password"  name="cf-password" formControlName="confirmPassword">
-      <br><br>
-      <label>
-        Role:
-      </label>
-      <br><br>
-      <mat-radio-group aria-label="Select an option" (change)="radioChange($event.value)">
-        <mat-radio-button value="1" selected>Developer</mat-radio-button>
-        <br><br><br>
-        <mat-radio-button value="2">Admin</mat-radio-button>
-      </mat-radio-group>
+    <div class="main" id="sign-up-form">
+      <h1 style="justify-items: center; padding-top: 3vw;padding-right: 2vw; color:white; padding-bottom: 2vw;">Sign Up
+      </h1>
+      <form [formGroup]="signupForm" (ngSubmit)="signup()" id="signup-form">
 
-      <br><br>
-      <div *ngIf="adminPassShow">
-        <label>
-          Admin Access Password:
+        <label for="username">
+          Username:
         </label>
-        <input type="password"  name="adminPassword" formControlName="adminAccess" autocomplete="current-password">
+        <input style="margin-left: 61px; padding-right: 30px;" type="text" id="username" name="username"
+          autocomplete="username" formControlName="username">
         <br><br>
-      </div>
-     
-    <div id="errorU" class="error" hidden>I'm an error</div>
-    <br><br>
-    <button type="submit">Signup</button>
-  </form>
-</div>
-   
-</body>
-</html> 
+
+        <label for="password">
+          Password:
+        </label>
+        <input style="margin-left: 63px; padding-right: 30px;" type="password" id="password" autocomplete="new-password"
+          formControlName="password">
+        <br><br>
+
+        <label>
+          Confirm Password:
+        </label>
+        <input style="margin-left: 11px; padding-right: 30px;" type="password" id="cf-password" name="cf-password"
+          formControlName="confirmPassword">
+        <br><br><br>
+
+        <label style="margin-right: 3vw;">
+          Role:
+        </label>&nbsp;
+        <mat-radio-group aria-label="Select an option" (change)="radioChange($event.value)">
+          <mat-radio-button value="1" selected>Developer</mat-radio-button>
+          &nbsp;&nbsp;
+          <mat-radio-button value="2">Admin</mat-radio-button>
+        </mat-radio-group>
+
+        <br><br>
+        <div *ngIf="adminPassShow">
+          <label>
+            Admin Access Password:
+          </label>
+          <input type="password" name="adminPassword" formControlName="adminAccess" autocomplete="current-password">
+          <br><br>
+        </div>
+
+        <div
+          *ngIf="signupForm.controls['username'].invalid && (signupForm.controls['username'].dirty || signupForm.controls['username'].touched)"
+          class="alert">
+          <div *ngIf="signupForm.controls['username'].errors?.['required']" style="align-self: center;">
+            Please enter username
+          </div>
+          <div *ngIf="signupForm.controls['username'].errors?.['minlength']">
+            Username must be at least 4 characters long
+          </div>
+          <!-- <div *ngIf="signupForm.controls['username'].errors?.['maxlength']">
+            Username cannot be more than 10 characters long
+          </div> -->
+          <div *ngIf="signupForm.controls['username'].errors?.['anywhitespace']">Username can not contain anyspaces
+          </div>
+        </div>
+        <div
+          *ngIf="signupForm.controls['password'].invalid && (signupForm.controls['password'].dirty || signupForm.controls['password'].touched)"
+          class="alert">
+          <div *ngIf="signupForm.controls['password'].errors?.['required']">
+            Please enter password
+          </div>
+          <div *ngIf="signupForm.controls['password'].errors?.['minlength']">
+            Password must be at least 6 characters long
+          </div>
+          <!-- <div *ngIf="signupForm.controls['password'].errors?.['maxlength']">
+            Password cannot be more than 10 characters long
+          </div> -->
+          <!-- <div *ngIf="signupForm.controls['password'].errors?.['anywhitespace']">Password can not contain just spaces</div> -->
+        </div>
+        <div
+          *ngIf="signupForm.controls['confirmPassword'].invalid && (signupForm.controls['confirmPassword'].dirty || signupForm.controls['confirmPassword'].touched)"
+          class="alert">
+          <div *ngIf="signupForm.controls['confirmPassword'].errors?.['required']">
+            Please confirm password
+          </div>
+          <div *ngIf="signupForm.controls['confirmPassword'].errors?.['sameAsPass']">
+            Passwords dont match
+          </div>
+        </div>
+        [3:23 PM]
+
+        <div id="errorU" class="error" hidden>I'm an error</div>
+        <br><br>
+        <button type="submit" style="margin-left: 150px; margin-bottom: 20px;">Signup</button>
+
+
+        <div class="sidenav" style="margin-left: 160px; padding-bottom: 50px;">
+          <p style="margin-left: -65px;">Not A User Yet? Sign up here</p>
+          <a href="/login">Login</a>
+
+
+        </div>
+      </form>
+    </div>
+
+  </body>
+
+</html>
