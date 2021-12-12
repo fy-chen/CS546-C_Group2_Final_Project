@@ -5,14 +5,6 @@
 
   <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>
 
-  <div *ngIf="showNoInput" class="alert">
-    Search Phrase not provided
-  </div>
-
-  <div *ngIf="showEmptySpace" class="alert">
-    Search Phrase cannot be empty spaces
-  </div>
-
   <ol id="pending-tickets">
       <li>pending tickets</li>
   </ol>
@@ -181,6 +173,14 @@
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Submit</button>
     </form>
+
+    <div *ngIf="showNoInput" class="alert">
+      Search Phrase not provided
+    </div>
+  
+    <div *ngIf="showEmptySpace" class="alert">
+      Search Phrase cannot be empty spaces
+    </div>
 
     <h2 class="table_head">Opening Tickets</h2>
     <table mat-table [dataSource]="ticketsOpeningDataSource" id="ticket_table">
@@ -434,7 +434,7 @@
       </mat-form-field>
 
       <br><br>
-      
+
       <mat-checkbox (change)="assignAdmin($event.checked)">Assign Myself</mat-checkbox>
 
       <div *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)" class="alert">
@@ -452,7 +452,7 @@
 
   </form>
   </mat-tab>
-  <mat-tab label="Remove Tickets">
+  <mat-tab label="Unassign Tickets">
     <form id="removeTicket-form" [formGroup]= "removeTicketForm" (ngSubmit)="removeTicket()">
       <mat-form-field appearance="fill" class="input-width" class="tickets">
           <mat-label>Tickets</mat-label>

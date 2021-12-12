@@ -210,9 +210,23 @@ router.post('/create', async(req, res) => {
 
 router.delete('/:id', async (req, res) => {
 
-    //Has to be admin
+    if(!req.session.user) {
+        res.status(401).json({"err": "Unauthorized!"});
+    }
+
     if (req.session.user.userRole != 1){
-        res.status(401).json({"err": "Unauthorized!"})
+        let user = await userData.get(req.session.user.userId);
+        console.log(user);
+        let isCreator = false;
+        for(let x of user.createdTickets){
+            if(x._id = req.params.id){
+                isCreator = true;
+                break;
+            }
+        }
+        if(isCreator === false){
+            res.status(401).json({"err": "Unauthorized!"});
+        }
     }
 
     try {

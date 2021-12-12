@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { DeveloperHomeComponent } from './components/developer-home/developer-home.component';
+import { DeveloperHomeComponent, ConfirmDeleteDialogDev } from './components/developer-home/developer-home.component';
 import { AdminHomeComponent, ConfirmDeleteDialog } from './components/admin-home/admin-home.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
@@ -46,7 +46,8 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     ConfirmDeleteDialog,
     ProjectsDetailsComponent,
     EditProjectComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ConfirmDeleteDialogDev
 
   ],
   imports: [
