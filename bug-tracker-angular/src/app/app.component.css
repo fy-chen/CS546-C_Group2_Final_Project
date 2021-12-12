@@ -21,3 +21,29 @@
 .sidenav a:hover {
     color: #f1f1f1;
 }
+
+/* .middle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #f1f1f1;
+}
+
+.title{
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #f1f1f1;
+}
+
+
+
+body{
+    background-position: center;
+    background-image: url(./landingPic.jpg)
+} */
+

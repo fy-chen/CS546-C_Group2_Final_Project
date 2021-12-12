@@ -17,7 +17,11 @@ import { ProjectsDetailsComponent } from './components/projects-details/projects
 import { AccessGuard } from './shared/access.guard';
 import { EditProjectComponent } from './components/edit-project/edit-project.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import {NotFoundPageComponent} from './components/not-found-page/not-found-page.component';
 const routes: Routes = [
+
+  {path: '', component: LandingPageComponent},
   { path: 'login', component: LoginComponent },
   {
     path: 'home',
@@ -89,6 +93,9 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
+  
+  {path:'404',component:NotFoundPageComponent},
+  {path: '**', redirectTo: '/404'},
 ];
 
 @NgModule({
