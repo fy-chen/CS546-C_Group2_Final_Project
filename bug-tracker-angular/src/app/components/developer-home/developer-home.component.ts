@@ -10,7 +10,8 @@ import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
-
+import { ChartType, ChartOptions, ChartConfiguration, ChartData } from 'chart.js';
+import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 export interface DialogData {
   _id: string;
 }
@@ -34,6 +35,13 @@ export class DeveloperHomeComponent implements OnInit {
   public ticketsAssignedDataSource = new MatTableDataSource<TicketTable>();
 
   dev: dev = {} as dev;
+  ticket : any;
+
+  p1: any;
+
+  p2: any;
+
+  p3: any;
 
   tickets: any;
 
@@ -54,6 +62,25 @@ export class DeveloperHomeComponent implements OnInit {
 
   public ticketsSearchResultDataSource = new MatTableDataSource<TicketTable>();
 
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      yAxes: [{
+          ticks: {
+              beginAtZero: true
+          }
+      }]
+  },
+  legend:{
+
+  }
+  };
+  public barChartLabels: Label[] = ["1(low importance)", "2(medium importance)", "3(most important)"]
+  public barChartData : SingleDataSet = [0,0,0]
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = false;
+  public barChartPlugins = [];
+   
 
   constructor(
     private projectService : ProjectService,
@@ -64,12 +91,17 @@ export class DeveloperHomeComponent implements OnInit {
     private ticketService: TicketService,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private formbuilder: FormBuilder
-  ) {}
+    private formbuilder: FormBuilder,
+    
+  ) {
+    monkeyPatchChartJsTooltip();
+    monkeyPatchChartJsLegend();
+  }
 
   createproject = '';
   searchTerm = '';
   searchRes: Array<any> =[];
+  projects :any;
   ngOnInit(): void {
     // this.AuthService.isLoggedIn().then(
     //   (data:any)=>{
@@ -86,12 +118,45 @@ export class DeveloperHomeComponent implements OnInit {
 
     this.getDev();
 
+    this.ticketService.getTicketsByPriority()
+    .subscribe((data) => {
+      this.ticket = data;
+
+      this.p1 = this.ticket.ticketsPriority1.length;
+      this.p2 = this.ticket.ticketsPriority2.length;
+      this.p3 = this.ticket.ticketsPriority3.length;
+
+      this.barChartData = [this.p1,this.p2,this.p3]
+    });
+  this.getProjectForUser();
   }
 
   getDev() {
     this.userService.getDev().subscribe((data: any) => {
+      console.log(data);  
       this.dev.username = data.username;
       this.dev._id = data._id;
+    });
+  }
+  
+  detailsClick(id: String) {
+    this.router.navigate(['/projects/details'], { state: { id: id } });
+  }
+ 
+
+
+
+  getProjectForUser(){
+    this.projectService.getAllProjects().subscribe((data) => {
+      this.projects = data;
+      console.log(this.projects);
+
+      for (let i = 0; i < this.projects.length; i++) {
+        this.projects.No = i + 1;
+        this.projects._id = this.projects[i]._id;
+        this.projects.projectName = this.projects[i].projectName;
+        this.projects.description = this.projects[i].description;
+      }
     });
   }
 
