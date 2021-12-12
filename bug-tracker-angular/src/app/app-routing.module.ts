@@ -21,15 +21,18 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import {NotFoundPageComponent} from './components/not-found-page/not-found-page.component';
 const routes: Routes = [
 
-  {path: '', component: LandingPageComponent},
-  { path: 'login', component: LoginComponent },
+  {path: '', component: LandingPageComponent, data: { requiresLogout: true },
+  canActivate: [AccessGuard]},
+  { path: 'login', component: LoginComponent ,data: { requiresLogout: true },
+  canActivate: [AccessGuard]},
   {
     path: 'home',
     component: DeveloperHomeComponent,
-    data: { requiresLogin: true },
+    data: { requiresDeveloper: true},
     canActivate: [AccessGuard],
   },
-  { path: 'signup', component: SignupComponent },
+  { path: 'signup', component: SignupComponent,data: { requiresLogout: true },
+  canActivate: [AccessGuard] },
   {
     path: 'ticket/create',
     component: CreateTicketComponent,
@@ -67,12 +70,12 @@ const routes: Routes = [
     data: { requiresLogin: true, requiresAdmin: true },
     canActivate: [AccessGuard],
   },
-  {
-    path: 'dashboard',
-    component: DashboardHomeComponent,
-    data: { requiresLogin: true },
-    canActivate: [AccessGuard],
-  },
+  // {
+  //   path: 'dashboard',
+  //   component: DashboardHomeComponent,
+  //   data: { requiresLogin: true },
+  //   canActivate: [AccessGuard],
+  // },
   {
     path: 'ticket/edit/:id',
     component: EditTicketComponent,

@@ -49,6 +49,7 @@ router.post('/assignTicket', async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+    //requires admin
     if (!req.session.user || req.session.user.userRole !== 1) {
         res.status(401).json({ message: "Unauthorized request" });
         return;
@@ -75,6 +76,7 @@ router.get("/admin/get", async (req, res) => {
 });
 
 router.get("/dev/get", async (req, res) => {
+    //requires user
     if (!req.session.user) {
         res.status(401).json({ message: "Unauthorized request" });
         return;
@@ -88,6 +90,7 @@ router.get("/dev/get", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+    //requires user
     if (!req.session.user || req.session.user.userRole !== 1) {
         res.status(401).json({ message: "Unauthorized request" });
         return;
@@ -101,7 +104,11 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/tickets/get", async (req, res) => {
-
+    //requires user
+    if (!req.session.user) {
+        res.status(401).json({ message: "Unauthorized request" });
+        return;
+    }
 
     try {
       const user = await users.get(req.session.user.userId);
@@ -157,7 +164,7 @@ router.post('/removeTicket', async (req, res) => {
     }
 
     try {
-        const userUpdated = await users.removeTicket(req.body);
+        const userUpdated = await users.removeTicket(xss(req.body));
         await tickets.removeAssignedUser(xss(req.body.ticketId), xss(req.body.userId));
         let history = { Property: 'RemoveAssignedUser', Value: userUpdated.username };
         await tickets.addHistory(xss(req.body.ticketId), history);
@@ -176,6 +183,12 @@ router.post('/removeTicket', async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
+    //requires admin
+    if (!req.session.user || req.session.user.userRole !== 1) {
+        res.status(401).json({ message: "Unauthorized request" });
+        return;
+    }
+    
     let userId = req.params.id;
     console.log(userId);
     if (!req.session.user || req.session.user.userRole !== 1) {

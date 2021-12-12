@@ -44,7 +44,7 @@
 </div>
 <mat-tab-group mat-align-tabs="start">
   <mat-tab label="All Users">
-    <mat-form-field class="input-width" appearance="fill" >
+    <mat-form-field class="search-width" appearance="fill" >
       <mat-label>Search</mat-label>
       <input matInput (keyup)="applyFilter($event.target)" placeholder="Search from users, tickets, projects">
     </mat-form-field>
@@ -197,7 +197,7 @@
   </mat-tab>
   <mat-tab label="All tickets">
 
-    <mat-form-field class="input-width" appearance="fill" >
+    <mat-form-field class="search-width" appearance="fill" >
       <mat-label>Search</mat-label>
       <input matInput (keyup)="applyTicketFilter($event.target)" placeholder="Search from titles, descriptions, errorTypes">
     </mat-form-field>
