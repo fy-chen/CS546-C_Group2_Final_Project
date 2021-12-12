@@ -220,12 +220,12 @@ router.put("/changePassword", async (req, res) => {
     const userData = req.body;
     // console.log('userData');
     // console.log(userData);
-    if (!req.session.user) {
+    if (!xss(req.session.user)) {
         res.status(401).json({ message: "Unauthorized request" });
         return;
     }
 
-    if (!mongodb.ObjectId.isValid(req.session.user.userId)) {
+    if (!mongodb.ObjectId.isValid(xss(req.session.user.userId))) {
         res.status(400).json({ message: "userId is not a valid ObjectId" });
         return;
     }
@@ -247,7 +247,7 @@ router.put("/changePassword", async (req, res) => {
     let user;
     let username;
     try {
-        user = await users.get(req.session.user.userId);
+        user = await users.get(xss(req.session.user.userId));
     } catch (error) {
         res.status(404).json({error:'user not found'});
         return;  
