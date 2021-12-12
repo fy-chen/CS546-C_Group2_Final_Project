@@ -267,6 +267,9 @@ export class AdminHomeComponent implements OnInit {
         location.reload();
         this.openSnackBar("Ticket has been succesfully deleted");
       }
+    },
+    (error) =>{
+      this.openSnackBar(error.error.err);
     });
   }
 
@@ -656,6 +659,9 @@ export class AdminHomeComponent implements OnInit {
           this.openSnackBar("Close ticket succeed");
           this.getAllTickets();
         }
+      },
+      (error) =>{
+        this.openSnackBar(error.error.err);
       }
     );
   }
