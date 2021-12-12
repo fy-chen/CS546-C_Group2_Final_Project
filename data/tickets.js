@@ -1,7 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const tickets = mongoCollections.tickets;
 let { ObjectId } = require('mongodb');
-let projectsData = require('./projects');
+const projects = mongoCollections.projects;
 let userData = require('./users');
 
 
@@ -28,7 +28,7 @@ async function areAppropriateParameters (title, description, priority, project, 
 
     isAppropriateString(title, 'title');
     isAppropriateString(description, 'description');
-    toObjectId(project, 'project');
+    project = toObjectId(project, 'project');
     isAppropriateString(errorType, 'errorType');
 
     if(title.length < 4 || title.length > 30) throw 'Provided title should be at least 4 characters long and at most 30 characters long';
@@ -41,8 +41,12 @@ async function areAppropriateParameters (title, description, priority, project, 
     else if(Number(priority) !== 1 && Number(priority) !== 2 && Number(priority) !== 3) throw 'Provided priority not valid';
 
     //should check if project exist
-    await projectsData.get(project);
-
+    projectsCollection = await projects();
+    
+    let thisproject = await projectsCollection.findOne({ _id: project });
+    if (thisproject === null) {
+        throw new Error(`No Project found for id ${id}`);
+    }
 }
 
 let isValidcreatedTime = (createdTime) => {
@@ -309,9 +313,12 @@ async function getTicketsByProject(projectId) {
     
     let parsedId = toObjectId(projectId, 'projectId');
 
-    let project = await projectsData.get(project);
-
-    if(project === null) throw "project no exist";
+    projectsCollection = await projects();
+    
+    let project = await projectsCollection.findOne({ _id: project });
+    if (project === null) {
+        throw new Error(`No Project found for id ${id}`);
+    }
 
     TicketsCollection = await tickets();
   

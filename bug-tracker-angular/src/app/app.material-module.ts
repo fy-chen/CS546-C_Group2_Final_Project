@@ -11,6 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox'
 
 @NgModule({
 // since we're exporting these modules, add them to export
@@ -26,7 +27,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatListModule,
         MatSnackBarModule,
         MatMenuModule,
-        MatDialogModule
+        MatDialogModule,
+        MatCheckboxModule
        
     ]
 })

@@ -3,6 +3,7 @@ const router = express.Router();
 const users = require('../data').users;
 const tickets = require('../data').tickets;
 const projects = require('../data').projects;
+let { ObjectId } = require('mongodb');
 // const mongoCollections = require('../config/mongoCollections');
 // const userCollection = mongoCollections.users;
 var mongodb = require('mongodb');
@@ -28,6 +29,13 @@ router.post('/assignTicket', async (req, res) => {
     }
     try {
         const userUpdated = await users.addTicket(req.body);
+        const user = await users.get(userId);
+        console.log(user);
+        const ticket = await tickets.get(ticketId);
+        console.log(ticket);
+        if(user.assignedProjects.indexOf(ObjectId(ticket.project)) === -1){
+            await users.addProject(userId, ticket.project);
+        }
         await tickets.addAssignedUser(ticketId, userId);
         let history = { Property: 'AssigntoUser', Value: userUpdated.username };
         await tickets.addHistory(ticketId, history);
@@ -48,6 +56,19 @@ router.get("/", async (req, res) => {
     try {
         const userList = await users.getAll();
         res.status(200).json(userList);
+    } catch (e) {
+        res.status(404).json({ error: e });
+    }
+});
+
+router.get("/admin/get", async (req, res) => {
+    if (!req.session.user || req.session.user.userRole !== 1) {
+        res.status(401).json({ message: "Unauthorized request" });
+        return;
+    }
+    try {
+        const admin = await users.get(req.session.user.userId);
+        res.status(200).json(admin);
     } catch (e) {
         res.status(404).json({ error: e });
     }
