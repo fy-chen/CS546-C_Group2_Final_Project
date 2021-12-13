@@ -57,12 +57,12 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  // {
-  //   path: 'projects',
-  //   component: ProjectsHomeComponent,
-  //   data: { requiresLogin: true },
-  //   canActivate: [AccessGuard],
-  // },
+  {
+    path: 'projects',
+    component: ProjectsHomeComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
   {
     path: 'projects/create',
     component: CreateProjectComponent,
