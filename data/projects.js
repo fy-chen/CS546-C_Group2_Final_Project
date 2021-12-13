@@ -265,7 +265,7 @@ async function removeUser(projectId, userId) {
   const user = await usersData.get(userId);
   const updatedInfo = await projectsCollection.updateOne(
     { _id: parsedProjectId },
-    { $pull: { users: { _id: userId } } }
+    { $pull: { users: userId } }
   );
 
   if (updatedInfo.modifiedCount === 0) {

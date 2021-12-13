@@ -286,8 +286,8 @@ export class AdminHomeComponent implements OnInit {
       let result: deletResult = data;
       console.log(result);
       if(result.deleted === true){
-        location.reload();
         this.openSnackBar("Ticket has been succesfully deleted");
+        this.ngOnInit();
       }
     },
     (error) =>{
@@ -299,7 +299,8 @@ export class AdminHomeComponent implements OnInit {
     this.userService.deleteUser(id).subscribe((data:any) =>{
       console.log(data) 
       if(data.deleted === true){
-        this.openSnackBar("Ticket has been succesfully deleted");
+        this.openSnackBar("User has been succesfully deleted");
+        this.ngOnInit();
       }
       else{
         this.openSnackBar("Something went wrong");
@@ -327,7 +328,8 @@ export class AdminHomeComponent implements OnInit {
   assignProject(){
     // let projectId = this.assignProjectForm.value.projectId;
     this.userService.assignProjecttoUser(this.assignProjectForm).subscribe((data)=>{
-      this.openSnackBar("User successfully assgined")
+      this.openSnackBar("User successfully assgined");
+      this.ngOnInit();
     })
   }
 
@@ -357,6 +359,7 @@ export class AdminHomeComponent implements OnInit {
       // if(result.deleted === true){
         //  
         this.openSnackBar("Project has been succesfully deleted");
+        this.ngOnInit();
       // }
     });
   }
@@ -464,6 +467,7 @@ export class AdminHomeComponent implements OnInit {
         console.log(result);
         this.haveBeenAssigned = false;
         this.openSnackBar("User Assigned Succeed");
+        this.ngOnInit();
       });
     });
   }
@@ -475,6 +479,7 @@ export class AdminHomeComponent implements OnInit {
       this.noAssignedUsers = false;
       this.openSnackBar("Remove Succeed");
       this.getAssignedUsers();
+      this.ngOnInit();
     });
   }
 
@@ -729,6 +734,7 @@ export class AdminHomeComponent implements OnInit {
         if(this.closeResult.updated === true){
           this.openSnackBar("Close ticket succeed");
           this.getAllTickets();
+          this.ngOnInit();
         }
       },
       (error) =>{
