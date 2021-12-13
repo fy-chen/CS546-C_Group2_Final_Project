@@ -209,12 +209,12 @@ router.post('/create', async(req, res) => {
 
 router.delete('/:id', async (req, res) => {
 
-    if(!xss(req.session.user)) {
+    if(!req.session.user) {
         res.status(401).json({"err": "Unauthorized!"});
         return;
     }
 
-    if (xss(req.session.user.userRole) !== 1){
+    if (req.session.user.userRole !== 1){
         let user = await userData.get(xss(req.session.user.userId));
         console.log(user);
         let isCreator = false;
@@ -230,7 +230,7 @@ router.delete('/:id', async (req, res) => {
         }
     }
 
-    if(xss(req.session.user.userRole) === 1) {
+    if(req.session.user.userRole === 1) {
         let ticket = await ticketsData.get(xss(req.params.id));
         let creator = await userData.get(ticket.creator);
         if(ticket.creator !== xss(req.session.user.userId) && creator.role === 1){
@@ -277,18 +277,18 @@ router.put('/edit/:id', async(req, res) => {
     let isAssignedUser = false;
 
     for(let x of ticket.assignedUsers){
-        if(x._id === xss(req.session.user.userId)){
+        if(x._id === req.session.user.userId){
             isAssignedUser = true;
             break;
         }
     }
 
-    if(ticket.creator !== xss(req.session.user.userId) && xss(req.session.user.userRole) !== 1 && !isAssignedUser) {
+    if(ticket.creator !== req.session.user.userId && req.session.user.userRole !== 1 && !isAssignedUser) {
         res.status(500).json({ NotAuthorized: true });
         return;
     }
 
-    if(xss(req.session.user.userRole) !== 1 && modifiedData.status === 'closed'){
+    if(req.session.user.userRole !== 1 && modifiedData.status === 'closed'){
         res.status(500).json({ NotAuthorized: true });
         return;
     }
@@ -436,12 +436,12 @@ router.get('/readyToClose/:id', async(req, res) => {
 
 router.get('/close/:id', async(req, res) => {
 
-    if(xss(req.session.user.userRole) !== 1){
+    if(req.session.user.userRole !== 1){
         res.status(500).json({ NotAuthorized: true });
         return;
     }
 
-    if(xss(req.session.user.userRole) === 1) {
+    if(req.session.user.userRole === 1) {
         let ticket = await ticketsData.get(xss(req.params.id));
         let creator = await userData.get(ticket.creator);
         if(ticket.creator !== xss(req.session.user.userId) && creator.role === 1){
@@ -488,7 +488,7 @@ router.get('/check/edit/:id', async(req, res) => {
             }
         }
         
-        if(ticket.creator !== xss(req.session.user.userId) && xss(req.session.user.userRole) !== 1 && !isAssignedUser) {
+        if(ticket.creator !== req.session.user.userId && req.session.user.userRole !== 1 && !isAssignedUser) {
             res.status(200).json({ NotAuthorized: true });
         }else{
             res.status(200).json({ Authorized: true });
