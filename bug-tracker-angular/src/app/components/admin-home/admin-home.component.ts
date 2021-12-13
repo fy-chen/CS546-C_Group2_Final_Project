@@ -1,12 +1,26 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TicketService } from 'src/app/shared/ticket.service';
-import { MatTableDataSource } from "@angular/material/table";
+import { MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
-import { TicketTable, searchResult, deletResult,user, Project, Ticket} from '../tickets';
-import { FormBuilder, FormControl, Validators }  from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
+import {
+  TicketTable,
+  searchResult,
+  deletResult,
+  user,
+  Project,
+  Ticket,
+} from '../tickets';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { ProjectService } from 'src/app/shared/project.service';
 
 export interface DialogData {
@@ -25,9 +39,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
-  styleUrls: ['./admin-home.component.css']
+  styleUrls: ['./admin-home.component.css'],
 })
-
 export class AdminHomeComponent implements OnInit {
   currentUser: any;
 
@@ -49,27 +62,27 @@ export class AdminHomeComponent implements OnInit {
 
   showNotFound: any;
 
-  showAssignedProjects= false;
+  showAssignedProjects = false;
 
   showAssignDevs = true;
 
   showAssignDevstoProject = true;
 
-  assignedProjects:any;
+  assignedProjects: any;
 
   haveBeenAssigned: any;
 
-  noAssignedProjects:any;
+  noAssignedProjects: any;
 
   noAssignedUsers: any;
-  
+
   tickets: any;
 
   ticketsByPriority: any;
 
   userSearch: any;
 
-  users:any;
+  users: any;
 
   assignedusers: any;
 
@@ -77,12 +90,14 @@ export class AdminHomeComponent implements OnInit {
 
   admin: admin = {} as admin;
 
+  isShown: boolean = false;
+
   ticketstable: TicketTable[] = [] as TicketTable[];
 
   assignTicketForm = this.formbuilder.group({
     ticketId: new FormControl('', Validators.required),
     userId: new FormControl('', Validators.required),
-  })
+  });
 
   removeTicketForm = this.formbuilder.group({
     ticketId: new FormControl('', Validators.required),
@@ -90,7 +105,7 @@ export class AdminHomeComponent implements OnInit {
   });
 
   searchTicketForm = this.formbuilder.group({
-    phrase: ''
+    phrase: '',
   });
 
   assignProjectForm = this.formbuilder.group({
@@ -104,21 +119,35 @@ export class AdminHomeComponent implements OnInit {
   });
 
   selectSortTypeForm = this.formbuilder.group({
-    type: new FormControl('', Validators.required)
-  })
+    type: new FormControl('', Validators.required),
+  });
 
+  public displayedColumns = [
+    'No',
+    'Title',
+    'Description',
+    'Creator',
+    'Status',
+    'Project',
+    'errorType',
+    'createdTime',
+    'deleteButton',
+  ];
 
-  public displayedColumns = ['No', 'Title', 'Description', 'Creator', 'Status', 'Project', 'errorType', 'createdTime', 'deleteButton'];
+  public userColumns = [
+    'No',
+    'Username',
+    'Projects',
+    'Tickets',
+    'Created Tickets',
+    'deleteButton',
+  ];
 
-  public userColumns = ['No', 'Username', 'Projects', 'Tickets', 'Created Tickets', 'deleteButton'];
+  public adminUsers = new MatTableDataSource<user>();
 
-  
-  public adminUsers =new  MatTableDataSource<user>() ;
-  
-  public developerUsers =new  MatTableDataSource<user>();
-  
+  public developerUsers = new MatTableDataSource<user>();
+
   public ticketsOpeningDataSource = new MatTableDataSource<Ticket>();
-  
 
   public ticketsClosedDataSource = new MatTableDataSource<Ticket>();
 
@@ -135,11 +164,26 @@ export class AdminHomeComponent implements OnInit {
   public ticketsbyErrorTypeDataSource = new MatTableDataSource<TicketTable>();
 
   public ticketsSearchResultDataSource = new MatTableDataSource<TicketTable>();
-
-  constructor(private router: Router, public dialog: MatDialog, private userService: UserService, private _snackBar: MatSnackBar, private ticketService: TicketService, private datepipe: DatePipe, private formbuilder: FormBuilder, private authService: AuthService,private projectService: ProjectService) { }
+  arrOfSearch: any;
+  objOfSearch: any;
+  id: any;
+  apiUrl = environment.apiUrl;
+  searchRes: any;
+  searchTerm: any;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    public dialog: MatDialog,
+    private userService: UserService,
+    private _snackBar: MatSnackBar,
+    private ticketService: TicketService,
+    private datepipe: DatePipe,
+    private formbuilder: FormBuilder,
+    private authService: AuthService,
+    private projectService: ProjectService
+  ) {}
 
   ngOnInit(): void {
-    
     this.getAllProjects();
 
     this.getAllTickets();
@@ -147,9 +191,19 @@ export class AdminHomeComponent implements OnInit {
     this.getAllUsers();
 
     this.getAdmin();
-    
+
+    this.arrOfSearch = [];
+    this.objOfSearch = {};
+    this.projectService.getAllProjects().subscribe((data) => {
+      this.projects = data;
+      console.log(this.projects);
+      this.id = this.projects._id;
+      console.log(data);
+
+      for (let i = 0; i < this.projects.length; i++) {}
+    });
+
     // this.getCurrentUser();
-    
   }
 
   getAdmin() {
@@ -160,92 +214,107 @@ export class AdminHomeComponent implements OnInit {
   }
 
   assignAdmin(checked: boolean, type: string) {
-    if(checked && type === 'ticket') {
-      this.assignTicketForm.patchValue({userId: this.admin._id});
+    if (checked && type === 'ticket') {
+      this.assignTicketForm.patchValue({ userId: this.admin._id });
       this.showAssignDevs = false;
-    }if(!checked && type === 'ticket') {
-      this.assignTicketForm.patchValue({userId: ''});
+    }
+    if (!checked && type === 'ticket') {
+      this.assignTicketForm.patchValue({ userId: '' });
       this.showAssignDevs = true;
     }
 
-    if(checked && type === 'project') {
-      this.assignProjectForm.patchValue({userId: this.admin._id});
+    if (checked && type === 'project') {
+      this.assignProjectForm.patchValue({ userId: this.admin._id });
       this.showAssignDevstoProject = false;
-    }if(!checked && type === 'project') {
-      this.assignProjectForm.patchValue({userId: ''});
+    }
+    if (!checked && type === 'project') {
+      this.assignProjectForm.patchValue({ userId: '' });
       this.showAssignDevstoProject = true;
     }
   }
 
-
-  getAllUsers(){
-    this.userService.getAllUsers().subscribe((data: any) =>{
-      this.developerUsers = new MatTableDataSource( 
-        data.filter((element:any)=>{
-          if (element['role'] == 2){
-            return true
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe((data: any) => {
+      this.developerUsers = new MatTableDataSource(
+        data.filter((element: any) => {
+          if (element['role'] == 2) {
+            return true;
           }
-          return false
+          return false;
         })
       );
       console.log(this.developerUsers);
-      this.developerUsers.filterPredicate = (data: any, filterValue: string): boolean =>{
-        if(data.username.trim().toLowerCase().indexOf(filterValue) !== -1 || this.arrayTurnerProj(data.assignedProjects,filterValue) || this.arrayTurnerTick(data.assignedTickets,filterValue) || this.arrayTurnerTick(data.createdTickets,filterValue))
-        {
-          return true
+      this.developerUsers.filterPredicate = (
+        data: any,
+        filterValue: string
+      ): boolean => {
+        if (
+          data.username.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          this.arrayTurnerProj(data.assignedProjects, filterValue) ||
+          this.arrayTurnerTick(data.assignedTickets, filterValue) ||
+          this.arrayTurnerTick(data.createdTickets, filterValue)
+        ) {
+          return true;
         }
-        return false
-      }
-      this.adminUsers = new MatTableDataSource( 
-        data.filter((element:any)=>{
-          if (element['role'] == 1){
-            return true
+        return false;
+      };
+      this.adminUsers = new MatTableDataSource(
+        data.filter((element: any) => {
+          if (element['role'] == 1) {
+            return true;
           }
-          return false
+          return false;
         })
       );
-      this.adminUsers.filterPredicate = (data: any, filterValue: string): boolean =>{
-        if(data.username.trim().toLowerCase().indexOf(filterValue) !== -1 || this.arrayTurnerProj(data.assignedProjects,filterValue) || this.arrayTurnerTick(data.assignedTickets,filterValue) || this.arrayTurnerTick(data.createdTickets,filterValue))
-        {
-          return true
+      this.adminUsers.filterPredicate = (
+        data: any,
+        filterValue: string
+      ): boolean => {
+        if (
+          data.username.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          this.arrayTurnerProj(data.assignedProjects, filterValue) ||
+          this.arrayTurnerTick(data.assignedTickets, filterValue) ||
+          this.arrayTurnerTick(data.createdTickets, filterValue)
+        ) {
+          return true;
         }
-        return false
-      }
-      this.users= data.filter((element:any)=>{
-        if (element['role'] == 2){
-          return true
+        return false;
+      };
+      this.users = data.filter((element: any) => {
+        if (element['role'] == 2) {
+          return true;
         }
-        return false
-      })
+        return false;
+      });
     });
   }
 
-
-  arrayTurnerProj(array:Array<Project>,filterValue: string): boolean{
-    for (let i=0; i<=array.length-1; i++){
-      if (array[i]){
-        if (array[i].projectName.trim().toLowerCase().indexOf(filterValue) !== -1){
+  arrayTurnerProj(array: Array<Project>, filterValue: string): boolean {
+    for (let i = 0; i <= array.length - 1; i++) {
+      if (array[i]) {
+        if (
+          array[i].projectName.trim().toLowerCase().indexOf(filterValue) !== -1
+        ) {
           // console.log("true")
-          return true
+          return true;
         }
       }
     }
-    return false
+    return false;
   }
 
-  arrayTurnerTick(array:Array<Ticket>,filterValue: string): boolean{
-    for (let i=0; i<=array.length-1; i++){
-      if(array[i]){
-        if (array[i].title.trim().toLowerCase().indexOf(filterValue) !== -1){
-          return true
+  arrayTurnerTick(array: Array<Ticket>, filterValue: string): boolean {
+    for (let i = 0; i <= array.length - 1; i++) {
+      if (array[i]) {
+        if (array[i].title.trim().toLowerCase().indexOf(filterValue) !== -1) {
+          return true;
         }
-      } 
+      }
     }
-    return false
+    return false;
   }
-  
 
-  applyFilter(target:any){
+  applyFilter(target: any) {
     let value = target.value;
     value = value.trim();
     value = value.toLowerCase();
@@ -255,7 +324,7 @@ export class AdminHomeComponent implements OnInit {
 
   applyTicketFilter(target: any) {
     let value = target.value;
-    value = value.trim()
+    value = value.trim();
     value = value.toLowerCase();
     this.ticketsOpeningDataSource.filter = value;
     this.ticketsReadytoCloseDataSource.filter = value;
@@ -266,52 +335,49 @@ export class AdminHomeComponent implements OnInit {
     this._snackBar.open(value, 'Done');
   }
 
-  openDialog(id: string,type: string) {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {data: {_id: id, type: type}});
-  
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
-      if(result.type==="ticket"){
+  openDialog(id: string, type: string) {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {
+      data: { _id: id, type: type },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+      if (result.type === 'ticket') {
         this.deleteTicket(result._id);
-      }
-      else if(result.type==="user"){
-        this.deleteUser(result._id)
+      } else if (result.type === 'user') {
+        this.deleteUser(result._id);
+      } else if (result.type === 'Project') {
+        console.log('got into project again');
+        this.deleteProject(result._id);
       }
     });
   }
 
   deleteTicket(id: string) {
     console.log(id);
-    this.ticketService.removeTicket(id).subscribe((data) =>{
+    this.ticketService.removeTicket(id).subscribe((data) => {
       let result: deletResult = data;
       console.log(result);
-      if(result.deleted === true){
-        this.openSnackBar("Ticket has been succesfully deleted");
+      if (result.deleted === true) {
+        this.openSnackBar('Ticket has been succesfully deleted');
         this.ngOnInit();
       }
-    },
-    (error) =>{
-      this.openSnackBar(error.error.err);
     });
   }
 
   deleteUser(id: string) {
-    this.userService.deleteUser(id).subscribe((data:any) =>{
-      console.log(data) 
-      if(data.deleted === true){
-        this.openSnackBar("User has been succesfully deleted");
+    this.userService.deleteUser(id).subscribe((data: any) => {
+      console.log(data);
+      if (data.deleted === true) {
+        this.openSnackBar('User has been succesfully deleted');
         this.ngOnInit();
+      } else {
+        this.openSnackBar('Something went wrong');
       }
-      else{
-        this.openSnackBar("Something went wrong");
-      }
-    },
-    err=>{
-      this.openSnackBar(err.error.message);
     });
   }
 
-  getAllProjects(){
+  getAllProjects() {
     this.projectService.getAllProjects().subscribe((data) => {
       this.projects = data;
       console.log(this.projects);
@@ -321,53 +387,101 @@ export class AdminHomeComponent implements OnInit {
         this.projects.projectName = this.projects[i].projectName;
         this.projects.description = this.projects[i].description;
       }
-
     });
   }
 
-  assignProject(){
+  search() {
+    this.searchRes = [];
+    this.isShown = !this.isShown;
+    this.projectService.search(this.searchTerm).then((data: any) => {
+      // console.log(data.length);
+      for (let i = 0; i < data.length; i++) {
+        this.projects.No = i + 1;
+        this.projects._id = this.projects[i]._id;
+        this.projects.projectName = this.projects[i].projectName;
+        this.projects.description = this.projects[i].description;
+        this.objOfSearch = {
+          projectname: this.projects.projectName,
+          description: this.projects.description,
+        };
+        this.arrOfSearch.push(this.objOfSearch);
+        console.log(this.arrOfSearch);
+      }
+    });
+    this.arrOfSearch = [];
+  }
+
+  detailsClick(id: String) {
+    this.router.navigate(['/projects/details'], { state: { id: id } });
+  }
+
+  assignProject() {
     // let projectId = this.assignProjectForm.value.projectId;
-    this.userService.assignProjecttoUser(this.assignProjectForm).subscribe((data)=>{
-      this.openSnackBar("User successfully assgined");
-      this.ngOnInit();
-    })
+    this.userService
+      .assignProjecttoUser(this.assignProjectForm)
+      .subscribe((data) => {
+        this.openSnackBar('User successfully assgined');
+        this.ngOnInit();
+      });
   }
 
   getAssignedProjects() {
     // this.removeTicketForm.patchValue({userId: null});
-    console.log(this.removeProjectForm.value)
-    if(this.removeProjectForm.value.userId){
-      this.userService.getUser(this.removeProjectForm.value.userId).subscribe((data:any) => {
-      
-        this.assignedProjects = data.assignedProjects;
+    console.log(this.removeProjectForm.value);
+    if (this.removeProjectForm.value.userId) {
+      this.userService
+        .getUser(this.removeProjectForm.value.userId)
+        .subscribe((data: any) => {
+          this.assignedProjects = data.assignedProjects;
 
-        if(this.assignedProjects.length === 0){
-          this.noAssignedProjects = true;
-          this.showAssignedProjects = false;
-        }else{
-          this.showAssignedProjects = true;
-          this.noAssignedProjects = false;
-        }
-      });
+          if (this.assignedProjects.length === 0) {
+            this.noAssignedProjects = true;
+            this.showAssignedProjects = false;
+          } else {
+            this.showAssignedProjects = true;
+            this.noAssignedProjects = false;
+          }
+        });
     }
   }
 
-  removeProject(){
-    this.userService.removeProjectFromUser(this.removeProjectForm).subscribe((data:any) =>{
-      let result= data;
-      console.log(result);
-      // if(result.deleted === true){
-        //  
-        this.openSnackBar("Project has been succesfully deleted");
+  removeProject() {
+    this.userService
+      .removeProjectFromUser(this.removeProjectForm)
+      .subscribe((data: any) => {
+        let result = data;
+        console.log(result);
+        // if(result.deleted === true){
+        //
+        this.openSnackBar('Project has been succesfully deleted');
         this.getAssignedProjects();
         this.ngOnInit();
-      // }
-    });
+        // }
+      });
+  }
+
+  // deleteProject(id: string) {
+  //   console.log(id);
+  //   return this.http.delete(`${this.apiUrl}/projects/` + id);
+  // }
+  deleteProject(id: string) {
+    this.projectService.deleteProject(id).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data.success === true) {
+          this.openSnackBar('Project has been succesfully deleted');
+          this.ngOnInit();
+        } else {
+          this.openSnackBar('Something went wrong');
+        }
+      },
+      (err) => {
+        this.openSnackBar(err.error.message);
+      }
+    );
   }
   getAllTickets() {
-
     this.ticketService.getAllTickets().subscribe((data) => {
-      
       this.tickets = data;
 
       // this.ticketstable = [] as TicketTable[];
@@ -395,109 +509,141 @@ export class AdminHomeComponent implements OnInit {
       //   }else if(ticketobj.status === 'closed') {
       //     closedtickets.push(ticketobj);
       //   }
-        
+
       // }
 
-      this.ticketsOpeningDataSource = new MatTableDataSource( 
-        data.filter((element:any)=>{
-          if (element['status'] == 'open'){
-            element.createdTime = this.datepipe.transform(element.createdTime, 'yyyy-MM-dd hh:mm:ss');
-            return true
+      this.ticketsOpeningDataSource = new MatTableDataSource(
+        data.filter((element: any) => {
+          if (element['status'] == 'open') {
+            element.createdTime = this.datepipe.transform(
+              element.createdTime,
+              'yyyy-MM-dd hh:mm:ss'
+            );
+            return true;
           }
-          return false
+          return false;
         })
       );
-      this.ticketsOpeningDataSource.filterPredicate = (data: any, filterValue: string): boolean =>{
-        if(data.title.trim().toLowerCase().indexOf(filterValue) !== -1 || data.description.trim().toLowerCase().indexOf(filterValue) !== -1 || data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1)
-        {
-          return true
+      this.ticketsOpeningDataSource.filterPredicate = (
+        data: any,
+        filterValue: string
+      ): boolean => {
+        if (
+          data.title.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          data.description.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1
+        ) {
+          return true;
         }
-        return false
-      }
-      this.ticketsReadytoCloseDataSource = new MatTableDataSource( 
-        data.filter((element:any)=>{
-          if (element['status'] == 'ready_to_close'){
-            element.createdTime = this.datepipe.transform(element.createdTime, 'yyyy-MM-dd hh:mm:ss');
-            return true
+        return false;
+      };
+      this.ticketsReadytoCloseDataSource = new MatTableDataSource(
+        data.filter((element: any) => {
+          if (element['status'] == 'ready_to_close') {
+            element.createdTime = this.datepipe.transform(
+              element.createdTime,
+              'yyyy-MM-dd hh:mm:ss'
+            );
+            return true;
           }
-          return false
+          return false;
         })
       );
-      this.ticketsReadytoCloseDataSource.filterPredicate = (data: any, filterValue: string): boolean =>{
-        if(data.title.trim().toLowerCase().indexOf(filterValue) !== -1 || data.description.trim().toLowerCase().indexOf(filterValue) !== -1 || data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1)
-        {
-          return true
+      this.ticketsReadytoCloseDataSource.filterPredicate = (
+        data: any,
+        filterValue: string
+      ): boolean => {
+        if (
+          data.title.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          data.description.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1
+        ) {
+          return true;
         }
-        return false
-      }
-      this.ticketsClosedDataSource = new MatTableDataSource( 
-        data.filter((element:any)=>{
-          if (element['status'] == 'closed'){
-            element.createdTime = this.datepipe.transform(element.createdTime, 'yyyy-MM-dd hh:mm:ss');
-            return true
+        return false;
+      };
+      this.ticketsClosedDataSource = new MatTableDataSource(
+        data.filter((element: any) => {
+          if (element['status'] == 'closed') {
+            element.createdTime = this.datepipe.transform(
+              element.createdTime,
+              'yyyy-MM-dd hh:mm:ss'
+            );
+            return true;
           }
-          return false
+          return false;
         })
       );
-      this.ticketsClosedDataSource.filterPredicate = (data: any, filterValue: string): boolean =>{
-        if(data.title.trim().toLowerCase().indexOf(filterValue) !== -1 || data.description.trim().toLowerCase().indexOf(filterValue) !== -1 || data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1)
-        {
-          return true
+      this.ticketsClosedDataSource.filterPredicate = (
+        data: any,
+        filterValue: string
+      ): boolean => {
+        if (
+          data.title.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          data.description.trim().toLowerCase().indexOf(filterValue) !== -1 ||
+          data.errorType.trim().toLowerCase().indexOf(filterValue) !== -1
+        ) {
+          return true;
         }
-        return false
-      }
+        return false;
+      };
       // this.ticketsOpeningDataSource.data = this.ticketstable;
       // this.ticketsReadytoCloseDataSource.data = ticketsReadytoClose;
       // this.ticketsClosedDataSource.data = closedtickets
     });
-
   }
 
   assignTicket() {
     let ticketId = this.assignTicketForm.value.ticketId;
-    this.ticketService.getTicket(ticketId).subscribe((data) =>{
+    this.ticketService.getTicket(ticketId).subscribe((data) => {
       let ticket = data;
-      for(let user of ticket.assignedUsers){
-        if(user._id === this.assignTicketForm.value.userId){
+      for (let user of ticket.assignedUsers) {
+        if (user._id === this.assignTicketForm.value.userId) {
           this.haveBeenAssigned = true;
           return;
         }
       }
-      this.userService.assignTickettoUser(this.assignTicketForm).subscribe((data) => {
-        let result = data;
-        console.log(result);
-        this.haveBeenAssigned = false;
-        this.openSnackBar("User Assigned Succeed");
-        this.ngOnInit();
-      });
+      this.userService
+        .assignTickettoUser(this.assignTicketForm)
+        .subscribe((data) => {
+          let result = data;
+          console.log(result);
+          this.haveBeenAssigned = false;
+          this.openSnackBar('User Assigned Succeed');
+          this.ngOnInit();
+        });
     });
   }
 
   removeTicket() {
-    this.userService.removeTicketfromUser(this.removeTicketForm).subscribe((data) => {
-      let result = data;
-      console.log(result);
-      this.noAssignedUsers = false;
-      this.openSnackBar("Remove Succeed");
-      this.getAssignedUsers();
-      this.ngOnInit();
-    });
+    this.userService
+      .removeTicketfromUser(this.removeTicketForm)
+      .subscribe((data) => {
+        let result = data;
+        console.log(result);
+        this.noAssignedUsers = false;
+        this.openSnackBar('Remove Succeed');
+        this.getAssignedUsers();
+        this.ngOnInit();
+      });
   }
 
   getAssignedUsers() {
-    this.removeTicketForm.patchValue({userId: null});
-    if(this.removeTicketForm.value.ticketId){
-      this.ticketService.getTicket(this.removeTicketForm.value.ticketId).subscribe((data) => {
-        this.assignedusers = data.assignedUsers;
+    this.removeTicketForm.patchValue({ userId: null });
+    if (this.removeTicketForm.value.ticketId) {
+      this.ticketService
+        .getTicket(this.removeTicketForm.value.ticketId)
+        .subscribe((data) => {
+          this.assignedusers = data.assignedUsers;
 
-        if(this.assignedusers.length === 0){
-          this.noAssignedUsers = true;
-          this.showAssignedUsers = false;
-        }else{
-          this.showAssignedUsers = true;
-          this.noAssignedUsers = false;
-        }
-      });
+          if (this.assignedusers.length === 0) {
+            this.noAssignedUsers = true;
+            this.showAssignedUsers = false;
+          } else {
+            this.showAssignedUsers = true;
+            this.noAssignedUsers = false;
+          }
+        });
     }
   }
 
@@ -508,10 +654,8 @@ export class AdminHomeComponent implements OnInit {
       let ticketsPriority2 = this.ticketsByPriority.ticketsPriority2;
       let ticketsPriority3 = this.ticketsByPriority.ticketsPriority3;
 
-      
-
       this.ticketstable = [] as TicketTable[];
-      for(let i = 0; i < ticketsPriority1.length; i++) {
+      for (let i = 0; i < ticketsPriority1.length; i++) {
         let ticketobj: TicketTable = {} as TicketTable;
         ticketobj.No = i + 1;
         ticketobj._id = ticketsPriority1[i]._id;
@@ -521,13 +665,16 @@ export class AdminHomeComponent implements OnInit {
         ticketobj.status = ticketsPriority1[i].status;
         ticketobj.project = ticketsPriority1[i].project;
         ticketobj.errorType = ticketsPriority1[i].errorType;
-        ticketobj.createdTime = this.datepipe.transform(ticketsPriority1[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+        ticketobj.createdTime = this.datepipe.transform(
+          ticketsPriority1[i].createdTime,
+          'yyyy-MM-dd hh:mm:ss'
+        );
         this.ticketstable.push(ticketobj);
         this.Priority1DataSource.data = this.ticketstable;
       }
 
       this.ticketstable = [] as TicketTable[];
-      for(let i = 0; i < ticketsPriority2.length; i++) {
+      for (let i = 0; i < ticketsPriority2.length; i++) {
         let ticketobj: TicketTable = {} as TicketTable;
         ticketobj.No = i + 1;
         ticketobj._id = ticketsPriority2[i]._id;
@@ -537,13 +684,16 @@ export class AdminHomeComponent implements OnInit {
         ticketobj.status = ticketsPriority2[i].status;
         ticketobj.project = ticketsPriority2[i].project;
         ticketobj.errorType = ticketsPriority2[i].errorType;
-        ticketobj.createdTime = this.datepipe.transform(ticketsPriority2[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+        ticketobj.createdTime = this.datepipe.transform(
+          ticketsPriority2[i].createdTime,
+          'yyyy-MM-dd hh:mm:ss'
+        );
         this.ticketstable.push(ticketobj);
         this.Priority2DataSource.data = this.ticketstable;
       }
 
       this.ticketstable = [] as TicketTable[];
-      for(let i = 0; i < ticketsPriority3.length; i++) {
+      for (let i = 0; i < ticketsPriority3.length; i++) {
         let ticketobj: TicketTable = {} as TicketTable;
         ticketobj.No = i + 1;
         ticketobj._id = ticketsPriority3[i]._id;
@@ -553,12 +703,13 @@ export class AdminHomeComponent implements OnInit {
         ticketobj.status = ticketsPriority3[i].status;
         ticketobj.project = ticketsPriority3[i].project;
         ticketobj.errorType = ticketsPriority3[i].errorType;
-        ticketobj.createdTime = this.datepipe.transform(ticketsPriority3[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+        ticketobj.createdTime = this.datepipe.transform(
+          ticketsPriority3[i].createdTime,
+          'yyyy-MM-dd hh:mm:ss'
+        );
         this.ticketstable.push(ticketobj);
         this.Priority3DataSource.data = this.ticketstable;
       }
-
-      
     });
   }
 
@@ -572,10 +723,10 @@ export class AdminHomeComponent implements OnInit {
 
       this.ticketstable = [] as TicketTable[];
 
-      for(let i = 0; i < ticketsbyProject.length; i++) {
-        if(sortedTicket.indexOf(i) === -1){
+      for (let i = 0; i < ticketsbyProject.length; i++) {
+        if (sortedTicket.indexOf(i) === -1) {
           let ticketobj: TicketTable = {} as TicketTable;
-          ticketobj.No = no++ ;
+          ticketobj.No = no++;
           ticketobj._id = ticketsbyProject[i]._id;
           ticketobj.title = ticketsbyProject[i].title;
           ticketobj.description = ticketsbyProject[i].description;
@@ -583,11 +734,14 @@ export class AdminHomeComponent implements OnInit {
           ticketobj.status = ticketsbyProject[i].status;
           ticketobj.project = ticketsbyProject[i].project;
           ticketobj.errorType = ticketsbyProject[i].errorType;
-          ticketobj.createdTime = this.datepipe.transform(ticketsbyProject[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+          ticketobj.createdTime = this.datepipe.transform(
+            ticketsbyProject[i].createdTime,
+            'yyyy-MM-dd hh:mm:ss'
+          );
           this.ticketstable.push(ticketobj);
           sortedTicket.push(i);
-          for(let j = i + 1; j < ticketsbyProject.length; j++) {
-            if(ticketsbyProject[i].project === ticketsbyProject[j].project){
+          for (let j = i + 1; j < ticketsbyProject.length; j++) {
+            if (ticketsbyProject[i].project === ticketsbyProject[j].project) {
               let ticketobj: TicketTable = {} as TicketTable;
               ticketobj.No = no++;
               ticketobj._id = ticketsbyProject[j]._id;
@@ -597,18 +751,19 @@ export class AdminHomeComponent implements OnInit {
               ticketobj.status = ticketsbyProject[j].status;
               ticketobj.project = ticketsbyProject[j].project;
               ticketobj.errorType = ticketsbyProject[j].errorType;
-              ticketobj.createdTime = this.datepipe.transform(ticketsbyProject[j].createdTime, 'yyyy-MM-dd hh:mm:ss');
+              ticketobj.createdTime = this.datepipe.transform(
+                ticketsbyProject[j].createdTime,
+                'yyyy-MM-dd hh:mm:ss'
+              );
               this.ticketstable.push(ticketobj);
               sortedTicket.push(j);
             }
           }
         }
-        
       }
 
       this.ticketsbyProjectDataSource.data = this.ticketstable;
     });
-
   }
 
   getTicketsByErrorType() {
@@ -621,10 +776,10 @@ export class AdminHomeComponent implements OnInit {
 
       this.ticketstable = [] as TicketTable[];
 
-      for(let i = 0; i < ticketsbyProject.length; i++) {
-        if(sortedTicket.indexOf(i) === -1){
+      for (let i = 0; i < ticketsbyProject.length; i++) {
+        if (sortedTicket.indexOf(i) === -1) {
           let ticketobj: TicketTable = {} as TicketTable;
-          ticketobj.No = no++ ;
+          ticketobj.No = no++;
           ticketobj._id = ticketsbyProject[i]._id;
           ticketobj.title = ticketsbyProject[i].title;
           ticketobj.description = ticketsbyProject[i].description;
@@ -632,11 +787,16 @@ export class AdminHomeComponent implements OnInit {
           ticketobj.status = ticketsbyProject[i].status;
           ticketobj.project = ticketsbyProject[i].project;
           ticketobj.errorType = ticketsbyProject[i].errorType;
-          ticketobj.createdTime = this.datepipe.transform(ticketsbyProject[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
+          ticketobj.createdTime = this.datepipe.transform(
+            ticketsbyProject[i].createdTime,
+            'yyyy-MM-dd hh:mm:ss'
+          );
           this.ticketstable.push(ticketobj);
           sortedTicket.push(i);
-          for(let j = i + 1; j < ticketsbyProject.length; j++) {
-            if(ticketsbyProject[i].errorType === ticketsbyProject[j].errorType){
+          for (let j = i + 1; j < ticketsbyProject.length; j++) {
+            if (
+              ticketsbyProject[i].errorType === ticketsbyProject[j].errorType
+            ) {
               let ticketobj: TicketTable = {} as TicketTable;
               ticketobj.No = no++;
               ticketobj._id = ticketsbyProject[j]._id;
@@ -646,13 +806,15 @@ export class AdminHomeComponent implements OnInit {
               ticketobj.status = ticketsbyProject[j].status;
               ticketobj.project = ticketsbyProject[j].project;
               ticketobj.errorType = ticketsbyProject[j].errorType;
-              ticketobj.createdTime = this.datepipe.transform(ticketsbyProject[j].createdTime, 'yyyy-MM-dd hh:mm:ss');
+              ticketobj.createdTime = this.datepipe.transform(
+                ticketsbyProject[j].createdTime,
+                'yyyy-MM-dd hh:mm:ss'
+              );
               this.ticketstable.push(ticketobj);
               sortedTicket.push(j);
             }
           }
         }
-        
       }
 
       this.ticketsbyErrorTypeDataSource.data = this.ticketstable;
@@ -661,24 +823,23 @@ export class AdminHomeComponent implements OnInit {
 
   showSortedTickets() {
     let type = this.selectSortTypeForm.value.type;
-    if(type === 'priority') {
+    if (type === 'priority') {
       this.getTicketsByPriority();
       this.showTicketsbyPriority = true;
       this.showTicketsbyProject = false;
       this.showTicketsbyErrorType = false;
-    }else if(type === 'errorType') {
+    } else if (type === 'errorType') {
       this.getTicketsByErrorType();
       this.showTicketsbyErrorType = true;
       this.showTicketsbyProject = false;
       this.showTicketsbyPriority = false;
-    }else if(type === 'project') {
+    } else if (type === 'project') {
       this.getTicketsByProject();
       this.showTicketsbyPriority = false;
       this.showTicketsbyProject = true;
       this.showTicketsbyErrorType = false;
     }
-}
-
+  }
 
   // searchTicket() {
 
@@ -716,7 +877,7 @@ export class AdminHomeComponent implements OnInit {
   //         ticketobj.project = searchResult.tickets[i].project;
   //         ticketobj.errorType = searchResult.tickets[i].errorType;
   //         ticketobj.createdTime = this.datepipe.transform(searchResult.tickets[i].createdTime, 'yyyy-MM-dd hh:mm:ss');
-  
+
   //         this.ticketstable.push(ticketobj);
   //       }
   //     }
@@ -729,29 +890,29 @@ export class AdminHomeComponent implements OnInit {
   // }
 
   closeTicket(id: string) {
-    this.ticketService.ChangeTicketStatus("close", id).subscribe(
+    this.ticketService.ChangeTicketStatus('close', id).subscribe(
       (data) => {
         this.closeResult = data;
-        if(this.closeResult.updated === true){
-          this.openSnackBar("Close ticket succeed");
+        if (this.closeResult.updated === true) {
+          this.openSnackBar('Close ticket succeed');
           this.getAllTickets();
           this.ngOnInit();
         }
       },
-      (error) =>{
+      (error) => {
         this.openSnackBar(error.error.err);
       }
     );
   }
 
-  logout(){
+  logout() {
     this.authService.logout().then(
-      (data:any)=>{
-        if (data['loggedOut']=true){
+      (data: any) => {
+        if ((data['loggedOut'] = true)) {
           this.router.navigate(['/login']);
         }
       },
-      error=>{
+      (error) => {
         console.log(error);
       }
     );
@@ -762,7 +923,6 @@ export class AdminHomeComponent implements OnInit {
   selector: 'confirm-delete-dialog',
   templateUrl: 'dialog.html',
 })
-
 export class ConfirmDeleteDialog {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDeleteDialog>,

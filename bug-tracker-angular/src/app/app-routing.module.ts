@@ -18,21 +18,32 @@ import { AccessGuard } from './shared/access.guard';
 import { EditProjectComponent } from './components/edit-project/edit-project.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
-import {NotFoundPageComponent} from './components/not-found-page/not-found-page.component';
+import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 const routes: Routes = [
-
-  {path: '', component: LandingPageComponent, data: { requiresLogout: true },
-  canActivate: [AccessGuard]},
-  { path: 'login', component: LoginComponent ,data: { requiresLogout: true },
-  canActivate: [AccessGuard]},
+  {
+    path: '',
+    component: LandingPageComponent,
+    data: { requiresLogout: true },
+    canActivate: [AccessGuard],
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: { requiresLogout: true },
+    canActivate: [AccessGuard],
+  },
   {
     path: 'home',
     component: DeveloperHomeComponent,
-    data: { requiresDeveloper: true},
+    data: { requiresDeveloper: true },
     canActivate: [AccessGuard],
   },
-  { path: 'signup', component: SignupComponent,data: { requiresLogout: true },
-  canActivate: [AccessGuard] },
+  {
+    path: 'signup',
+    component: SignupComponent,
+    data: { requiresLogout: true },
+    canActivate: [AccessGuard],
+  },
   {
     path: 'ticket/create',
     component: CreateTicketComponent,
@@ -46,12 +57,12 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  {
-    path: 'projects',
-    component: ProjectsHomeComponent,
-    data: { requiresLogin: true },
-    canActivate: [AccessGuard],
-  },
+  // {
+  //   path: 'projects',
+  //   component: ProjectsHomeComponent,
+  //   data: { requiresLogin: true },
+  //   canActivate: [AccessGuard],
+  // },
   {
     path: 'projects/create',
     component: CreateProjectComponent,
@@ -96,9 +107,9 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  
-  {path:'404',component:NotFoundPageComponent},
-  {path: '**', redirectTo: '/404'},
+
+  { path: '404', component: NotFoundPageComponent },
+  { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({

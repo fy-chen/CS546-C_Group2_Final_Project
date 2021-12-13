@@ -52,7 +52,7 @@ export class ProjectService {
     return this.http.post(`${this.apiUrl}/projects/search/`, form.value);
   }
 
-  removeProject(id: string) {
+  deleteProject(id: string) {
     return this.http.delete(`${this.apiUrl}/projects/` + id);
   }
 

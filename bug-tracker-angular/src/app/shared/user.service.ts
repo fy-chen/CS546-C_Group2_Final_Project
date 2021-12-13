@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { FormGroup } from '@angular/forms';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class UserService {
-
   apiUrl = environment.apiUrl;
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllUsers() {
     return this.http.get(`${this.apiUrl}/user/`);
   }
 
-  deleteUser(id:string) {
-    return this.http.delete(`${this.apiUrl}/user/`+id);
+  deleteUser(id: string) {
+    return this.http.delete(`${this.apiUrl}/user/` + id);
   }
+  // deleteProject(id: string) {
+  //   return this.http.delete(`${this.apiUrl}/projects/` + id);
+  // }
 
   getUser(id: string) {
     return this.http.get(`${this.apiUrl}/user/` + id);
@@ -39,23 +40,22 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/tickets/get`);
   }
 
-  updatePassword(form: FormGroup){
+  updatePassword(form: FormGroup) {
     return this.http.put(`${this.apiUrl}/user/changePassword`, form.value);
   }
   assignProjecttoUser(form: FormGroup) {
     return this.http.post(`${this.apiUrl}/user/assignProject`, form.value);
   }
 
-  removeProjectFromUser(form: FormGroup){
+  removeProjectFromUser(form: FormGroup) {
     return this.http.post(`${this.apiUrl}/user/unassignProject`, form.value);
   }
 
-  getAdmin(){
+  getAdmin() {
     return this.http.get(`${this.apiUrl}/user/admin/get`);
   }
 
-  getDev(){
+  getDev() {
     return this.http.get(`${this.apiUrl}/user/dev/get`);
   }
-
 }
