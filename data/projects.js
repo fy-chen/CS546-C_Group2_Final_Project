@@ -95,7 +95,7 @@ async function remove(id) {
     throw new Error(`Could not remove Project of Id ${id}`);
   }
 
-  return `${project.projectName} has been deleted successfully.`;
+  return { success: true };
 }
 
 async function rename(id, newProjectName) {

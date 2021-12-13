@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/shared/auth.service';
 export class EditProjectComponent implements OnInit {
   id: any;
   project: any;
-  admin:any;
+  admin: any;
 
   editProjectForm = this.formbuilder.group({
     projectName: new FormControl(
@@ -42,25 +42,23 @@ export class EditProjectComponent implements OnInit {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private location: Location,
-    private AuthService :AuthService
+    private AuthService: AuthService
   ) {}
 
-  async checkRole(){
-
+  async checkRole() {
     const loggedIn: any = await this.AuthService.isLoggedIn();
-    if (loggedIn.loggedIn === true){
-      if (loggedIn.role  == 1){
-         this.admin = true;
-      }
-      else{
+    if (loggedIn.loggedIn === true) {
+      if (loggedIn.role == 1) {
+        this.admin = true;
+      } else {
         this.admin = false;
       }
     }
   }
   ngOnInit(): void {
-    this.checkRole(); 
+    this.checkRole();
     this.id = this.route.snapshot.paramMap.get('id');
-    this.projectService.getProject(this.project).subscribe((data) => {
+    this.projectService.getProject(this.id).subscribe((data) => {
       this.project = data;
       console.log(this.project.projectName);
       // this.editProjectForm.setValue(
