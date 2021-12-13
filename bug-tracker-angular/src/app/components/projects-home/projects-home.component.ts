@@ -61,6 +61,7 @@ export class ProjectsHomeComponent implements OnInit {
     this.searchRes = [];
     this.isShown = !this.isShown;
     this.projectService.search(this.searchTerm).then((data: any) => {
+      this.projects = data;
       // console.log(data.length);
       for (let i = 0; i < data.length; i++) {
         this.projects.No = i + 1;
