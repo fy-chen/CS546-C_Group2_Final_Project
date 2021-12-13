@@ -11,8 +11,9 @@ const xss = require('xss');
 
 router.post('/assignTicket', async (req, res) => {
     //Has to be admin
-    if (req.session.user.role != 1){
-        res.status(401).json({"err": "Unauthorized!"})
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"});
+        return;
     }
     let ticketId = xss(req.body.ticketId);
     let userId = xss(req.body.userId);
@@ -146,8 +147,9 @@ router.get("/tickets/get", async (req, res) => {
 
 router.post('/removeTicket', async (req, res) => {
     //Has to be admin
-    if (req.session.user.role != 1){
-        res.status(401).json({"err": "Unauthorized!"})
+    if (req.session.user.userRole != 1){
+        res.status(401).json({"err": "Unauthorized!"});
+        return;
     }
 
     let ticketId = xss(req.body.ticketId);
@@ -164,7 +166,7 @@ router.post('/removeTicket', async (req, res) => {
     }
 
     try {
-        const userUpdated = await users.removeTicket(xss(req.body));
+        const userUpdated = await users.removeTicket(req.body);
         await tickets.removeAssignedUser(xss(req.body.ticketId), xss(req.body.userId));
         let history = { Property: 'RemoveAssignedUser', Value: userUpdated.username };
         await tickets.addHistory(xss(req.body.ticketId), history);
