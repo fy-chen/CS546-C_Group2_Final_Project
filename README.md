@@ -44,6 +44,34 @@ CS546-C_Group2_Final_Project>
 ```
 node .\data\seed.js
 ```
+## Credential
+
+* Admin:
+
+Username: Admin1
+
+Password: password
+
+Username: Admin12
+
+Password: password
+
+* Developer:
+
+Username: developer1
+
+Password: password1
+
+Username: developer2
+
+Password: password2
+
+Username: developer3
+
+Password: password3
+
+
+
 
 ## Executing program
 
