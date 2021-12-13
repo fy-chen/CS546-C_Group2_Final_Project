@@ -130,8 +130,6 @@ router.post('/create', async(req, res) => {
 
     console.log(ticketData);
 
-    console.log(req.session.user.userId);
-
     let userId = xss(req.session.user.userId);
 
     let errors = {};
@@ -149,7 +147,7 @@ router.post('/create', async(req, res) => {
     }
 
     try{
-        ticketsData.isAppropriateString(req.session.user.userId, 'creator');
+        ticketsData.isAppropriateString(xss(req.session.user.userId), 'creator');
     }catch(e) {
         errors.creator_error = e;
     }
@@ -211,17 +209,17 @@ router.post('/create', async(req, res) => {
 
 router.delete('/:id', async (req, res) => {
 
-    if(!req.session.user) {
+    if(!xss(req.session.user)) {
         res.status(401).json({"err": "Unauthorized!"});
         return;
     }
 
-    if (req.session.user.userRole !== 1){
-        let user = await userData.get(req.session.user.userId);
+    if (xss(req.session.user.userRole) !== 1){
+        let user = await userData.get(xss(req.session.user.userId));
         console.log(user);
         let isCreator = false;
         for(let x of user.createdTickets){
-            if(x._id = req.params.id){
+            if(x._id = xss(req.params.id)){
                 isCreator = true;
                 break;
             }
@@ -232,10 +230,10 @@ router.delete('/:id', async (req, res) => {
         }
     }
 
-    if(req.session.user.userRole === 1) {
-        let ticket = await ticketsData.get(req.params.id);
+    if(xss(req.session.user.userRole) === 1) {
+        let ticket = await ticketsData.get(xss(req.params.id));
         let creator = await userData.get(ticket.creator);
-        if(ticket.creator !== req.session.user.userId && creator.role === 1){
+        if(ticket.creator !== xss(req.session.user.userId) && creator.role === 1){
             res.status(401).json({"err": "Unauthorized to delete other admin's tickets!"});
             return;
         }
@@ -279,18 +277,18 @@ router.put('/edit/:id', async(req, res) => {
     let isAssignedUser = false;
 
     for(let x of ticket.assignedUsers){
-        if(x._id === req.session.user.userId){
+        if(x._id === xss(req.session.user.userId)){
             isAssignedUser = true;
             break;
         }
     }
 
-    if(ticket.creator !== req.session.user.userId && req.session.user.userRole !== 1 && !isAssignedUser) {
+    if(ticket.creator !== xss(req.session.user.userId) && xss(req.session.user.userRole) !== 1 && !isAssignedUser) {
         res.status(500).json({ NotAuthorized: true });
         return;
     }
 
-    if(req.session.user.userRole !== 1 && modifiedData.status === 'closed'){
+    if(xss(req.session.user.userRole) !== 1 && modifiedData.status === 'closed'){
         res.status(500).json({ NotAuthorized: true });
         return;
     }
@@ -409,7 +407,7 @@ router.put('/edit/:id', async(req, res) => {
 
 
     try{
-        const ticket = await ticketsData.update(req.params.id, modifiedData.title, modifiedData.description, modifiedData.priority, modifiedData.project, modifiedData.status, modifiedData.errorType);
+        const ticket = await ticketsData.update(xss(req.params.id), modifiedData.title, modifiedData.description, modifiedData.priority, modifiedData.project, modifiedData.status, modifiedData.errorType);
         res.json(ticket);
     }catch(e) {
         res.status(500).json({ error: e });
@@ -438,15 +436,15 @@ router.get('/readyToClose/:id', async(req, res) => {
 
 router.get('/close/:id', async(req, res) => {
 
-    if(req.session.user.userRole !== 1){
+    if(xss(req.session.user.userRole) !== 1){
         res.status(500).json({ NotAuthorized: true });
         return;
     }
 
-    if(req.session.user.userRole === 1) {
-        let ticket = await ticketsData.get(req.params.id);
+    if(xss(req.session.user.userRole) === 1) {
+        let ticket = await ticketsData.get(xss(req.params.id));
         let creator = await userData.get(ticket.creator);
-        if(ticket.creator !== req.session.user.userId && creator.role === 1){
+        if(ticket.creator !== xss(req.session.user.userId) && creator.role === 1){
             res.status(401).json({"err": "Unauthorized to close other admin's tickets!"});
             return;
         }
@@ -484,13 +482,13 @@ router.get('/check/edit/:id', async(req, res) => {
         let isAssignedUser = false;
         
         for(let x of ticket.assignedUsers){
-            if(x._id === req.session.user.userId){
+            if(x._id === xss(req.session.user.userId)){
                 isAssignedUser = true;
                 break;
             }
         }
         
-        if(ticket.creator !== req.session.user.userId && req.session.user.userRole !== 1 && !isAssignedUser) {
+        if(ticket.creator !== xss(req.session.user.userId) && xss(req.session.user.userRole) !== 1 && !isAssignedUser) {
             res.status(200).json({ NotAuthorized: true });
         }else{
             res.status(200).json({ Authorized: true });
