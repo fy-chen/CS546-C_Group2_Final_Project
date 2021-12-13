@@ -1,108 +1,112 @@
 #ticket_table {
-    width: 80%;
-    margin-bottom: 30px;
+  width: 80%;
+  margin-bottom: 30px;
 }
 
 #bar {
-    width: 100%;
+  width: 100%;
 }
 
 .gotoEdit {
-    margin-left: 20px;
-    margin-right: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #all_tickets {
-    margin-top: 20px;
-    margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 30px;
 }
 
 #assign_tickets {
-    margin-top: 20px;
-    margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 30px;
 }
 
 #remove_tickets {
-    margin-top: 20px;
-    margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 30px;
 }
 
 #tickets_by_priority {
-    margin-top: 20px;
-    margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 30px;
 }
 
 #tickets_by_project {
-    margin-top: 20px;
-    margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 30px;
 }
 
 #tickets_by_errorType {
-    margin-top: 20px;
-    margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 30px;
 }
 
 table {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .alert {
-    color: rgb(192, 13, 13);
+  color: rgb(192, 13, 13);
 }
 
-.mat-raised-button:disabled{
-    background-color: black;
-    color: white;
+.mat-raised-button:disabled {
+  background-color: black;
+  color: white;
 }
 
 .mat-raised-button.mat-red {
-    background-color: rgb(192, 13, 13);
-    color: white;
+  background-color: rgb(192, 13, 13);
+  color: white;
 }
 
 .mat-form-field.mat-form-field-invalid mat-label {
-    color: rgb(192, 13, 13)!important;
+  color: rgb(192, 13, 13) !important;
 }
 
 body {
-    font-family: "Lato", sans-serif;
-  }
-  
-  .sidenav {
-    height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    padding-top: 20px;
-  }
-  
-  .sidenav a {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-  }
-  
-  .sidenav a:hover {
-    color: #f1f1f1;
-  }
-  
-  .main {
-    margin-left: 160px; /* Same as the width of the sidenav */
-    font-size: 28px; /* Increased text to enable scrolling */
-    padding: 0px 10px;
-  }
-  
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-  }
+  font-family: "Lato", sans-serif;
+}
 
- .search-width{
-     width: 20vw;
- }
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  /* font-size: 28px; Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+.search-width {
+  width: 20vw;
+}

@@ -1,41 +1,49 @@
 <div class="sidenav">
   <a href="/projects">Project</a>
   <div *ngIf="!admin">
-      <a  href="/home" >Home</a>
+    <a href="/home">Home</a>
   </div>
-  
+
   <div *ngIf="admin">
-      <a href="/admin-home">Admin</a>
-  </div> 
+    <a href="/admin-home">Admin</a>
+  </div>
 </div>
 
-<div class = "main">
+<div class="main">
   <h1>Welcome {{admin.username}}, you have admin priviledges</h1>
-  <a href="/changePassword">Change Password</a>
   <br>
   <br>
   <br>
   <div id="bar">
-    <button mat-raised-button color="primary" (click)="logout()">Logout</button>
+    &nbsp;&nbsp;
     <!-- <button mat-raised-button color="primary" >All Projects</button> -->
     <!-- <button mat-raised-button color="primary" >All Developers</button> -->
-  
-    <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>
-  
+
+    <a mat-raised-button color="primary" href="/ticket/create">Create Ticket</a>&nbsp;&nbsp;
+
+    <a href="/projects/create" mat-raised-button color="primary">Create a Project</a>&nbsp;&nbsp;
+
+    <a mat-raised-button color="primary" href="/changePassword" style="margin-left: 60%;">Change
+      Password</a>&nbsp;&nbsp;
+
+    <button mat-raised-button color="primary" (click)="logout()">Logout</button>&nbsp;&nbsp;
+
+
+
     <!-- <button mat-raised-button color="primary" (click)="showTicketsButtonClicked()">All tickets</button> -->
-  
+
     <!-- <button mat-raised-button color="primary" (click)="showAssigntoUserButtonClicked()">Assign tickets</button> -->
-  
+
     <!-- <button mat-raised-button color="primary" (click)="showRemoveUserButtonClicked()">Remove tickets</button> -->
-  
+
     <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Sorted Tickets</button>
     <mat-menu #menu="matMenu">
       <button (click)="showTicketsSortedByPriority()" mat-menu-item>Priority</button>
       <button (click)="showTicketsSortedbyProject()" mat-menu-item>Project</button>
       <button (click)="showTicketsSortedbyErrorType()" mat-menu-item>Error Type</button>
     </mat-menu> -->
-  
-  
+
+
     <!-- <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
       <mat-form-field class="input-width" appearance="fill" >
         <mat-label>Search</mat-label>
@@ -47,15 +55,15 @@
     <div *ngIf="showNoInput" class="alert">
       Search Phrase not provided
     </div> -->
-  
+
     <!-- <div *ngIf="showEmptySpace" class="alert">
       Search Phrase cannot be empty spaces
     </div> -->
-  
+
     <ol id="pending-tickets">
       <li>pending tickets</li>
     </ol>
-  
+
   </div>
   <mat-tab-group mat-align-tabs="start">
     <mat-tab label="All Users">
@@ -69,18 +77,19 @@
           <th mat-header-cell *matHeaderCellDef> No. </th>
           <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Username">
           <th mat-header-cell *matHeaderCellDef> Username </th>
           <td mat-cell *matCellDef="let element">{{element.username}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Projects">
           <th mat-header-cell *matHeaderCellDef> Projects </th>
           <td mat-cell *matCellDef="let element">
             <div *ngIf="element.assignedProjects[0]; else none">
               <mat-form-field appearance="fill" class="input-width" class="tickets">
-                <mat-label>({{element.assignedProjects.length}}): {{element.assignedProjects[0].projectName}}</mat-label>
+                <mat-label>({{element.assignedProjects.length}}): {{element.assignedProjects[0].projectName}}
+                </mat-label>
                 <mat-select>
                   <mat-option *ngFor="let project of element.assignedProjects">
                     {{project.projectName}}
@@ -91,7 +100,7 @@
             <ng-template #none>No projects</ng-template>
           </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Tickets">
           <th mat-header-cell *matHeaderCellDef> Tickets </th>
           <td mat-cell *matCellDef="let element">
@@ -108,7 +117,7 @@
             <ng-template #none>None assigned</ng-template>
           </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Created Tickets">
           <th mat-header-cell *matHeaderCellDef> Created Tickets </th>
           <td mat-cell *matCellDef="let element">
@@ -125,14 +134,15 @@
             <ng-template #none>None created</ng-template>
           </td>
         </ng-container>
-  
-         <ng-container matColumnDef="deleteButton">
-            <th mat-header-cell *matHeaderCellDef>  </th>
-            <td mat-cell *matCellDef="let element"> 
-                <button mat-raised-button color="red" *ngIf="admin._id==element._id"(click)="openDialog(element._id,'user',true)">Delete</button> 
-            </td>
-        </ng-container> 
-  
+
+        <ng-container matColumnDef="deleteButton">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-raised-button color="red" *ngIf="admin._id==element._id"
+              (click)="openDialog(element._id,'user',true)">Delete</button>
+          </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef=userColumns></tr>
         <tr mat-row *matRowDef="let row; columns: userColumns;"></tr>
       </table>
@@ -142,18 +152,19 @@
           <th mat-header-cell *matHeaderCellDef> No. </th>
           <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Username">
           <th mat-header-cell *matHeaderCellDef> Username </th>
           <td mat-cell *matCellDef="let element">{{element.username}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Projects">
           <th mat-header-cell *matHeaderCellDef> Projects </th>
           <td mat-cell *matCellDef="let element">
             <div *ngIf="element.assignedProjects[0]; else none">
               <mat-form-field appearance="fill" class="input-width" class="tickets">
-                <mat-label>({{element.assignedProjects.length}}): {{element.assignedProjects[0].projectName}}</mat-label>
+                <mat-label>({{element.assignedProjects.length}}): {{element.assignedProjects[0].projectName}}
+                </mat-label>
                 <mat-select>
                   <mat-option *ngFor="let project of element.assignedProjects">
                     {{project.projectName}}
@@ -164,7 +175,7 @@
             <ng-template #none>No projects</ng-template>
           </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Tickets">
           <th mat-header-cell *matHeaderCellDef> Tickets </th>
           <td mat-cell *matCellDef="let element">
@@ -181,7 +192,7 @@
             <ng-template #none>None assigned</ng-template>
           </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Created Tickets">
           <th mat-header-cell *matHeaderCellDef> Created Tickets </th>
           <td mat-cell *matCellDef="let element">
@@ -198,26 +209,26 @@
             <ng-template #none>None created</ng-template>
           </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <button mat-raised-button color="red" (click)="openDialog(element._id,'user')">Delete</button>
           </td>
         </ng-container>
-  
+
         <tr mat-header-row *matHeaderRowDef=userColumns></tr>
         <tr mat-row *matRowDef="let row; columns: userColumns;"></tr>
       </table>
     </mat-tab>
     <mat-tab label="All tickets">
-  
+
       <mat-form-field class="search-width" appearance="fill">
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyTicketFilter($event.target)"
           placeholder="Search from titles, descriptions, errorTypes">
       </mat-form-field>
-  
+
       <!-- <h2>Search for Tickets</h2>
       <form [formGroup]="searchTicketForm" (ngSubmit)="searchTicket()">
         <mat-form-field class="input-width" appearance="fill" >
@@ -226,7 +237,7 @@
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit">Submit</button>
       </form> -->
-  
+
       <!-- <div *ngIf="showNoInput" class="alert">
         Search Phrase not provided
       </div>
@@ -234,50 +245,51 @@
       <div *ngIf="showEmptySpace" class="alert">
         Search Phrase cannot be empty spaces
       </div> -->
-  
+
       <h2 class="table_head">Opening Tickets</h2>
       <table mat-table [dataSource]="ticketsOpeningDataSource" id="ticket_table">
-  
+
         <ng-container matColumnDef="No">
           <th mat-header-cell *matHeaderCellDef> No. </th>
           <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Title">
           <th mat-header-cell *matHeaderCellDef> Title </th>
-          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a> </td>
+          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
+          </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
           <td mat-cell *matCellDef="let element"> {{element.description}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Creator">
           <th mat-header-cell *matHeaderCellDef> Creator </th>
           <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Status">
           <th mat-header-cell *matHeaderCellDef> Status </th>
           <td mat-cell *matCellDef="let element"> {{element.status}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Project">
           <th mat-header-cell *matHeaderCellDef> Project </th>
           <td mat-cell *matCellDef="let element"> {{element.project}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="errorType">
           <th mat-header-cell *matHeaderCellDef> Error Type </th>
           <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="createdTime">
           <th mat-header-cell *matHeaderCellDef> Created Time </th>
           <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
@@ -285,53 +297,54 @@
             <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
           </td>
         </ng-container>
-  
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-  
+
       <h2 class="table_head">Tickets Ready to Close</h2>
       <table mat-table [dataSource]="ticketsReadytoCloseDataSource" id="ticket_table">
         <ng-container matColumnDef="No">
           <th mat-header-cell *matHeaderCellDef> No. </th>
           <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Title">
           <th mat-header-cell *matHeaderCellDef> Title </th>
-          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a> </td>
+          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
+          </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
           <td mat-cell *matCellDef="let element"> {{element.description}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Creator">
           <th mat-header-cell *matHeaderCellDef> Creator </th>
           <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Status">
           <th mat-header-cell *matHeaderCellDef> Status </th>
           <td mat-cell *matCellDef="let element"> {{element.status}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Project">
           <th mat-header-cell *matHeaderCellDef> Project </th>
           <td mat-cell *matCellDef="let element"> {{element.project}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="errorType">
           <th mat-header-cell *matHeaderCellDef> Error Type </th>
           <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="createdTime">
           <th mat-header-cell *matHeaderCellDef> Created Time </th>
           <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
@@ -340,53 +353,54 @@
             <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
           </td>
         </ng-container>
-  
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-  
+
       <h2 class="table_head">Closed Tickets</h2>
       <table mat-table [dataSource]="ticketsClosedDataSource" id="ticket_table">
         <ng-container matColumnDef="No">
           <th mat-header-cell *matHeaderCellDef> No. </th>
           <td mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Title">
           <th mat-header-cell *matHeaderCellDef> Title </th>
-          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a> </td>
+          <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
+          </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
           <td mat-cell *matCellDef="let element"> {{element.description}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Creator">
           <th mat-header-cell *matHeaderCellDef> Creator </th>
           <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Status">
           <th mat-header-cell *matHeaderCellDef> Status </th>
           <td mat-cell *matCellDef="let element"> {{element.status}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="Project">
           <th mat-header-cell *matHeaderCellDef> Project </th>
           <td mat-cell *matCellDef="let element"> {{element.project}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="errorType">
           <th mat-header-cell *matHeaderCellDef> Error Type </th>
           <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="createdTime">
           <th mat-header-cell *matHeaderCellDef> Created Time </th>
           <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
         </ng-container>
-  
+
         <ng-container matColumnDef="deleteButton">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
@@ -394,11 +408,11 @@
             <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
           </td>
         </ng-container>
-  
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-  
+
       <!-- <div *ngIf="showNotFound" class="alert">
         NoTicketsFound
       </div>
@@ -457,7 +471,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </div> -->
-  
+
     </mat-tab>
     <mat-tab label="Assign Tickets">
       <form id="assignTicket-form" [formGroup]="assignTicketForm" (ngSubmit)="assignTicket()">
@@ -469,7 +483,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <div
           *ngIf="assignTicketForm.controls['ticketId'].invalid && (assignTicketForm.controls['ticketId'].dirty || assignTicketForm.controls['ticketId'].touched)"
           class="alert">
@@ -477,9 +491,9 @@
             Please choose a ticket
           </div>
         </div>
-  
+
         <br><br>
-  
+
         <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignDevs">
           <mat-label>Users</mat-label>
           <mat-select formControlName="userId" id="userId">
@@ -488,11 +502,11 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <br><br>
-  
+
         <mat-checkbox (change)="assignAdmin($event.checked, 'ticket')">Assign Myself</mat-checkbox>
-  
+
         <div
           *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)"
           class="alert">
@@ -500,14 +514,14 @@
             Please choose a user
           </div>
         </div>
-  
+
         <br><br>
         <button mat-raised-button color="primary" type="submit" [disabled]="!assignTicketForm.valid">Confirm</button>
-  
+
         <div *ngIf="haveBeenAssigned" class="alert">
           User has been Assigned
         </div>
-  
+
       </form>
     </mat-tab>
     <mat-tab label="Unassign Tickets">
@@ -520,7 +534,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <div
           *ngIf="removeTicketForm.controls['ticketId'].invalid && (removeTicketForm.controls['ticketId'].dirty || removeTicketForm.controls['ticketId'].touched)"
           class="alert">
@@ -528,9 +542,9 @@
             Please choose a ticket
           </div>
         </div>
-  
+
         <br><br>
-  
+
         <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignedUsers">
           <mat-label>Users</mat-label>
           <mat-select formControlName="userId" id="userId">
@@ -539,7 +553,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <div
           *ngIf="removeTicketForm.controls['userId'].invalid && (removeTicketForm.controls['userId'].dirty || removeTicketForm.controls['userId'].touched)"
           class="alert">
@@ -547,17 +561,23 @@
             Please choose a user
           </div>
         </div>
-  
+
         <br><br>
         <button mat-raised-button color="primary" type="submit" [disabled]="!removeTicketForm.valid">Confirm</button>
-  
+
         <div *ngIf="noAssignedUsers" class="alert">
           This ticket have no assigned users
         </div>
-  
+
       </form>
     </mat-tab>
     <mat-tab label='All Projects'>
+      <!-- <mat-form-field class="search-width" appearance="fill">
+        <mat-label>Search</mat-label>
+        <button mat-raised-button color="primary" type="submit" style="margin-left: 130%;" (click)='toggleSearch()'>Show
+          All</button>
+        <input matInput (keyup)='search()' class="search-width" type='text' id='serchProj' [(ngModel)]='searchTerm'>
+      </mat-form-field> -->
       <div *ngIf="isShown">
         <table style="margin-top: 50px">
           <thead style="font-size: 14px">
@@ -586,9 +606,9 @@
           </tbody>
         </table>
       </div>
-  
-  
-      <div>
+
+
+      <div *ngIf="!isShown">
         <table style="margin-top: 50px">
           <thead style="font-size: 14px">
             <tr mat-header-cell>
@@ -627,7 +647,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <div
           *ngIf="assignProjectForm.controls['projectId'].invalid && (assignProjectForm.controls['projectId'].dirty || assignProjectForm.controls['projectId'].touched)"
           class="alert">
@@ -635,7 +655,7 @@
             Please choose a Project
           </div>
         </div>
-  
+
         <div
           *ngIf="assignTicketForm.controls['userId'].invalid && (assignTicketForm.controls['userId'].dirty || assignTicketForm.controls['userId'].touched)"
           class="alert">
@@ -643,9 +663,9 @@
             Please choose a user
           </div>
         </div>
-  
+
         <br><br>
-  
+
         <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignDevstoProject">
           <mat-label>Users</mat-label>
           <mat-select formControlName="userId" id="userId">
@@ -654,11 +674,11 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <br><br>
-  
+
         <mat-checkbox (change)="assignAdmin($event.checked, 'project')">Assign Myself</mat-checkbox>
-  
+
         <div
           *ngIf="assignProjectForm.controls['userId'].invalid && (assignProjectForm.controls['userId'].dirty || assignProjectForm.controls['userId'].touched)"
           class="alert">
@@ -666,14 +686,14 @@
             Please choose a user
           </div>
         </div>
-  
+
         <br><br>
         <button mat-raised-button type="submit" color="primary" [disabled]="!assignProjectForm.valid">Confirm</button>
-  
+
         <div *ngIf="haveBeenAssigned" class="alert">
           User has been Assigned
         </div>
-  
+
       </form>
     </mat-tab>
     <mat-tab label="Unassign Projects">
@@ -686,7 +706,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <div
           *ngIf="removeProjectForm.controls['userId'].invalid && (removeProjectForm.controls['userId'].dirty || removeProjectForm.controls['userId'].touched)"
           class="alert">
@@ -694,9 +714,9 @@
             Please choose a User
           </div>
         </div>
-  
+
         <br><br>
-  
+
         <mat-form-field appearance="fill" class="input-width" class="users" *ngIf="showAssignedProjects">
           <mat-label>Projects</mat-label>
           <mat-select formControlName="projectId" id="projectId">
@@ -705,7 +725,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <div
           *ngIf="removeTicketForm.controls['userId'].invalid && (removeTicketForm.controls['userId'].dirty || removeTicketForm.controls['userId'].touched)"
           class="alert">
@@ -713,17 +733,17 @@
             Please choose a Project
           </div>
         </div>
-  
+
         <br><br>
         <button mat-raised-button color="primary" type="submit" [disabled]="!removeProjectForm.valid">Confirm</button>
-  
+
         <div *ngIf="noAssignedProjects" class="alert">
           This user have no assigned projects
         </div>
-  
+
       </form>
     </mat-tab>
-  
+
     <mat-tab label="Sorted Tickets">
       <form id="selectSortType-form" [formGroup]="selectSortTypeForm" (ngSubmit)="showSortedTickets()">
         <mat-form-field appearance="fill" class="input-width">
@@ -734,9 +754,9 @@
             <mat-option value="errorType"> Error Type </mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <button mat-raised-button color="primary" type="submit" [disabled]="!selectSortTypeForm.valid">Confirm</button>
-  
+
       </form>
       <div id="tickets_by_priority" *ngIf="showTicketsbyPriority">
         <h2 class="table_head">Most Important (Priority 3)</h2>
@@ -745,43 +765,43 @@
             <th mat-header-cell *matHeaderCellDef> No. </th>
             <td mat-cell *matCellDef="let element"> {{element.No}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Title">
             <th mat-header-cell *matHeaderCellDef> Title </th>
             <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
             </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Description">
             <th mat-header-cell *matHeaderCellDef> Description </th>
             <td mat-cell *matCellDef="let element"> {{element.description}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Creator">
             <th mat-header-cell *matHeaderCellDef> Creator </th>
             <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
             <td mat-cell *matCellDef="let element"> {{element.status}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Project">
             <th mat-header-cell *matHeaderCellDef> Project </th>
             <td mat-cell *matCellDef="let element"> {{element.project}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="errorType">
             <th mat-header-cell *matHeaderCellDef> Error Type </th>
             <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="createdTime">
             <th mat-header-cell *matHeaderCellDef> Created Time </th>
             <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="deleteButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">
@@ -789,54 +809,54 @@
               <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
             </td>
           </ng-container>
-  
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-  
+
         <h2 class="table_head">Median Important (Priority 2)</h2>
         <table mat-table [dataSource]="Priority2DataSource" id="ticket_table">
           <ng-container matColumnDef="No">
             <th mat-header-cell *matHeaderCellDef> No. </th>
             <td mat-cell *matCellDef="let element"> {{element.No}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Title">
             <th mat-header-cell *matHeaderCellDef> Title </th>
             <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
             </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Description">
             <th mat-header-cell *matHeaderCellDef> Description </th>
             <td mat-cell *matCellDef="let element"> {{element.description}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Creator">
             <th mat-header-cell *matHeaderCellDef> Creator </th>
             <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
             <td mat-cell *matCellDef="let element"> {{element.status}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Project">
             <th mat-header-cell *matHeaderCellDef> Project </th>
             <td mat-cell *matCellDef="let element"> {{element.project}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="errorType">
             <th mat-header-cell *matHeaderCellDef> Error Type </th>
             <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="createdTime">
             <th mat-header-cell *matHeaderCellDef> Created Time </th>
             <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="deleteButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">
@@ -844,54 +864,54 @@
               <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
             </td>
           </ng-container>
-  
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-  
+
         <h2 class="table_head">Less Important (Priority 1)</h2>
         <table mat-table [dataSource]="Priority1DataSource" id="ticket_table">
           <ng-container matColumnDef="No">
             <th mat-header-cell *matHeaderCellDef> No. </th>
             <td mat-cell *matCellDef="let element"> {{element.No}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Title">
             <th mat-header-cell *matHeaderCellDef> Title </th>
             <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
             </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Description">
             <th mat-header-cell *matHeaderCellDef> Description </th>
             <td mat-cell *matCellDef="let element"> {{element.description}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Creator">
             <th mat-header-cell *matHeaderCellDef> Creator </th>
             <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
             <td mat-cell *matCellDef="let element"> {{element.status}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Project">
             <th mat-header-cell *matHeaderCellDef> Project </th>
             <td mat-cell *matCellDef="let element"> {{element.project}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="errorType">
             <th mat-header-cell *matHeaderCellDef> Error Type </th>
             <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="createdTime">
             <th mat-header-cell *matHeaderCellDef> Created Time </th>
             <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="deleteButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">
@@ -899,13 +919,13 @@
               <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
             </td>
           </ng-container>
-  
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </div>
-  
-  
+
+
       <div id="tickets_by_project" *ngIf="showTicketsbyProject">
         <h2 class="table_head">Tickets</h2>
         <table mat-table [dataSource]="ticketsbyProjectDataSource" id="ticket_table">
@@ -913,43 +933,43 @@
             <th mat-header-cell *matHeaderCellDef> No. </th>
             <td mat-cell *matCellDef="let element"> {{element.No}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Title">
             <th mat-header-cell *matHeaderCellDef> Title </th>
             <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
             </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Description">
             <th mat-header-cell *matHeaderCellDef> Description </th>
             <td mat-cell *matCellDef="let element"> {{element.description}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Creator">
             <th mat-header-cell *matHeaderCellDef> Creator </th>
             <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
             <td mat-cell *matCellDef="let element"> {{element.status}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Project">
             <th mat-header-cell *matHeaderCellDef> Project </th>
             <td mat-cell *matCellDef="let element"> {{element.project}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="errorType">
             <th mat-header-cell *matHeaderCellDef> Error Type </th>
             <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="createdTime">
             <th mat-header-cell *matHeaderCellDef> Created Time </th>
             <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="deleteButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">
@@ -957,12 +977,12 @@
               <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
             </td>
           </ng-container>
-  
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </div>
-  
+
       <div id="tickets_by_errorType" *ngIf="showTicketsbyErrorType">
         <h2 class="table_head">Tickets</h2>
         <table mat-table [dataSource]="ticketsbyErrorTypeDataSource" id="ticket_table">
@@ -970,43 +990,43 @@
             <th mat-header-cell *matHeaderCellDef> No. </th>
             <td mat-cell *matCellDef="let element"> {{element.No}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Title">
             <th mat-header-cell *matHeaderCellDef> Title </th>
             <td mat-cell *matCellDef="let element"> <a mat-button href="/ticket/{{element._id}}">{{element.title}}</a>
             </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Description">
             <th mat-header-cell *matHeaderCellDef> Description </th>
             <td mat-cell *matCellDef="let element"> {{element.description}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Creator">
             <th mat-header-cell *matHeaderCellDef> Creator </th>
             <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
             <td mat-cell *matCellDef="let element"> {{element.status}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="Project">
             <th mat-header-cell *matHeaderCellDef> Project </th>
             <td mat-cell *matCellDef="let element"> {{element.project}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="errorType">
             <th mat-header-cell *matHeaderCellDef> Error Type </th>
             <td mat-cell *matCellDef="let element"> {{element.errorType}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="createdTime">
             <th mat-header-cell *matHeaderCellDef> Created Time </th>
             <td mat-cell *matCellDef="let element"> {{element.createdTime}} </td>
           </ng-container>
-  
+
           <ng-container matColumnDef="deleteButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let element">
@@ -1014,12 +1034,12 @@
               <button mat-raised-button color="red" (click)="openDialog(element._id,'ticket')">Delete</button>
             </td>
           </ng-container>
-  
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </div>
-  
+
     </mat-tab>
   </mat-tab-group>
 

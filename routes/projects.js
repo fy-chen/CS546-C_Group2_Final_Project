@@ -20,7 +20,7 @@ let isAppropriateString = (string, name) => {
 };
 
 router.get("/", async (req, res) => {
-  if (!xss(req.session.user)) {
+  if (!req.session.user) {
     res.status(401).json({ message: "Unauthorized request" });
     return;
   }
@@ -55,7 +55,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/users/:id", async (req, res) => {
   //reuqires login
-  if (!xss(req.session.user)) {
+  if (!req.session.user) {
     res.status(401).json({ message: "Unauthorized request" });
     return;
   }
@@ -120,12 +120,12 @@ router.post("/create", async (req, res) => {
 });
 
 router.post("/search", async (req, res) => {
-  if (!xss(req.session.user)) {
+  if (!req.session.user) {
     res.status(401).json({ message: "Unauthorized request" });
     return;
   }
   try {
-    if (!xss(req.body.phrase) || xss(req.body.phrase.trim().length) === 0) {
+    if (!req.body.phrase || req.body.phrase.trim().length === 0) {
       throw new Error(`Provided search phrase is empty`);
     }
   } catch (e) {
@@ -133,7 +133,7 @@ router.post("/search", async (req, res) => {
   }
 
   try {
-    const projectList = await projectsData.searchProject(xss(req.body.phrase));
+    const projectList = await projectsData.searchProject(req.body.phrase);
     if (projectList.length === 0) {
       return res.status(200).send([]);
       // res.render("pages/projectPage", { notFound: true });
@@ -147,7 +147,7 @@ router.post("/search", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  if (!xss(req.session.user)) {
+  if (!req.session.user) {
     res.status(401).json({ err: "Unauthorized!" });
     return;
   }
