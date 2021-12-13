@@ -77,7 +77,9 @@ router.get("/users/:id", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-  if (!xss(req.session.user) || xss(req.session.user.userRole) !== 1) {
+  console.log("session");
+  console.log(req.session.user);
+  if (!req.session.user || req.session.user.userRole !== 1) {
     res.status(401).json({ message: "Unauthorized request" });
     return;
   }
@@ -86,10 +88,6 @@ router.post("/create", async (req, res) => {
   projectData.role = xss(req.session.user.userRole);
 
   try {
-    if (!xss(req.session.user) || xss(req.session.user.userRole) !== 1) {
-      res.status(401).json({ message: "Unauthorized request" });
-      return;
-    }
     isAppropriateString(projectData.projectName, "Project Name");
     isAppropriateString(projectData.description, "description");
 
@@ -168,12 +166,14 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/update/:id", async (req, res) => {
-  if (!xss(req.session.user) || xss(req.session.user.userRole) !== 1) {
+  console.log("session");
+  console.log(req.session.user.userRole);
+  if (!req.session.user || req.session.user.userRole !== 1) {
     res.status(401).json({ message: "Unauthorized request" });
     return;
   }
   let projectData = req.body;
-  projectData.role = xss(req.session.user.userRole);
+  projectData.role = req.session.user.userRole;
   try {
     projectsData.toObjectId(xss(req.params.id));
   } catch (e) {

@@ -399,7 +399,7 @@ export class AdminHomeComponent implements OnInit {
 
   search() {
     this.searchRes = [];
-    this.isShown = !this.isShown;
+    this.isShown = true;
     this.projectService.search(this.searchTerm).then((data: any) => {
       // console.log(data.length);
       for (let i = 0; i < data.length; i++) {
@@ -826,6 +826,10 @@ export class AdminHomeComponent implements OnInit {
 
       this.ticketsbyErrorTypeDataSource.data = this.ticketstable;
     });
+  }
+
+  toggleSearch() {
+    this.isShown = false;
   }
 
   showSortedTickets() {
