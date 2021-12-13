@@ -335,17 +335,21 @@ export class AdminHomeComponent implements OnInit {
     this._snackBar.open(value, 'Done');
   }
 
-  openDialog(id: string, type: string) {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {
-      data: { _id: id, type: type },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
+  openDialog(id: string,type: string,self?:Boolean) {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {data: {_id: id, type: type}});
+  
+    dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      if (result.type === 'ticket') {
+      if(result.type==="ticket"){
         this.deleteTicket(result._id);
-      } else if (result.type === 'user') {
-        this.deleteUser(result._id);
+      }
+      else if(result.type==="user"){
+        if (self){
+          this.deleteUser(result._id,true)
+        }
+        else{
+          this.deleteUser(result._id)
+        }
       } else if (result.type === 'Project') {
         console.log('got into project again');
         this.deleteProject(result._id);
@@ -365,11 +369,14 @@ export class AdminHomeComponent implements OnInit {
     });
   }
 
-  deleteUser(id: string) {
-    this.userService.deleteUser(id).subscribe((data: any) => {
-      console.log(data);
-      if (data.deleted === true) {
-        this.openSnackBar('User has been succesfully deleted');
+  deleteUser(id: string,self?: boolean) {
+    this.userService.deleteUser(id).subscribe((data:any) =>{
+      console.log(data) 
+      if(data.deleted === true){
+        if(self){
+          this.logout();
+        }
+        this.openSnackBar("User has been succesfully deleted");
         this.ngOnInit();
       } else {
         this.openSnackBar('Something went wrong');
