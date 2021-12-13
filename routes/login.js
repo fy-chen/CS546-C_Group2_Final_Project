@@ -13,8 +13,8 @@ router.get('/',async(req,res)=>{
 });
 
 router.post('/',async(req,res) =>{
-     let username = req.body.username;
-     let password = req.body.password;
+     let username = xss(req.body.username);
+     let password = xss(req.body.password);
      username = username.toLowerCase();
     try {
         const loginResponse =  await users.login(username,password);

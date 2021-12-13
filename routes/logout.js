@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.get('/', async (req,res) => {
     try{
-        req.session.destroy();
+        xss(req.session).destroy();
         res.status(200).json({loggedOut:true});
     }
     catch(e){

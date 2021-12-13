@@ -6,7 +6,7 @@ const ticketData = data.tickets;
 const xss = require('xss');
 router.get('/:id', async(req, res) => {
     try {
-        const comment = await commentData.get(req.params.id);
+        const comment = await commentData.get(xss(req.params.id));
     } catch (e) {
         res.status(500).json({error:e});
     }
@@ -14,7 +14,7 @@ router.get('/:id', async(req, res) => {
 
 router.get('/getAll/:id', async(req, res) => {
     try {
-        const comments = await commentData.getAll(req.params.id);
+        const comments = await commentData.getAll(xss(req.params.id));
         res.json(comments);
     } catch (e) {
         res.status(500).json({ error: e });
@@ -36,7 +36,7 @@ router.post('/create', async(req, res) => {
     // if(Object.keys(err))
 
     try {
-        const comment = await commentData.create(commentsData.ticketId, commentsData.text, userId);
+        const comment = await commentData.create(xss(commentsData.ticketId), xss(commentsData.text), userId);
         res.json(comment)
     } catch (e) {
         console.log(e);
@@ -46,7 +46,7 @@ router.post('/create', async(req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const DeletInfro = await commentData.remove(req.params.id);
+        const DeletInfro = await commentData.remove(xss(req.params.id));
         res.status(200).json(DeletInfro);
     } catch (e) {
         res.status(500).json({error:e});

@@ -3,6 +3,7 @@ import { tick } from '@angular/core/testing';
 import { ProjectService } from 'src/app/shared/project.service';
 import { UserService } from 'src/app/shared/user.service';
 import { TicketService } from 'src/app/shared/ticket.service';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-projects-details',
@@ -30,14 +31,29 @@ export class ProjectsDetailsComponent implements OnInit {
   objOfTicket: any;
   arrOfTicket: any;
   // tickets: any;
+  admin:any;
 
   constructor(
     private projectService: ProjectService,
     private userService: UserService,
-    private ticketService: TicketService
+    private ticketService: TicketService,
+    private AuthService :AuthService,
   ) {}
+  async checkRole(){
 
+
+    const loggedIn: any = await this.AuthService.isLoggedIn();
+    if (loggedIn.loggedIn === true){
+      if (loggedIn.role  == 1){
+         this.admin = true;
+      }
+      else{
+        this.admin = false;
+      }
+    }
+  }
   ngOnInit(): void {
+    this.checkRole(); 
     history.state.id;
     this.projectService.getProject(history.state.id).subscribe((data) => {
       this.arrOfUser = [];
