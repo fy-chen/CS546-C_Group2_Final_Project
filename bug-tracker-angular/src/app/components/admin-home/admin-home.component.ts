@@ -359,6 +359,7 @@ export class AdminHomeComponent implements OnInit {
       // if(result.deleted === true){
         //  
         this.openSnackBar("Project has been succesfully deleted");
+        this.getAssignedProjects();
         this.ngOnInit();
       // }
     });
