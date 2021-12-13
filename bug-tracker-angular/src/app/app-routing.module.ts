@@ -50,7 +50,7 @@ const routes: Routes = [
     data: { requiresLogin: true },
     canActivate: [AccessGuard],
   },
-  { path: 'ticket', component: TicketHomeComponent },
+  // { path: 'ticket', component: TicketHomeComponent },
   {
     path: 'ticket/:id',
     component: TicketComponent,
